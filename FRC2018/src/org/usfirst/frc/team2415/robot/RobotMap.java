@@ -23,13 +23,9 @@ public class RobotMap {
 	public static final int LEFT_TALON_FRONT = 1; 
 	public static final int RIGHT_TALON_BACK = 3; 
 	public static final int RIGHT_TALON_FRONT = 4;
-  
-	public static final int SHOOTER_TALON = 6; 
-	public static final int CLIMBER_TALON = 9;
-	public static final int GM_INTAKE = 8;
-	public static final int CLIMBER_TALON2 = 5;
 	
-	public static final int GEAR_MANIP_SOLENOID = 4;
+	public static final int GEAR_SHIFTER_FRONT = 5;
+	public static final int GEAR_SHIFTER_BACK = 6;
 	
 	
 }

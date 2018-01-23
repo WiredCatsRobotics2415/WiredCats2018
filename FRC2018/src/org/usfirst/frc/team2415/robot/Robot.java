@@ -1,13 +1,11 @@
 package org.usfirst.frc.team2415.robot;
 
+import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
-import Subsystems.ElevatorSubsystem;
-import Subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -31,8 +29,9 @@ public class Robot extends IterativeRobot {
 	public static XboxController gamepad;
 	
 	public static ArcadeDrive arcadeDrive;
-	public static IntakeSubsystem intakeSubsystem;
-	public static ElevatorSubsystem elevatorSubsytem;
+	
+	public static CheesyDriveHelper cheesyDriveHelper;
+	
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -44,9 +43,12 @@ public class Robot extends IterativeRobot {
 //		chooser.addObject("My Auto", customAuto);
 //		SmartDashboard.putData("Auto choices", chooser);
 		gamepad = new XboxController(0);
-		intakeSubsystem = new IntakeSubsystem();
-		elevatorSubsytem = new ElevatorSubsystem();
+
 		arcadeDrive = new ArcadeDrive();
+		
+		cheesyDriveHelper = new CheesyDriveHelper();
+		
+		
 	}
 
 	/**
@@ -63,7 +65,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 //		autoSelected = chooser.getSelected();
-		 autoSelected = SmartDashboard.getString("Auto Selector");
+//		 autoSelected = SmartDashboard.getString("Auto Selector");
 		// defaultAuto);
 //		System.out.println("Auto selected: " + autoSelected);
 	}
@@ -93,10 +95,16 @@ public class Robot extends IterativeRobot {
 		double leftY;
     	double rightX;
     	
+    	if(arcadeDrive.getVelocity() > 5) {
+    		arcadeDrive.switchGear(true);
+    	} else {
+    		arcadeDrive.switchGear(false);
+    	}
+    	
     	if(arcadeDrive.getShifter() == DoubleSolenoid.Value.kForward) {
     	
-    	leftY = Robot.gamepad.getRawAxis(1);
-    	rightX = -Robot.gamepad.getRawAxis(4);
+    		leftY = Robot.gamepad.getRawAxis(1);
+    		rightX = -Robot.gamepad.getRawAxis(4);
     	
     	} else {
     		
@@ -105,31 +113,13 @@ public class Robot extends IterativeRobot {
     		
     	}
     	
-    	if (Math.abs(leftY) < arcadeDrive.DEADBAND) leftY = 0;
-    	if (Math.abs(rightX) < arcadeDrive.DEADBAND) rightX = 0;
-    	
-    	leftY = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(leftY, 3) + (1-arcadeDrive.INTERPOLATION_FACTOR)*leftY;
-    	rightX = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(rightX, 3) + (1-arcadeDrive.INTERPOLATION_FACTOR)*rightX;
-    	
-    	double left = arcadeDrive.STRAIGHT_RESTRICTER*leftY + arcadeDrive.TURN_SPEED_BOOST*rightX;
-    	double right = arcadeDrive.STRAIGHT_RESTRICTER*leftY - arcadeDrive.TURN_SPEED_BOOST*rightX;
+    	if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
+    	if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND)) rightX = 0; 
 		
-    	if(gamepad.getAButton()) {
-			new IntakeCommand(true);
-		} else if(gamepad.getBButton()) {
-			new IntakeCommand(false);
-		}
-		if(gamepad.getPOV() == 0) {
-			new ElevatorCommand((byte)0);
-		} else if(gamepad.getPOV() == 90) {
-			new ElevatorCommand((byte)1);
-		} else if(gamepad.getPOV() == 180) {
-			new ElevatorCommand((byte)2);
-		} else if(gamepad.getPOV() == 270) {
-			new ElevatorCommand((byte)3);
-		} else if(gamepad.getXButton()) {
-			new ElevatorCommand((byte)4);
-		}
+		boolean isQuickTurn = leftY < 0.1;
+		
+		arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
+    	
     	
 	}
 
@@ -138,6 +128,12 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+	}
+	
+	public void changeGear(boolean gear){
+		if(gear){
+			
+		}
 	}
 }
 
