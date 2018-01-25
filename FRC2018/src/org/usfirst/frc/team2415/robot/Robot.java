@@ -26,6 +26,8 @@ public class Robot extends IterativeRobot {
 	
 	public static CheesyDriveHelper cheesyDriveHelper;
 	
+//	public static DoubleSolenoid isabella;
+	
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -42,6 +44,8 @@ public class Robot extends IterativeRobot {
 		arcadeDrive = new ArcadeDrive();
 		
 		cheesyDriveHelper = new CheesyDriveHelper();
+		
+//		isabella = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GEAR_SHIFTER_FRONT, RobotMap.GEAR_SHIFTER_BACK);
 		
 		
 	}
