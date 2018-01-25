@@ -24,7 +24,7 @@ public class ArcadeDrive extends Subsystem {
 //	private static ArcadeDrive mInstance = new ArcadeDrive();
 	
 	private WPI_TalonSRX lFront, rFront, lBack, rBack;
-    private DoubleSolenoid isabella;
+    private DoubleSolenoid shifter;
 //    private Solenoid pu, pupu;
     private final int WHEEL_CIRCUMFERENCE = 5; //inches
 
@@ -42,13 +42,13 @@ public class ArcadeDrive extends Subsystem {
 	public ArcadeDrive() {
 	
 		lFront = new WPI_TalonSRX(RobotMap.LEFT_TALON_FRONT);
-		rFront = new WPI_TalonSRX(RobotMap.RIGHT_TALON_BACK);
+		rFront = new WPI_TalonSRX(RobotMap.RIGHT_TALON_FRONT);
 		lBack = new WPI_TalonSRX(RobotMap.LEFT_TALON_BACK);
 		rBack = new WPI_TalonSRX(RobotMap.RIGHT_TALON_BACK);
 		
 		//shifter, shifter1, shifter 2 -- dont work
 		
-		isabella = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GEAR_SHIFTER_BACK, RobotMap.GEAR_SHIFTER_FRONT);
+		shifter = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GEAR_SHIFTER_BACK, RobotMap.GEAR_SHIFTER_FRONT);
 		
 		lBack.set(ControlMode.Follower, lFront.getDeviceID());
 		rBack.set(ControlMode.Follower, rFront.getDeviceID());
@@ -69,14 +69,14 @@ public class ArcadeDrive extends Subsystem {
 	}
 	
 	public Value getShifter() {
-		return isabella.get();
+		return shifter.get();
 	}
 	
 	public void switchGear(boolean gear) {
 		if(gear) {
-			isabella.set(DoubleSolenoid.Value.kForward);
+			shifter.set(DoubleSolenoid.Value.kForward);
 		} else {
-			isabella.set(DoubleSolenoid.Value.kReverse);
+			shifter.set(DoubleSolenoid.Value.kReverse);
 		}
 	}
 	

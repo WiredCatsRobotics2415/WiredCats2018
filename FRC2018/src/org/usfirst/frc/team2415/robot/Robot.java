@@ -22,11 +22,11 @@ public class Robot extends IterativeRobot {
 	public static XboxController gamepad;
 	public static Compressor compressor;
 	
-	public static ArcadeDrive arcadeDrive;
-	
 	public static CheesyDriveHelper cheesyDriveHelper;
 	
-//	public static DoubleSolenoid isabella;
+	public static ArcadeDrive arcadeDrive;
+	
+
 	
 
 	/**
@@ -45,7 +45,7 @@ public class Robot extends IterativeRobot {
 		
 		cheesyDriveHelper = new CheesyDriveHelper();
 		
-//		isabella = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GEAR_SHIFTER_FRONT, RobotMap.GEAR_SHIFTER_BACK);
+
 		
 		
 	}
