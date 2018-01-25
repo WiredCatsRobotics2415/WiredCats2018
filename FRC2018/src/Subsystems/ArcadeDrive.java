@@ -21,7 +21,7 @@ public class ArcadeDrive extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 	
-	private static ArcadeDrive mInstance = new ArcadeDrive();
+//	private static ArcadeDrive mInstance = new ArcadeDrive();
 	
 	private final WPI_TalonSRX lFront, rFront, lBack, rBack;
     private final DoubleSolenoid shifter;
@@ -34,9 +34,9 @@ public class ArcadeDrive extends Subsystem {
     
 	//if we win, be happy robot :)
 	
-	public ArcadeDrive getInstance() {
-		return mInstance;
-	}
+//	public ArcadeDrive getInstance() {
+//		return mInstance;
+//	}
 	
 	public ArcadeDrive() {
 	
@@ -45,7 +45,7 @@ public class ArcadeDrive extends Subsystem {
 		lBack = new WPI_TalonSRX(RobotMap.LEFT_TALON_BACK);
 		rBack = new WPI_TalonSRX(RobotMap.RIGHT_TALON_BACK);
 		
-		shifter = new DoubleSolenoid(RobotMap.GEAR_SHIFTER_BACK, RobotMap.GEAR_SHIFTER_FRONT, RobotMap.PCM_ID);
+		shifter = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GEAR_SHIFTER_BACK, RobotMap.GEAR_SHIFTER_FRONT);
 		
 		lBack.set(ControlMode.Follower, lFront.getDeviceID());
 		rBack.set(ControlMode.Follower, rFront.getDeviceID());

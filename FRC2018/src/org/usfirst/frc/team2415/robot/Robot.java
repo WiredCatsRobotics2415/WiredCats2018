@@ -2,6 +2,7 @@ package org.usfirst.frc.team2415.robot;
 
 import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -18,15 +19,8 @@ public class Robot extends IterativeRobot {
 	String autoSelected;
 	SendableChooser<String> chooser = new SendableChooser<>();
 	
-	public static final int IR_SENSOR = 2;
-	public static final int INTAKE_SOLENOID_1 = 3;
-	public static final int INTAKE_SOLENOID_2 = 4;
-	public static final int INTAKE_TALON_RIGHT = 5;
-	public static final int INTAKE_TALON_LEFT = 6;
-	public static final int ELEVATOR_TALON_1 = 7;
-	public static final int ELEVATOR_TALON_2 = 8;
-	
 	public static XboxController gamepad;
+	public static Compressor compressor;
 	
 	public static ArcadeDrive arcadeDrive;
 	
@@ -43,6 +37,7 @@ public class Robot extends IterativeRobot {
 //		chooser.addObject("My Auto", customAuto);
 //		SmartDashboard.putData("Auto choices", chooser);
 		gamepad = new XboxController(0);
+		compressor = new Compressor(0);
 
 		arcadeDrive = new ArcadeDrive();
 		
@@ -95,23 +90,23 @@ public class Robot extends IterativeRobot {
 		double leftY;
     	double rightX;
     	
-    	if(arcadeDrive.getVelocity() > 5) {
+    	if(gamepad.getAButton()) {
     		arcadeDrive.switchGear(true);
     	} else {
     		arcadeDrive.switchGear(false);
     	}
     	
-    	if(arcadeDrive.getShifter() == DoubleSolenoid.Value.kForward) {
-    	
-    		leftY = Robot.gamepad.getRawAxis(1);
-    		rightX = -Robot.gamepad.getRawAxis(4);
-    	
-    	} else {
+//    	if(arcadeDrive.getShifter() == DoubleSolenoid.Value.kForward) {
+//    	
+//    		leftY = Robot.gamepad.getRawAxis(1);
+//    		rightX = -Robot.gamepad.getRawAxis(4);
+//    	
+//    	} else {
     		
     		leftY = -Robot.gamepad.getRawAxis(1);
         	rightX = Robot.gamepad.getRawAxis(4);
     		
-    	}
+//    	}
     	
     	if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
     	if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND)) rightX = 0; 
