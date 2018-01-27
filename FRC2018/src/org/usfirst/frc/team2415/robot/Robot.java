@@ -143,9 +143,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 		if(gamepad.getBumper(Hand.kLeft)) {
-			SmartDashboard.putString("Gear: ", "High Gear");
+			SmartDashboard.putBoolean("High Gear: ", true);
     	} else {
-    		SmartDashboard.putString("Gear: ", "Low Gear");
+    		SmartDashboard.putBoolean("High Gear: ", false);
     	}
 	}
 }
