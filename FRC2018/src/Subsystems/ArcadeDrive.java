@@ -82,7 +82,7 @@ public class ArcadeDrive extends Subsystem {
 		return shifter.get();
 	}
 	
-	public void switchGear(boolean gear) {
+	public void setHighGear(boolean gear) {
 		if(gear) {
 			shifter.set(DoubleSolenoid.Value.kForward);
 		} else {
@@ -106,9 +106,8 @@ public class ArcadeDrive extends Subsystem {
 	}
 	
 	public double[] getDistance() {
-//		return new double[]{lFront.getPosition()*WHEEL_CIRCUMFERENCE,
-//				rFront.getPosition()*WHEEL_CIRCUMFERENCE};
-		return null;
+		return new double[]{lFront.getSelectedSensorPosition(0)*WHEEL_CIRCUMFERENCE,
+				rFront.getSelectedSensorPosition(0)*WHEEL_CIRCUMFERENCE};
 	}
 
 	@Override

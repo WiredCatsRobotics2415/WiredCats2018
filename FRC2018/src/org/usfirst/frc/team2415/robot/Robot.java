@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -96,9 +97,9 @@ public class Robot extends IterativeRobot {
     	double rightX;
     	
     	if(gamepad.getBumper(Hand.kLeft)) {
-    		arcadeDrive.switchGear(true);
+    		arcadeDrive.setHighGear(true);
     	} else {
-    		arcadeDrive.switchGear(false);
+    		arcadeDrive.setHighGear(false);
     	}
     	
 //    	if(arcadeDrive.getShifter() == DoubleSolenoid.Value.kForward) {
@@ -141,12 +142,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-	}
-	
-	public void changeGear(boolean gear){
-		if(gear){
-			
-		}
+		if(gamepad.getBumper(Hand.kLeft)) {
+			SmartDashboard.putString("Gear: ", "High Gear");
+    	} else {
+    		SmartDashboard.putString("Gear: ", "Low Gear");
+    	}
 	}
 }
 
