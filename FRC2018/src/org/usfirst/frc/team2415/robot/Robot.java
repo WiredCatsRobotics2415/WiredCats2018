@@ -4,6 +4,7 @@ import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -94,7 +95,7 @@ public class Robot extends IterativeRobot {
 		double leftY;
     	double rightX;
     	
-    	if(gamepad.getAButton()) {
+    	if(gamepad.getBumper(Hand.kLeft)) {
     		arcadeDrive.switchGear(true);
     	} else {
     		arcadeDrive.switchGear(false);
@@ -117,7 +118,20 @@ public class Robot extends IterativeRobot {
 		
 		boolean isQuickTurn = leftY < 0.1;
 		
-		arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
+//		leftY = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(leftY, 3) + (1-arcadeDrive.INTERPOLATION_FACTOR)*leftY;
+//    	rightX = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(rightX, 3) + (1-arcadeDrive.INTERPOLATION_FACTOR)*rightX;
+//    	
+//    	double left = arcadeDrive.STRAIGHT_RESTRICTER*leftY + arcadeDrive.TURN_SPEED_BOOST*rightX;
+//    	double right = arcadeDrive.STRAIGHT_RESTRICTER*leftY - arcadeDrive.TURN_SPEED_BOOST*rightX;
+    	
+//    	arcadeDrive.setMotors(left*0.7, right*0.7);
+		
+		if(gamepad.getBumper(Hand.kLeft)) {
+			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
+    	} else {
+    		arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
+    	}
+		
     	
     	
 	}
