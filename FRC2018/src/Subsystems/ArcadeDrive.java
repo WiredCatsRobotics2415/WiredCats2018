@@ -1,5 +1,6 @@
 package Subsystems;
 
+import org.usfirst.frc.team2415.robot.Robot;
 import org.usfirst.frc.team2415.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -58,9 +59,9 @@ public class ArcadeDrive extends Subsystem {
 		lFront.configContinuousCurrentLimit(30, 10);
 		lFront.enableCurrentLimit(true);
 		
-		rFront.configPeakCurrentLimit(35, 10);
+		rFront.configPeakCurrentLimit(30, 10);
 		rFront.configPeakCurrentDuration(200, 10);
-		rFront.configContinuousCurrentLimit(30, 10);
+		rFront.configContinuousCurrentLimit(25, 10);
 		rFront.enableCurrentLimit(true);
 		
 		lFront.setNeutralMode(NeutralMode.Coast);
@@ -99,6 +100,11 @@ public class ArcadeDrive extends Subsystem {
 		double b = rFront.getMotorOutputVoltage()/rFront.getBusVoltage();
 		return (a + b)/2; 
 	}
+	
+//	public double getBattery() {
+//		return Robot.pdp.getVoltage();
+//		return 0;
+//	}
 	
 	public void setMotors(double left, double right) {
 		lFront.set(left);

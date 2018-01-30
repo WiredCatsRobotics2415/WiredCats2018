@@ -3,12 +3,11 @@ package org.usfirst.frc.team2415.robot;
 import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,6 +27,8 @@ public class Robot extends IterativeRobot {
 	
 	public static ArcadeDrive arcadeDrive;
 	
+//	public static PowerDistributionPanel pdp;
+	
 
 	
 
@@ -41,11 +42,13 @@ public class Robot extends IterativeRobot {
 //		chooser.addObject("My Auto", customAuto);
 //		SmartDashboard.putData("Auto choices", chooser);
 		gamepad = new XboxController(0);
-		compressor = new Compressor(0);
+		compressor = new Compressor(20);
 
 		arcadeDrive = new ArcadeDrive();
 		
 		cheesyDriveHelper = new CheesyDriveHelper();
+		
+//		pdp = new PowerDistributionPanel(0);
 		
 
 		
@@ -90,6 +93,11 @@ public class Robot extends IterativeRobot {
 	/**
 	 * This function is called periodically during operator control
 	 */
+	
+	public void teleopInit() {
+//		System.out.println("START");
+	}
+	
 	@Override
 	public void teleopPeriodic() {
 		
@@ -121,11 +129,11 @@ public class Robot extends IterativeRobot {
 		
 //		leftY = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(leftY, 3) + (1-arcadeDrive.INTERPOLATION_FACTOR)*leftY;
 //    	rightX = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(rightX, 3) + (1-arcadeDrive.INTERPOLATION_FACTOR)*rightX;
-//    	
+////    	
 //    	double left = arcadeDrive.STRAIGHT_RESTRICTER*leftY + arcadeDrive.TURN_SPEED_BOOST*rightX;
 //    	double right = arcadeDrive.STRAIGHT_RESTRICTER*leftY - arcadeDrive.TURN_SPEED_BOOST*rightX;
-    	
-//    	arcadeDrive.setMotors(left*0.7, right*0.7);
+//    	
+//    	arcadeDrive.setMotors(left, right);
 		
 		if(gamepad.getBumper(Hand.kLeft)) {
 			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
@@ -133,7 +141,7 @@ public class Robot extends IterativeRobot {
     		arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
     	}
 		
-    	
+//    	System.out.println(arcadeDrive.getBattery());
     	
 	}
 
@@ -142,11 +150,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		if(gamepad.getBumper(Hand.kLeft)) {
-			SmartDashboard.putBoolean("High Gear: ", true);
-    	} else {
-    		SmartDashboard.putBoolean("High Gear: ", false);
-    	}
+
 	}
 }
 
