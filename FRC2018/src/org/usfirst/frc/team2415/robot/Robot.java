@@ -54,6 +54,9 @@ public class Robot extends IterativeRobot {
 		
 		intake = new Intake();
 		
+		arcadeDrive.zeroEncoders();
+		arcadeDrive.zeroYaw();
+		
 //		pdp = new PowerDistributionPanel(0);
 		
 
