@@ -16,7 +16,7 @@ public class Intake extends Subsystem {
 	
 	final double INTAKE_SPEED = 0.25;
 	
-	public long startTime;
+	public long startTime, waitTime = 500;
 	public boolean prismHeld = false;
 	
 	public static WPI_TalonSRX leftIntake, rightIntake;
@@ -70,7 +70,7 @@ public class Intake extends Subsystem {
 			startTime = System.currentTimeMillis();
 		}
 		
-		if (!clappersIn() && hasPrism() && System.currentTimeMillis() - startTime == 500) {
+		if (!clappersIn() && hasPrism() && System.currentTimeMillis() - startTime >= waitTime) {
 			holdPrism(true);
 		}
 			
