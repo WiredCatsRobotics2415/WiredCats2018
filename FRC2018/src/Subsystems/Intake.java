@@ -16,6 +16,9 @@ public class Intake extends Subsystem {
 	
 	final double INTAKE_SPEED = 0.25;
 	
+	public long startTime;
+	public boolean prismHeld = false;
+	
 	public static WPI_TalonSRX leftIntake, rightIntake;
 	public static DoubleSolenoid grabber;
 	public static DigitalInput IRDetector;
@@ -34,37 +37,48 @@ public class Intake extends Subsystem {
 		leftIntake.set(newSpeed);
 		rightIntake.set(-newSpeed);
 	}
-	/*DOES NOT WORK, DON'T USE
-	 * public boolean waitMillis(long startTime, long wait) {
-		
-		if (System.currentTimeMillis() < startTime + wait) {
+	
+	public void holdPrism(boolean grip) {
+		if(grip) {
+			grabber.set(DoubleSolenoid.Value.kForward);
+		} else {
+			grabber.set(DoubleSolenoid.Value.kReverse);
+		}
+	}
+	
+	public boolean clappersIn() {
+		if(grabber.get() == DoubleSolenoid.Value.kForward) {
 			return true;
 		} else {
 			return false;
 		}
-	}*/
+	}
+	
+	public boolean hasPrism() {
+		return IRDetector.get();
+	}
+	
 	public void grabPrism() {
-		//long startTime = System.currentTimeMillis();
-		Value pistonState = grabber.get();
-		Value pistonOn = DoubleSolenoid.Value.kForward;
-		Value pistonOff = DoubleSolenoid.Value.kReverse;
-		if (pistonState == pistonOff && IRDetector.get()) {
-			grabber.set(pistonOn);
+		
+		if(clappersIn()) {
 			sideRoller(0);
-		}
-		if (!IRDetector.get()) {
-			sideRoller(1);
 		} else {
-			sideRoller(0);
+			sideRoller(1);
 		}
+		
+		if(!hasPrism()) {
+			startTime = System.currentTimeMillis();
+		}
+		
+		if (!clappersIn() && hasPrism() && System.currentTimeMillis() - startTime == 500) {
+			holdPrism(true);
+		}
+			
 	}
 	public void emptyPrism() {
 		//long startTime = System.currentTimeMillis();
-		Value pistonState = grabber.get();
-		Value pistonOn = DoubleSolenoid.Value.kForward;
-		Value pistonOff = DoubleSolenoid.Value.kReverse;
-		if (pistonState == pistonOn) {
-			grabber.set(pistonOff);
+		if (clappersIn()) {
+			holdPrism(false);
 		}
 		sideRoller(-1);
 	}

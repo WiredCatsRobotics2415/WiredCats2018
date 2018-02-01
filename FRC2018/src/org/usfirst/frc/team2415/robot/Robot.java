@@ -100,6 +100,7 @@ public class Robot extends IterativeRobot {
 	
 	public void teleopInit() {
 //		System.out.println("START");
+		intake.holdPrism(false);
 	}
 	
 	@Override
@@ -113,18 +114,9 @@ public class Robot extends IterativeRobot {
     	} else {
     		arcadeDrive.setHighGear(false);
     	}
-    	
-//    	if(arcadeDrive.getShifter() == DoubleSolenoid.Value.kForward) {
-//    	
-//    		leftY = Robot.gamepad.getRawAxis(1);
-//    		rightX = -Robot.gamepad.getRawAxis(4);
-//    	
-//    	} else {
-    		
+
     		leftY = -Robot.gamepad.getRawAxis(1);
         	rightX = Robot.gamepad.getRawAxis(4);
-    		
-//    	}
     	
     	if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
     	if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND)) rightX = 0; 
@@ -146,6 +138,12 @@ public class Robot extends IterativeRobot {
     	}
 		
 //    	System.out.println(arcadeDrive.getBattery());
+		
+		if(gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
+			intake.grabPrism();
+		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
+			intake.emptyPrism();
+		}
     	
 	}
 

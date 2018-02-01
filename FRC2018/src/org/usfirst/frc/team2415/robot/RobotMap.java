@@ -29,7 +29,10 @@ public class RobotMap {
 	
 	public static final int LEFT_SIDE_ROLLER = 11;
 	public static final int RIGHT_SIDE_ROLLER = 2;
-	public static final int INTAKE_SOLENOID = 1;
+	public static final int INTAKE_SOLENOID_FRONT = 1;
+	public static final int INTAKE_SOLENOID_BACK = 6;
+	
+	public static final int IR_PORT = 4;
 	
 	
 }
