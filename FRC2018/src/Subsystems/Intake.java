@@ -77,10 +77,10 @@ public class Intake extends Subsystem {
 	}
 	public void emptyPrism() {
 		//long startTime = System.currentTimeMillis();
-		if (clappersIn()) {
+		sideRoller(-1);
+		if(!hasPrism()) {
 			holdPrism(false);
 		}
-		sideRoller(-1);
 	}
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
