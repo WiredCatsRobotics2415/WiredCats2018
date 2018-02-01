@@ -4,9 +4,9 @@ import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
 import Subsystems.Intake;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
@@ -29,6 +29,8 @@ public class Robot extends IterativeRobot {
 	public static ArcadeDrive arcadeDrive;
 	public static Intake intake;
 	
+	public char mySide;
+	
 //	public static PowerDistributionPanel pdp;
 	
 
@@ -50,7 +52,7 @@ public class Robot extends IterativeRobot {
 		
 		cheesyDriveHelper = new CheesyDriveHelper();
 		
-		Intake intake = new Intake();
+		intake = new Intake();
 		
 //		pdp = new PowerDistributionPanel(0);
 		
@@ -76,6 +78,16 @@ public class Robot extends IterativeRobot {
 //		 autoSelected = SmartDashboard.getString("Auto Selector");
 		// defaultAuto);
 //		System.out.println("Auto selected: " + autoSelected);
+		String gameData;
+		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		mySide = gameData.charAt(0);
+		
+		if (mySide == 'R') {
+			
+		} else {
+			
+		}
+		
 	}
 
 	/**
