@@ -2,6 +2,7 @@ package org.usfirst.frc.team2415.robot;
 
 import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
+import Subsystems.Intake;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -26,6 +27,7 @@ public class Robot extends IterativeRobot {
 	public static CheesyDriveHelper cheesyDriveHelper;
 	
 	public static ArcadeDrive arcadeDrive;
+	public static Intake intake;
 	
 //	public static PowerDistributionPanel pdp;
 	
@@ -47,6 +49,8 @@ public class Robot extends IterativeRobot {
 		arcadeDrive = new ArcadeDrive();
 		
 		cheesyDriveHelper = new CheesyDriveHelper();
+		
+		Intake intake = new Intake();
 		
 //		pdp = new PowerDistributionPanel(0);
 		

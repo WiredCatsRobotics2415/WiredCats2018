@@ -27,6 +27,10 @@ public class RobotMap {
 	public static final int GEAR_SHIFTER_FRONT = 0;
 	public static final int GEAR_SHIFTER_BACK = 7;
 	
+	public static final int LEFT_SIDE_ROLLER = 11;
+	public static final int RIGHT_SIDE_ROLLER = 2;
+	public static final int INTAKE_SOLENOID = 1;
+	
 	
 }
 
