@@ -81,6 +81,9 @@ public class Robot extends IterativeRobot {
 //		 autoSelected = SmartDashboard.getString("Auto Selector");
 		// defaultAuto);
 //		System.out.println("Auto selected: " + autoSelected);
+		arcadeDrive.zeroEncoders();
+		arcadeDrive.zeroYaw();
+		
 		String gameData;
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		mySide = gameData.charAt(0);
@@ -116,6 +119,8 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 //		System.out.println("START");
 		intake.holdPrism(false);
+		arcadeDrive.zeroEncoders();
+		arcadeDrive.zeroYaw();
 	}
 	
 	@Override
@@ -163,13 +168,47 @@ public class Robot extends IterativeRobot {
 		}
     	
 	}
+	
+	public void testInit() {
+		arcadeDrive.zeroEncoders();
+		arcadeDrive.zeroYaw();
+	}
 
 	/**
 	 * This function is called periodically during test mode
 	 */
 	@Override
 	public void testPeriodic() {
+		
+		System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] + ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
 
+		double leftY;
+    	double rightX;
+
+    		leftY = -Robot.gamepad.getRawAxis(1);
+        	rightX = Robot.gamepad.getRawAxis(4);
+    	
+    	if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
+    	if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND)) rightX = 0; 
+		
+		
+		leftY = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(leftY, 3) + (1-arcadeDrive.INTERPOLATION_FACTOR)*leftY;
+    	rightX = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(rightX, 3) + (1-arcadeDrive.INTERPOLATION_FACTOR)*rightX;
+//    	
+    	double left = arcadeDrive.STRAIGHT_RESTRICTER*leftY + arcadeDrive.TURN_SPEED_BOOST*rightX;
+    	double right = arcadeDrive.STRAIGHT_RESTRICTER*leftY - arcadeDrive.TURN_SPEED_BOOST*rightX;
+    	
+    	arcadeDrive.setMotors(left, right);
+
+	}
+	
+	public void disabledInit() {
+		arcadeDrive.zeroEncoders();
+		arcadeDrive.zeroYaw();
+	}
+	
+	public void disabledPeriodic() {
+		
 	}
 }
 

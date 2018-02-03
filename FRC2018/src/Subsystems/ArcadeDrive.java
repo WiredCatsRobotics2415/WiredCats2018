@@ -80,8 +80,8 @@ public class ArcadeDrive extends Subsystem {
 		lFront.setNeutralMode(NeutralMode.Coast);
 		rFront.setNeutralMode(NeutralMode.Coast);
 		
-		lFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-		rFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+		lFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		rFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		
 		lFront.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_100Ms, 0);
 		lFront.configVelocityMeasurementWindow(64, 0);
@@ -130,8 +130,8 @@ public class ArcadeDrive extends Subsystem {
 	}
 	
 	public void zeroEncoders(){
-    	lFront.setSelectedSensorPosition(0, 0, 0);
-    	rFront.setSelectedSensorPosition(0, 0, 0);
+    	lFront.setSelectedSensorPosition(0, 0, 10);
+    	rFront.setSelectedSensorPosition(0, 0, 10);
     }
 	
 	public double getPitch(){
