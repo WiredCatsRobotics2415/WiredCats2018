@@ -37,6 +37,8 @@ public class ArcadeDrive extends Subsystem {
 	public double STRAIGHT_RESTRICTER = 1; 
 	public double TURN_SPEED_BOOST = 0.35;
 	public double INTERPOLATION_FACTOR = 0.420;
+	public double LOW_SWITCH = 200;
+	public double HIGH_SWITCH = 500;
     
 	//if we win, be happy robot :)
 	
@@ -104,6 +106,14 @@ public class ArcadeDrive extends Subsystem {
 		}
 	}
 	
+	public boolean isHighGear() {
+		if (shifter.get() == DoubleSolenoid.Value.kForward) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public double getVelocity() {
 		return (lFront.getSelectedSensorVelocity(0) + rFront.getSelectedSensorVelocity(0)) / 2;
 	}
@@ -125,8 +135,9 @@ public class ArcadeDrive extends Subsystem {
 	}
 	
 	public double[] getDistance() {
-		return new double[]{lFront.getSelectedSensorPosition(0)*WHEEL_CIRCUMFERENCE,
-				rFront.getSelectedSensorPosition(0)*WHEEL_CIRCUMFERENCE};
+		//in rotations
+		return new double[]{lFront.getSelectedSensorPosition(0)/4096,
+				rFront.getSelectedSensorPosition(0)/4096};
 	}
 	
 	public void zeroEncoders(){

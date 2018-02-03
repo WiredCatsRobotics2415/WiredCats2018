@@ -126,16 +126,32 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
+		//DEFAULT = low gear
+		
 		System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] + ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
 		
 		double leftY;
     	double rightX;
     	
+    	
+    	//manual transmission
     	if(gamepad.getBumper(Hand.kLeft)) {
     		arcadeDrive.setHighGear(true);
     	} else {
     		arcadeDrive.setHighGear(false);
     	}
+    	
+    	/* beginning of auto transmission
+    	if (!arcadeDrive.isHighGear()) {
+    		if (arcadeDrive.getVelocity() < arcadeDrive.HIGH_SWITCH) {
+    			arcadeDrive.setHighGear(true);
+    		}
+    	} else {
+    		if (arcadeDrive.getVelocity() > arcadeDrive.LOW_SWITCH) {
+    			arcadeDrive.setHighGear(false);
+    		}
+    	}
+    	*/
 
     		leftY = -Robot.gamepad.getRawAxis(1);
         	rightX = Robot.gamepad.getRawAxis(4);
