@@ -28,7 +28,6 @@ public class Intake extends Subsystem {
 	public Intake() {
 		leftIntake = new WPI_TalonSRX(RobotMap.LEFT_SIDE_ROLLER);
 		rightIntake = new WPI_TalonSRX(RobotMap.RIGHT_SIDE_ROLLER);
-		grabber = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.INTAKE_SOLENOID_FRONT, RobotMap.INTAKE_SOLENOID_BACK);
 		IRDetector = new DigitalInput(RobotMap.IR_PORT);
 	}
 	
@@ -38,49 +37,16 @@ public class Intake extends Subsystem {
 		rightIntake.set(-newSpeed);
 	}
 	
-	public void holdPrism(boolean grip) {
-		if(grip) {
-			grabber.set(DoubleSolenoid.Value.kForward);
-		} else {
-			grabber.set(DoubleSolenoid.Value.kReverse);
-		}
-	}
-	
-	public boolean clappersIn() {
-		if(grabber.get() == DoubleSolenoid.Value.kForward) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
 	public boolean hasPrism() {
 		return IRDetector.get();
 	}
 	
 	public void grabPrism() {
-		
-		if(clappersIn()) {
-			sideRoller(0);
-		} else {
 			sideRoller(1);
-		}
-		
-		if(!hasPrism()) {
-			startTime = System.currentTimeMillis();
-		}
-		
-		if (!clappersIn() && hasPrism() && System.currentTimeMillis() - startTime >= waitTime) {
-			holdPrism(true);
-		}
-			
 	}
 	public void emptyPrism() {
 		//long startTime = System.currentTimeMillis();
 		sideRoller(-1);
-		if(!hasPrism()) {
-			holdPrism(false);
-		}
 	}
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.

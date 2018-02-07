@@ -79,8 +79,11 @@ public class ArcadeDrive extends Subsystem {
 		rFront.configContinuousCurrentLimit(25, 10);
 		rFront.enableCurrentLimit(true);
 		
-		lFront.setNeutralMode(NeutralMode.Coast);
-		rFront.setNeutralMode(NeutralMode.Coast);
+//		lFront.setNeutralMode(NeutralMode.Coast);
+//		rFront.setNeutralMode(NeutralMode.Coast);
+		
+		lFront.setNeutralMode(NeutralMode.Brake);
+		rFront.setNeutralMode(NeutralMode.Brake);
 		
 		lFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		rFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
