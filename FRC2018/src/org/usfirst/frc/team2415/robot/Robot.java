@@ -118,7 +118,6 @@ public class Robot extends IterativeRobot {
 	
 	public void teleopInit() {
 //		System.out.println("START");
-		intake.holdPrism(false);
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
 	}
