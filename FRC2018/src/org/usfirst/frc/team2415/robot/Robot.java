@@ -190,9 +190,11 @@ public class Robot extends IterativeRobot {
 		}
 		
 		if (gamepad.getAButton()) {
-			beast.shoot(beast.SCALE);
+			beast.shoot(1,2);
 		} else if (gamepad.getBButton()) {
-			beast.shoot(beast.SWITCH);
+			beast.shoot(0,2);
+		} else {
+			beast.run();
 		}
 
 	}
