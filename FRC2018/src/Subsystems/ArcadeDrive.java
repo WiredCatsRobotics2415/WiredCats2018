@@ -80,11 +80,11 @@ public class ArcadeDrive extends Subsystem {
 		lFront.setNeutralMode(NeutralMode.Coast);
 		rFront.setNeutralMode(NeutralMode.Coast);
 		
-		lFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-		rFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		lBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		rBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		
-		lFront.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_100Ms, 0);
-		lFront.configVelocityMeasurementWindow(64, 0);
+		lBack.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_100Ms, 10);
+		lBack.configVelocityMeasurementWindow(128, 10);
 	
 	}
 	
@@ -101,6 +101,14 @@ public class ArcadeDrive extends Subsystem {
 			shifter.set(DoubleSolenoid.Value.kForward);
 		} else {
 			shifter.set(DoubleSolenoid.Value.kReverse);
+		}
+	}
+	
+	public boolean isHighGear() {
+		if (shifter.get() == DoubleSolenoid.Value.kForward) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
@@ -125,8 +133,8 @@ public class ArcadeDrive extends Subsystem {
 	}
 	
 	public double[] getDistance() {
-		return new double[]{lFront.getSelectedSensorPosition(0)*WHEEL_CIRCUMFERENCE,
-				rFront.getSelectedSensorPosition(0)*WHEEL_CIRCUMFERENCE};
+		return new double[]{(double)lFront.getSelectedSensorPosition(0)/4096*WHEEL_CIRCUMFERENCE,
+				(double)rFront.getSelectedSensorPosition(0)/4096*WHEEL_CIRCUMFERENCE};
 	}
 	
 	public void zeroEncoders(){
@@ -152,6 +160,16 @@ public class ArcadeDrive extends Subsystem {
     
     public double getAngle(){
     	return ahrs.getAngle();
+    }
+    
+    public void setBrakeMode(boolean brake) {
+    	if (brake) {
+    		lFront.setNeutralMode(NeutralMode.Brake);
+    		rFront.setNeutralMode(NeutralMode.Brake);
+    	} else {
+    		lFront.setNeutralMode(NeutralMode.Coast);
+    		rFront.setNeutralMode(NeutralMode.Coast);
+    	}
     }
 
 	@Override

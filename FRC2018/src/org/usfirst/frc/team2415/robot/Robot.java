@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -48,14 +49,15 @@ public class Robot extends IterativeRobot {
 		gamepad = new XboxController(0);
 		compressor = new Compressor(20);
 
-		arcadeDrive = new ArcadeDrive();
-		
 		cheesyDriveHelper = new CheesyDriveHelper();
 		
+		arcadeDrive = new ArcadeDrive();
 		intake = new Intake();
 		
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
+		
+		updateShuffle();
 		
 //		pdp = new PowerDistributionPanel(0);
 		
@@ -101,6 +103,9 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		
+		updateShuffle();
+		
 //		switch (autoSelected) {
 //		case customAuto:
 //			// Put custom auto code here
@@ -118,7 +123,6 @@ public class Robot extends IterativeRobot {
 	
 	public void teleopInit() {
 //		System.out.println("START");
-		intake.holdPrism(false);
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
 	}
@@ -126,7 +130,13 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		
-		System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] + ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
+		updateShuffle();
+		
+		System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] + 
+				", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
+		
+		System.out.println(
+				"VELOCITY: " + arcadeDrive.getVelocity());
 		
 		double leftY;
     	double rightX;
@@ -137,8 +147,8 @@ public class Robot extends IterativeRobot {
     		arcadeDrive.setHighGear(false);
     	}
 
-    		leftY = -Robot.gamepad.getRawAxis(1);
-        	rightX = Robot.gamepad.getRawAxis(4);
+    		leftY = Robot.gamepad.getRawAxis(1);
+        	rightX = -Robot.gamepad.getRawAxis(4);
     	
     	if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
     	if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND)) rightX = 0; 
@@ -165,6 +175,8 @@ public class Robot extends IterativeRobot {
 			intake.grabPrism();
 		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
 			intake.emptyPrism();
+		} else {
+			intake.stopGrab();
 		}
     	
 	}
@@ -179,6 +191,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		
+		updateShuffle();
 		
 		System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] + ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
 
@@ -208,6 +222,18 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void disabledPeriodic() {
+		updateShuffle();
+		
+	}
+	
+	public void updateShuffle() {
+		SmartDashboard.putBoolean("HIGH GEAR: ", arcadeDrive.isHighGear());
+		SmartDashboard.putBoolean("COMP ", compressor.enabled());
+
+		SmartDashboard.putNumber("HEADING: ", arcadeDrive.getAngle());
+		SmartDashboard.putNumber("VELOCITY: ", Math.abs(arcadeDrive.getVelocity()));
+		SmartDashboard.putNumber("THROTTLE", -Robot.gamepad.getRawAxis(1));
+		SmartDashboard.putNumber("YAW", Robot.gamepad.getRawAxis(4));
 		
 	}
 }
