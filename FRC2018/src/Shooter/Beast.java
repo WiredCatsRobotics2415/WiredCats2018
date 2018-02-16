@@ -113,9 +113,9 @@ public class Beast extends Subsystem {
 	public void setSpeed(double velocity) { //speed in m/s
 		double speed = (velocity/GEAR_DISTANCE)/10;
 		rFar.set(ControlMode.Velocity, speed);
-		rNear.set(ControlMode.Follower, RobotMap.RIGHT_FAR_SHOOTER);
-		lFar.set(ControlMode.Follower, RobotMap.RIGHT_FAR_SHOOTER);
-		lNear.set(ControlMode.Follower, RobotMap.RIGHT_FAR_SHOOTER);
+		rNear.set(ControlMode.Follower, rNear.getDeviceID());
+		lFar.set(ControlMode.Follower, lFar.getDeviceID());
+		lNear.set(ControlMode.Follower, lNear.getDeviceID());
 	}
 
     // Put methods for controlling this subsystem
