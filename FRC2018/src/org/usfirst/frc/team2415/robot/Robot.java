@@ -31,6 +31,7 @@ public class Robot extends IterativeRobot {
 	public static Intake intake;
 	
 	public char mySide;
+	public long autoStopTime;
 	
 //	public static PowerDistributionPanel pdp;
 	
@@ -86,9 +87,11 @@ public class Robot extends IterativeRobot {
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
 		
+		autoStopTime = System.currentTimeMillis();
+		
 		String gameData;
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		mySide = gameData.charAt(0);
+//		gameData = DriverStation.getInstance().getGameSpecificMessage();
+//		mySide = gameData.charAt(0);
 		
 		if (mySide == 'R') {
 			
@@ -105,6 +108,12 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		
 		updateShuffle();
+		
+		if (Math.abs(System.currentTimeMillis() - autoStopTime) <= 1000) {
+			intake.sideRoller(-1);
+		} else {
+			intake.sideRoller(0);
+		}
 		
 //		switch (autoSelected) {
 //		case customAuto:
@@ -132,11 +141,14 @@ public class Robot extends IterativeRobot {
 		
 		updateShuffle();
 		
-		System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] + 
-				", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
+//		System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] + 
+//				", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
+//		
+//		System.out.println(
+//				"VELOCITY: " + arcadeDrive.getVelocity());
 		
-		System.out.println(
-				"VELOCITY: " + arcadeDrive.getVelocity());
+//		System.out.println("IR SENSOR: " + intake.hasPrism());
+//		System.out.println("YAW: " + arcadeDrive.getYaw());
 		
 		double leftY;
     	double rightX;
@@ -223,6 +235,8 @@ public class Robot extends IterativeRobot {
 	
 	public void disabledPeriodic() {
 		updateShuffle();
+		
+//		System.out.println("IR SENSOR: " + intake.IRDetector.get());
 		
 	}
 	

@@ -35,7 +35,7 @@ public class RobotMap {
 	public static final int RIGHT_FAR_SHOOTER = 12;
 	public static final int RIGHT_NEAR_SHOOTER = 13;
 	
-	public static final int IR_PORT = 4;
+	public static final int IR_PORT = 0;
 	public static final int LIMIT_SWITCH = 3;
 	
 	
