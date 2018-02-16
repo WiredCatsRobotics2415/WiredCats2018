@@ -13,8 +13,8 @@ public class Finder {
 	
 	public Finder(double targetX, double targetY) {
 		this.min = Math.sqrt((4.9*Math.pow(targetX,2))/(Math.cos(LAUNCH_ANGLE)*((Math.sin(LAUNCH_ANGLE)*targetX)-(Math.cos(LAUNCH_ANGLE)*targetY))));
-		//sets min velocity as velocity wihtout air resistance
-		this.velocity = this.min*VELOCITY_MULTIPLIER; //staring velocity is min velocity times velocity multiplier
+		//sets min velocity as velocity without air resistance
+		this.velocity = this.min*VELOCITY_MULTIPLIER; //starting velocity is min velocity times velocity multiplier
 		this.max = MAX_VELOCITY; //set max velocity to max velocity constant
 		this.cube = new Projectile(LAUNCH_ANGLE,this.velocity,targetX,targetY); //creates cube object
 	}
