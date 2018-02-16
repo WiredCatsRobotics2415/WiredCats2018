@@ -36,7 +36,8 @@ public class RobotMap {
 	public static final int RIGHT_NEAR_SHOOTER = 13;
 	
 	public static final int IR_PORT = 0;
-	public static final int LIMIT_SWITCH = 3;
+	public static final int TOP_LIMIT = 3;
+	public static final int BOTTOM_LIMIT = 5;
 	
 	
 }

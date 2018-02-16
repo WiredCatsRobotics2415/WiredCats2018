@@ -2,9 +2,9 @@ package org.usfirst.frc.team2415.robot;
 
 import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
+import Subsystems.Beast;
 import Subsystems.Intake;
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -29,6 +29,7 @@ public class Robot extends IterativeRobot {
 	
 	public static ArcadeDrive arcadeDrive;
 	public static Intake intake;
+	public static Beast beast;
 	
 	public char mySide;
 	public long autoStopTime;
@@ -54,6 +55,7 @@ public class Robot extends IterativeRobot {
 		
 		arcadeDrive = new ArcadeDrive();
 		intake = new Intake();
+		beast = new Beast();
 		
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
@@ -189,6 +191,12 @@ public class Robot extends IterativeRobot {
 			intake.emptyPrism();
 		} else {
 			intake.stopGrab();
+		}
+		
+		if (gamepad.getAButton()) {
+			beast.shoot(beast.SCALE);
+		} else if (gamepad.getBButton()) {
+			beast.shoot(beast.SWITCH);
 		}
     	
 	}
