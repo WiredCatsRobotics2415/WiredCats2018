@@ -1,6 +1,5 @@
 package Subsystems;
 
-import org.usfirst.frc.team2415.robot.Robot;
 import org.usfirst.frc.team2415.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -8,9 +7,12 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
 import Cheesy.DriveSignal;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -26,6 +28,8 @@ public class ArcadeDrive extends Subsystem {
 	
 	private WPI_TalonSRX lFront, rFront, lBack, rBack;
     private DoubleSolenoid shifter;
+    public AHRS ahrs;
+    
 //    private Solenoid pu, pupu;
     private final int WHEEL_CIRCUMFERENCE = 5; //inches
 
@@ -41,6 +45,15 @@ public class ArcadeDrive extends Subsystem {
 //	}
 	
 	public ArcadeDrive() {
+		
+		try {
+            /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
+            /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
+            /* See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details. */
+            ahrs = new AHRS(SerialPort.Port.kMXP); 
+        } catch (RuntimeException ex ) {
+            DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
+        }
 	
 		lFront = new WPI_TalonSRX(RobotMap.LEFT_TALON_FRONT);
 		rFront = new WPI_TalonSRX(RobotMap.RIGHT_TALON_FRONT);
@@ -67,11 +80,11 @@ public class ArcadeDrive extends Subsystem {
 		lFront.setNeutralMode(NeutralMode.Coast);
 		rFront.setNeutralMode(NeutralMode.Coast);
 		
-		lFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
-		rFront.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+		lBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		rBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		
-		lFront.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_100Ms, 0);
-		lFront.configVelocityMeasurementWindow(64, 0);
+		lBack.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_100Ms, 10);
+		lBack.configVelocityMeasurementWindow(128, 10);
 	
 	}
 	
@@ -88,6 +101,14 @@ public class ArcadeDrive extends Subsystem {
 			shifter.set(DoubleSolenoid.Value.kForward);
 		} else {
 			shifter.set(DoubleSolenoid.Value.kReverse);
+		}
+	}
+	
+	public boolean isHighGear() {
+		if (shifter.get() == DoubleSolenoid.Value.kForward) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
@@ -112,9 +133,44 @@ public class ArcadeDrive extends Subsystem {
 	}
 	
 	public double[] getDistance() {
-		return new double[]{lFront.getSelectedSensorPosition(0)*WHEEL_CIRCUMFERENCE,
-				rFront.getSelectedSensorPosition(0)*WHEEL_CIRCUMFERENCE};
+		return new double[]{(double)lFront.getSelectedSensorPosition(0)/4096*WHEEL_CIRCUMFERENCE,
+				(double)rFront.getSelectedSensorPosition(0)/4096*WHEEL_CIRCUMFERENCE};
 	}
+	
+	public void zeroEncoders(){
+    	lFront.setSelectedSensorPosition(0, 0, 10);
+    	rFront.setSelectedSensorPosition(0, 0, 10);
+    }
+	
+	public double getPitch(){
+    	return ahrs.getPitch();
+    }
+    
+    public double getYaw(){
+    	return ahrs.getYaw();
+    }
+    
+    public void zeroYaw(){
+    	ahrs.zeroYaw();
+    }
+    
+    public double getRoll(){
+    	return ahrs.getRoll();
+    }
+    
+    public double getAngle(){
+    	return ahrs.getAngle();
+    }
+    
+    public void setBrakeMode(boolean brake) {
+    	if (brake) {
+    		lFront.setNeutralMode(NeutralMode.Brake);
+    		rFront.setNeutralMode(NeutralMode.Brake);
+    	} else {
+    		lFront.setNeutralMode(NeutralMode.Coast);
+    		rFront.setNeutralMode(NeutralMode.Coast);
+    	}
+    }
 
 	@Override
 	protected void initDefaultCommand() {
