@@ -52,12 +52,13 @@ public class TimedTurnByCommand extends TimedCommand implements PIDOutput {
     	turnController.setContinuous(true);
     	turnController.enable();
     	turnController.setSetpoint(angle);
+    	
+    	System.out.println("SET: " + turnController.getSetpoint());
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-//    	System.out.println(System.currentTimeMillis());
-    	Robot.arcadeDrive.setMotors(rotateToAngleRate, -rotateToAngleRate);
+    	Robot.arcadeDrive.setMotors(rotateToAngleRate, rotateToAngleRate);
     }
 
     // Called once after timeout

@@ -11,9 +11,9 @@ import com.kauailabs.navx.frc.AHRS;
 
 import Cheesy.DriveSignal;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -50,7 +50,7 @@ public class ArcadeDrive extends Subsystem {
             /* Communicate w/navX-MXP via the MXP SPI Bus.                                     */
             /* Alternatively:  I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB     */
             /* See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details. */
-            ahrs = new AHRS(SerialPort.Port.kMXP); 
+            ahrs = new AHRS(SPI.Port.kMXP); 
         } catch (RuntimeException ex ) {
             DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
         }
@@ -132,14 +132,19 @@ public class ArcadeDrive extends Subsystem {
 		rFront.set(right);
 	}
 	
+	public void setVelocity(double leftVel, double rightVel) {
+		lFront.set(ControlMode.Velocity, leftVel);
+		rFront.set(ControlMode.Velocity, rightVel);
+	}
+	
 	public double[] getDistance() {
-		return new double[]{(double)lFront.getSelectedSensorPosition(0)/4096*WHEEL_CIRCUMFERENCE,
-				(double)rFront.getSelectedSensorPosition(0)/4096*WHEEL_CIRCUMFERENCE};
+		return new double[]{(double)lBack.getSelectedSensorPosition(0)/4096*WHEEL_CIRCUMFERENCE,
+				(double)rBack.getSelectedSensorPosition(0)/4096*WHEEL_CIRCUMFERENCE};
 	}
 	
 	public void zeroEncoders(){
-    	lFront.setSelectedSensorPosition(0, 0, 10);
-    	rFront.setSelectedSensorPosition(0, 0, 10);
+    	lBack.setSelectedSensorPosition(0, 0, 10);
+    	rBack.setSelectedSensorPosition(0, 0, 10);
     }
 	
 	public double getPitch(){

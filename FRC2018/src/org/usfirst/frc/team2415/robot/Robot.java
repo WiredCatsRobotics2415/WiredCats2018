@@ -4,10 +4,13 @@ import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
 import Subsystems.Beast;
 import Subsystems.Intake;
+import autonomous.TestAuto;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import utilities.FalconPathPlanner;
@@ -84,6 +87,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		
 //		autoSelected = chooser.getSelected();
 //		 autoSelected = SmartDashboard.getString("Auto Selector");
 		// defaultAuto);
@@ -105,6 +109,11 @@ public class Robot extends IterativeRobot {
 			
 		}
 		
+		System.out.println("HELP");
+		
+		Command turn = new TestAuto();
+		turn.start();
+		
 	}
 
 	/**
@@ -112,6 +121,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
+		Scheduler.getInstance().run();
 		
 		updateShuffle();
 		
@@ -121,20 +131,25 @@ public class Robot extends IterativeRobot {
 			intake.sideRoller(0);
 		}
 		
+//		System.out.println(Robot.arcadeDrive.getYaw());
+		
 		double[][] waypoints = new double[][]{
 			{1, 1},
-			{5, 1},
-			{9, 5},
+			{2, 1},
 		}; 
 
-		double totalTime = 8; //max seconds we want to drive the path
-		double timeStep = 0.02; //period of control loop on Rio, seconds
+		double totalTime = 5; //max seconds we want to drive the path
+		double timeStep = 0.1; //period of control loop on Rio, seconds
 		double robotTrackWidth = 2.165; //distance between left and right wheels, feet
 
 		FalconPathPlanner path = new FalconPathPlanner(waypoints);
 		path.calculate(totalTime, timeStep, robotTrackWidth);
 		
-		arcadeDrive.setMotors(path.smoothLeftVelocity[pathStep][1], path.smoothRightVelocity[pathStep][1]);
+		if (pathStep < path.smoothLeftVelocity.length) {
+//		arcadeDrive.setMotors(path.smoothLeftVelocity[pathStep][1], -path.smoothRightVelocity[pathStep][1]);
+//		System.out.println("LEFT: " + path.smoothLeftVelocity[pathStep][1] + "\n RIGHT :" + path.smoothRightVelocity[pathStep][1]);
+		pathStep += 1;
+		}
 		
 //		switch (autoSelected) {
 //		case customAuto:
@@ -159,11 +174,14 @@ public class Robot extends IterativeRobot {
 	
 	@Override
 	public void teleopPeriodic() {
+		Scheduler.getInstance().run();
+		
+		System.out.println(arcadeDrive.getYaw());
 		
 		updateShuffle();
 		
-//		System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] + 
-//				", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
+		System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] + 
+				", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
 //		
 //		System.out.println(
 //				"VELOCITY: " + arcadeDrive.getVelocity());
@@ -181,7 +199,7 @@ public class Robot extends IterativeRobot {
     	}
 
     		leftY = Robot.gamepad.getRawAxis(1);
-        	rightX = -Robot.gamepad.getRawAxis(4);
+        	rightX = Robot.gamepad.getRawAxis(4);
     	
     	if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
     	if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND)) rightX = 0; 
@@ -212,11 +230,11 @@ public class Robot extends IterativeRobot {
 			intake.stopGrab();
 		}
 		
-		if (gamepad.getAButton()) {
-			beast.shoot(beast.SCALE);
-		} else if (gamepad.getBButton()) {
-			beast.shoot(beast.SWITCH);
-		}
+//		if (gamepad.getAButton()) {
+//			beast.shoot(beast.SCALE);
+//		} else if (gamepad.getBButton()) {
+//			beast.shoot(beast.SWITCH);
+//		}
     	
 	}
 	
@@ -261,6 +279,8 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void disabledPeriodic() {
+		Scheduler.getInstance().run();
+		
 		updateShuffle();
 		
 //		System.out.println("IR SENSOR: " + intake.IRDetector.get());
