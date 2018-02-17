@@ -45,7 +45,7 @@ public class TestTracker extends Subsystem {
 		if (this.deltaLeftEn < this.deltaRightEn) { //turning left
 			vectorAngle *= -1;
 		}
-		double netAngle = lastAngle + thisAngle;
+		double netAngle = lastAngle + vectorAngle;
 		this.pos[0] += Math.sin(Math.toRadians(netAngle))*netDistance;
 		this.pos[1] += Math.cos(Math.toRadians(netAngle))*netDistance;
 		lastAngle = thisAngle;
