@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import utilities.FalconPathPlanner;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -33,6 +34,7 @@ public class Robot extends IterativeRobot {
 	
 	public char mySide;
 	public long autoStopTime;
+	public int pathStep;
 	
 //	public static PowerDistributionPanel pdp;
 	
@@ -91,6 +93,8 @@ public class Robot extends IterativeRobot {
 		
 		autoStopTime = System.currentTimeMillis();
 		
+		pathStep = 0;
+		
 		String gameData;
 //		gameData = DriverStation.getInstance().getGameSpecificMessage();
 //		mySide = gameData.charAt(0);
@@ -116,6 +120,21 @@ public class Robot extends IterativeRobot {
 		} else {
 			intake.sideRoller(0);
 		}
+		
+		double[][] waypoints = new double[][]{
+			{1, 1},
+			{5, 1},
+			{9, 5},
+		}; 
+
+		double totalTime = 8; //max seconds we want to drive the path
+		double timeStep = 0.02; //period of control loop on Rio, seconds
+		double robotTrackWidth = 2.165; //distance between left and right wheels, feet
+
+		FalconPathPlanner path = new FalconPathPlanner(waypoints);
+		path.calculate(totalTime, timeStep, robotTrackWidth);
+		
+		arcadeDrive.setMotors(path.smoothLeftVelocity[pathStep][1], path.smoothRightVelocity[pathStep][1]);
 		
 //		switch (autoSelected) {
 //		case customAuto:

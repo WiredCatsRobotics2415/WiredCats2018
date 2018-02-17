@@ -2,6 +2,8 @@ package Subsystems;
 
 import org.usfirst.frc.team2415.robot.RobotMap;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -29,6 +31,13 @@ public class Beast extends Subsystem {
 		rFar = new WPI_TalonSRX(RobotMap.RIGHT_FAR_SHOOTER);
 		rNear = new WPI_TalonSRX(RobotMap.RIGHT_NEAR_SHOOTER);
 		
+		lFar.setNeutralMode(NeutralMode.Brake);
+		lNear.setNeutralMode(NeutralMode.Brake);
+		rFar.setNeutralMode(NeutralMode.Brake);
+		rNear.setNeutralMode(NeutralMode.Brake);
+		
+		lNear.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		
 		topLimit = new DigitalInput(RobotMap.TOP_LIMIT);
 		bottomLimit = new DigitalInput(RobotMap.BOTTOM_LIMIT);
 		
@@ -39,6 +48,7 @@ public class Beast extends Subsystem {
 					System.out.println("REACHED TOP");
 					shooter.interrupt();
 					ascentStopTime = System.currentTimeMillis();
+					System.out.println("ENCODER AT: " + getHeight());
 					System.out.println("STOP TIME: " + ascentStopTime);
 				}
 				if(bottomLimit.get()) {
@@ -85,6 +95,14 @@ public class Beast extends Subsystem {
 		}
 	}
 	
+	public double getHeight() {
+		return (double)lNear.getSelectedSensorPosition(0);
+	}
+	
+	public void zeroShooterEncoder(){
+    	lNear.setSelectedSensorPosition(0, 0, 10);
+    }
+	
 	public void shoot(byte state) {
 		shootAt = state;
 		checker.start();
@@ -99,6 +117,7 @@ public class Beast extends Subsystem {
 	}
 	
 	public void backDown() {
+		zeroShooterEncoder();
 		lFar.set(-0.5);
 		lNear.set(-0.5);
 		rFar.set(-0.5);

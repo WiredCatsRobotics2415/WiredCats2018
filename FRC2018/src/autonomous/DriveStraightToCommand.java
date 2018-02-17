@@ -30,6 +30,7 @@ public class DriveStraightToCommand extends Command implements PIDOutput {
 	long startTime;
 	boolean finisher;
 	
+	double startPos;
 	double distance;
 	double speed;
 	double time;
@@ -40,7 +41,7 @@ public class DriveStraightToCommand extends Command implements PIDOutput {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
 		requires(Robot.arcadeDrive);
-		this.distance = -distance;
+		this.distance = distance;
 		this.speed = speed;
 		this.time = time;
     }
@@ -50,7 +51,8 @@ public class DriveStraightToCommand extends Command implements PIDOutput {
     	startTime = System.currentTimeMillis()/1000;
 //    	Robot.arcadeDrive.set(ControlMode.PercentOutput);
     	Robot.arcadeDrive.zeroEncoders();
-    	Robot.arcadeDrive.zeroYaw();
+//    	Robot.arcadeDrive.zeroYaw();
+//    	startPos = (Math.abs(Robot.arcadeDrive.getDistance()[1]) + Math.abs(Robot.arcadeDrive.getDistance()[0]))/2;
     	Robot.arcadeDrive.setMotors(0, 0);
     	turnController = new PIDController(kP, kI, kD, kF, Robot.arcadeDrive.ahrs, this);
     	turnController.setInputRange(-180.0f,  180.0f);
