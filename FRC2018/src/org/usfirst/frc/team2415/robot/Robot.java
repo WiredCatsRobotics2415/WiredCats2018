@@ -203,7 +203,7 @@ public class Robot extends IterativeRobot {
 		double leftY;
     	double rightX;
 
-    		leftY = -Robot.gamepad.getRawAxis(1);
+    		leftY = Robot.gamepad.getRawAxis(1);
         	rightX = Robot.gamepad.getRawAxis(4);
     	
     	if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
