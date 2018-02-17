@@ -160,20 +160,12 @@ public class Robot extends IterativeRobot {
     	}
 
     		leftY = Robot.gamepad.getRawAxis(1);
-        	rightX = -Robot.gamepad.getRawAxis(4);
+        	rightX = Robot.gamepad.getRawAxis(4);
     	
     	if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
     	if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND)) rightX = 0; 
 		
 		boolean isQuickTurn = leftY < 0.1;
-		
-//		leftY = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(leftY, 3) + (1-arcadeDrive.INTERPOLATION_FACTOR)*leftY;
-//    	rightX = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(rightX, 3) + (1-arcadeDrive.INTERPOLATION_FACTOR)*rightX;
-////    	
-//    	double left = arcadeDrive.STRAIGHT_RESTRICTER*leftY + arcadeDrive.TURN_SPEED_BOOST*rightX;
-//    	double right = arcadeDrive.STRAIGHT_RESTRICTER*leftY - arcadeDrive.TURN_SPEED_BOOST*rightX;
-//    	
-//    	arcadeDrive.setMotors(left, right);
 		
 		if(gamepad.getBumper(Hand.kLeft)) {
 			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
@@ -224,6 +216,7 @@ public class Robot extends IterativeRobot {
     	double left = arcadeDrive.STRAIGHT_RESTRICTER*leftY + arcadeDrive.TURN_SPEED_BOOST*rightX;
     	double right = arcadeDrive.STRAIGHT_RESTRICTER*leftY - arcadeDrive.TURN_SPEED_BOOST*rightX;
     	
+    	System.out.println(left + "..." + right);
     	arcadeDrive.setMotors(left, right);
 
 	}
