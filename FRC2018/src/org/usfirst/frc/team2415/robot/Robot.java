@@ -56,7 +56,7 @@ public class Robot extends IterativeRobot {
 		cheesyDriveHelper = new CheesyDriveHelper();
 
 		arcadeDrive = new ArcadeDrive();
-		velocityDrive = new VelocityDrive();
+//		velocityDrive = new VelocityDrive();
 		intake = new Intake();
 		beast = new Beast();
 

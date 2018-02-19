@@ -5,7 +5,6 @@ import org.usfirst.frc.team2415.robot.RobotMap;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -13,7 +12,7 @@ import Cheesy.DriveSignal;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -57,7 +56,7 @@ public class ArcadeDrive extends Subsystem {
 			 * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/
 			 * for details.
 			 */
-			ahrs = new AHRS(SPI.Port.kMXP);
+			ahrs = new AHRS(SerialPort.Port.kMXP);
 		} catch (RuntimeException ex) {
 			DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
 		}

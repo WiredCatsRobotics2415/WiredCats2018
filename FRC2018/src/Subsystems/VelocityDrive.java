@@ -169,7 +169,7 @@ public class VelocityDrive extends Subsystem {
 
 		} else {
 
-			setVelocity(.87 * 1079 * rightX, -.87 * 1079 * rightX);
+			setVelocity(.87 * MAX_RPM * rightX, -.87 * MAX_RPM * rightX);
 		}
 
 	}
