@@ -24,12 +24,16 @@ public class Beast extends Subsystem {
 	private Thread checker, shooter, descend;
 	
 	long ascentStopTime;
+	double kHeight = 4096 * 6;
 	
 	public Beast() {
 		lFar = new WPI_TalonSRX(RobotMap.LEFT_FAR_SHOOTER);
 		lNear = new WPI_TalonSRX(RobotMap.LEFT_NEAR_SHOOTER);
 		rFar = new WPI_TalonSRX(RobotMap.RIGHT_FAR_SHOOTER);
 		rNear = new WPI_TalonSRX(RobotMap.RIGHT_NEAR_SHOOTER);
+		
+		lNear.setInverted(true);
+		lFar.setInverted(true);
 		
 		lFar.setNeutralMode(NeutralMode.Brake);
 		lNear.setNeutralMode(NeutralMode.Brake);
@@ -44,14 +48,14 @@ public class Beast extends Subsystem {
 		checker = new Thread(new Runnable(){
 			public void run() {
 				System.out.println("CHECKING");
-				if(topLimit.get()) {
+				if(!topLimit.get() /* || getHeight() - kHeight <= 50 */) {
 					System.out.println("REACHED TOP");
 					shooter.interrupt();
 					ascentStopTime = System.currentTimeMillis();
 					System.out.println("ENCODER AT: " + getHeight());
 					System.out.println("STOP TIME: " + ascentStopTime);
 				}
-				if(bottomLimit.get()) {
+				if(!bottomLimit.get()) {
 					System.out.println("REACHED BOTTOM");
 					descend.interrupt();
 				}
@@ -80,6 +84,7 @@ public class Beast extends Subsystem {
 				if (descend.interrupted()) {
 					System.out.println("STOPPED GOING DOWN");
 					stopShooter();
+					zeroShooterEncoder();
 					return;
 				} else {
 					backDown();
@@ -87,6 +92,17 @@ public class Beast extends Subsystem {
 			}
 		});
 		
+	}
+	
+	public void testMotor(double speed) {
+//		lFar.set(speed);
+		lNear.set(speed);
+		rFar.set(speed);
+//		rNear.set(speed);
+	}
+	
+	public void checkLimits() {
+		System.out.println("TOP: " + !topLimit.get());
 	}
 	
 	public void beginDescent() {
@@ -110,32 +126,32 @@ public class Beast extends Subsystem {
 	}
 	
 	public void stopShooter() {
-		lFar.set(0);
+//		lFar.set(0);
 		lNear.set(0);
 		rFar.set(0);
-		rNear.set(0);
+//		rNear.set(0);
 	}
 	
 	public void backDown() {
 		zeroShooterEncoder();
-		lFar.set(-0.5);
-		lNear.set(-0.5);
-		rFar.set(-0.5);
-		rNear.set(-0.5);
+//		lFar.set(-0.5);
+		lNear.set(-0.45);
+		rFar.set(-0.45);
+//		rNear.set(-0.5);
 	}
 	
 	public void scaleShot() {
-		lFar.set(0.5);
-		lNear.set(0.5);
-		rFar.set(0.5);
-		rNear.set(0.5);
+//		lFar.set(0.25);
+		lNear.set(0.6);
+		rFar.set(0.6);
+//		rNear.set(0.25);
 	}
 	
 	public void switchShot() {
-		lFar.set(1);
-		lNear.set(1);
-		rFar.set(1);
-		rNear.set(1);
+//		lFar.set(0.5);
+		lNear.set(0.45);
+		rFar.set(0.45);
+//		rNear.set(0.5);
 	}
 
     // Put methods for controlling this subsystem

@@ -18,7 +18,7 @@ public class TimedTurnByCommand extends TimedCommand implements PIDOutput {
 	long finisherTime, startTime;
 	
 	double kP = 0.025 * 1.69;
-	double kI = 0.0000;//0.00018
+	double kI = 0.0000;
 	double kD = 0.071 * 0.8;
 	double kF = 0;
 	
@@ -42,8 +42,8 @@ public class TimedTurnByCommand extends TimedCommand implements PIDOutput {
 //    	Robot.arcadeDrive.changeControlMode(TalonControlMode.PercentVbus);
     	
     	Robot.arcadeDrive.setMotors(0, 0);
-
     	Robot.arcadeDrive.setBrakeMode(true);
+//    	Robot.arcadeDrive.slaveRight(true);
     	
     	turnController = new PIDController(kP, kI, kD, kF, Robot.arcadeDrive.ahrs, this);
     	turnController.setInputRange(-180.0f,  180.0f);
@@ -59,6 +59,7 @@ public class TimedTurnByCommand extends TimedCommand implements PIDOutput {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.arcadeDrive.setMotors(rotateToAngleRate, rotateToAngleRate);
+    	if (turnController.onTarget()) Robot.arcadeDrive.setMotors(0, 0);
     }
 
     // Called once after timeout
@@ -66,6 +67,7 @@ public class TimedTurnByCommand extends TimedCommand implements PIDOutput {
 //    	System.out.println("DONE");
     	Robot.arcadeDrive.setMotors(0, 0);
     	turnController.reset();
+//    	Robot.arcadeDrive.slaveRight(false);
     }
 
     // Called when another command which requires one or more of the same
@@ -74,6 +76,7 @@ public class TimedTurnByCommand extends TimedCommand implements PIDOutput {
 //    	System.out.println("DONE");
     	Robot.arcadeDrive.setMotors(0, 0);
     	turnController.reset();
+//    	Robot.arcadeDrive.slaveRight(false);
     }
     
 
