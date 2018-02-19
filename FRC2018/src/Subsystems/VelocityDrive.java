@@ -48,10 +48,16 @@ public class VelocityDrive extends Subsystem {
 	public double left, right;
 	// if we win, be happy robot :)
 
-	private double kP = 0;
-	private double kI = 0;
-	private double kD = 0;
-	private double kF = 0;
+	private double kHP = 0;
+	private double kHI = 0;
+	private double kHD = 0;
+	private double kHF = 0;
+	
+	private double kLP = 0;
+	private double kLI = 0;
+	private double kLD = 0;
+	private double kLF = 0;
+	
 	private int kTimeout = 10;
 
 	public VelocityDrive() {
@@ -77,17 +83,10 @@ public class VelocityDrive extends Subsystem {
 		lBack = new WPI_TalonSRX(RobotMap.LEFT_TALON_BACK);
 		rBack = new WPI_TalonSRX(RobotMap.RIGHT_TALON_BACK);
 
-		// shifter, shifter1, shifter 2 -- dont work
-
 		shifter = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GEAR_SHIFTER_BACK, RobotMap.GEAR_SHIFTER_FRONT);
 
 		lBack.set(ControlMode.Follower, lFront.getDeviceID());
 		rBack.set(ControlMode.Follower, rFront.getDeviceID());
-
-		lFront.config_kP(0, kP, kTimeout);
-		lFront.config_kI(0, kI, kTimeout);
-		lFront.config_kD(0, kD, kTimeout);
-		lFront.config_kF(0, kF, kTimeout);
 
 		lFront.configPeakCurrentLimit(35, 10);
 		lFront.configPeakCurrentDuration(200, 10);
@@ -123,6 +122,16 @@ public class VelocityDrive extends Subsystem {
 
 		pointTurn = Math.abs(leftY) <= .1 && Math.abs(rightX) >= .1;
 
+		if (isHighGear()) {
+			setPIDF(lFront, kHP, kHI, kHD, kHF);
+			setPIDF(rFront, kHP, kHI, kHD, kHF);
+			MAX_RPM = 300;
+		} else {
+			setPIDF(lFront, kLP, kLI, kLD, kLF);
+			setPIDF(rFront, kLP, kLI, kLD, kLF);
+			MAX_RPM = 500;
+		}
+		
 		if (!pointTurn) {
 			setBrakeMode(true);
 
@@ -169,6 +178,13 @@ public class VelocityDrive extends Subsystem {
 		return shifter.get();
 	}
 
+	public void setPIDF(WPI_TalonSRX talon, double p, double i, double d, double f) {
+		talon.config_kP(0, p, kTimeout);
+		talon.config_kI(0, i, kTimeout);
+		talon.config_kD(0, d, kTimeout);
+		talon.config_kF(0, f, kTimeout);
+	}
+	
 	public void setHighGear(boolean gear) {
 		if (gear) {
 			shifter.set(DoubleSolenoid.Value.kForward);

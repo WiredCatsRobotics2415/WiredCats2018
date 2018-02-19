@@ -90,8 +90,8 @@ public class ArcadeDrive extends Subsystem {
 		lBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		rBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 
-		lBack.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_100Ms, 10);
-		lBack.configVelocityMeasurementWindow(128, 10);
+//		lBack.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_100Ms, 10);
+//		lBack.configVelocityMeasurementWindow(128, 10);
 
 	}
 
