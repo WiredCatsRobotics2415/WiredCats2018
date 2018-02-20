@@ -5,7 +5,7 @@ import Subsystems.ArcadeDrive;
 import Subsystems.Beast;
 import Subsystems.Intake;
 import Subsystems.VelocityDrive;
-import autonomous.PathfindCommand;
+import autonomous.TestAuto;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -105,8 +105,8 @@ public class Robot extends IterativeRobot {
 
 		// System.out.println("HELP");
 
-		// Command turn = new TestAuto();
-		// turn.start();
+		 Command turn = new TestAuto();
+		 turn.start();
 
 		double[][] waypoints = new double[][] { 
 			{ 1, 1 }, 
@@ -114,8 +114,8 @@ public class Robot extends IterativeRobot {
 			{ 5, 3 }
 		};
 
-		Command pathfind = new PathfindCommand(waypoints);
-		pathfind.start();
+//		Command pathfind = new PathfindCommand(waypoints);
+//		pathfind.start();
 
 	}
 
@@ -226,7 +226,7 @@ public class Robot extends IterativeRobot {
 		 if (gamepad.getBButton()) {
 			 beast.testShoot((byte) 1); //switch
 		 } else if (gamepad.getAButton()) {
-			 beast.testShoot((byte) 0); //switch
+			 beast.testShoot((byte) 0); //scale
 		 } else if (gamepad.getYButton()) {
 			 System.out.println("RESET");
 			 beast.resetBools();
@@ -313,6 +313,8 @@ public class Robot extends IterativeRobot {
 //		SmartDashboard.putNumber("VELOCITY: ", Math.abs(arcadeDrive.getVelocity()));
 		SmartDashboard.putNumber("THROTTLE", -Robot.gamepad.getRawAxis(1));
 		SmartDashboard.putNumber("YAW", Robot.gamepad.getRawAxis(4));
+		
+		SmartDashboard.putBoolean("SHOOTER REACHED BOTTOM: ", beast.reachedBot);
 
 	}
 }

@@ -123,21 +123,18 @@ public class Beast extends Subsystem {
 
 	public void testShoot(byte state) {
 		
-		System.out.println(getHeight());
-		
 		if (reachedBot) {
-			zeroShooterEncoder();
 			shooting = (stopTime + 2000 <= System.currentTimeMillis());
 		}
 
-		if ((!topLimit.get() && !dropping) || (getHeight() <= kHeight && !dropping)) {
+		if (!topLimit.get() && !dropping) {
 			System.out.println("REACHED TOP");
 			stopShooter();
 			System.out.println("ENCODER AT: " + getHeight());
 			System.out.println("STOP TIME: " + ascentStopTime);
 			dropping = true;
 			shooting = false;
-		} else if ((!bottomLimit.get() == dropping || -2000 < getHeight()) && dropping && !shooting) {
+		} else if (!bottomLimit.get() == dropping && dropping && !shooting) {
 			System.out.println("REACHED BOTTOM");
 			stopShooter();
 			dropping = false;
@@ -145,7 +142,6 @@ public class Beast extends Subsystem {
 			// zeroShooterEncoder();
 		} else if (dropping && System.currentTimeMillis() > ascentStopTime + 1000) {
 			System.out.println("GOING DOWN");
-			System.out.println(getHeight());
 			stopTime = System.currentTimeMillis();
 			// System.out.println(dropping + "\t" + !bottomLimit.get());
 			// System.out.println(!bottomLimit.get() == dropping);
