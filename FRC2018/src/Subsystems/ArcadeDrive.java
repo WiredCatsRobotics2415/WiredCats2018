@@ -56,7 +56,7 @@ public class ArcadeDrive extends Subsystem {
 			 * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/
 			 * for details.
 			 */
-			ahrs = new AHRS(SerialPort.Port.kMXP);
+			ahrs = new AHRS(I2C.Port.kMXP);
 		} catch (RuntimeException ex) {
 			DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
 		}

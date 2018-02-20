@@ -38,6 +38,7 @@ public class Robot extends IterativeRobot {
 
 	public char mySide;
 	public long autoStopTime;
+	public boolean shooting;
 
 	// public static PowerDistributionPanel pdp;
 
@@ -154,14 +155,15 @@ public class Robot extends IterativeRobot {
 		// System.out.println("START");
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
+		beast.zeroShooterEncoder();
 	}
 
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 
-		beast.checkLimits();
-		System.out.println(beast.getHeight());
+//		beast.checkLimits();
+//		System.out.println(beast.getHeight());
 
 		updateShuffle();
 
@@ -172,7 +174,7 @@ public class Robot extends IterativeRobot {
 		// "VELOCITY: " + arcadeDrive.getVelocity());
 
 		// System.out.println("IR SENSOR: " + intake.hasPrism());
-		// System.out.println("YAW: " + arcadeDrive.getYaw());
+//		 System.out.println("YAW: " + arcadeDrive.getYaw());
 
 		double leftY;
 		double rightX;
@@ -221,17 +223,25 @@ public class Robot extends IterativeRobot {
 			intake.stopGrab();
 		}
 
-		// if (gamepad.getAButton()) {
-		// beast.shoot(beast.SCALE);
-		// } else if (gamepad.getBButton()) {
-		// beast.shoot(beast.SWITCH);
-		// }
+		 if (gamepad.getBButton()) {
+			 beast.testShoot((byte) 1); //switch
+		 } else if (gamepad.getAButton()) {
+			 beast.testShoot((byte) 0); //switch
+		 } else if (gamepad.getYButton()) {
+			 System.out.println("RESET");
+			 beast.resetBools();
+		 } else if (gamepad.getXButton()) {
+			 beast.stopShooter();
+		 }
+		 
+//		 System.out.println("TELEOP");
 
 	}
 
 	public void testInit() {
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
+		beast.zeroShooterEncoder();
 	}
 
 	/**
@@ -243,6 +253,7 @@ public class Robot extends IterativeRobot {
 		double leftY;
 		leftY = -Robot.gamepad.getRawAxis(1);
 		System.out.println(beast.getHeight());
+//		System.out.println(leftY);
 		beast.testMotor(leftY * 0.65);
 
 		// updateShuffle();
@@ -285,11 +296,12 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledPeriodic() {
+//		System.out.println(-Robot.gamepad.getRawAxis(1));
 		Scheduler.getInstance().run();
 
 		updateShuffle();
 
-		System.out.println("YAW: " + arcadeDrive.getYaw());
+//		System.out.println("YAW: " + arcadeDrive.getYaw());
 
 	}
 
