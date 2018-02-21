@@ -81,11 +81,14 @@ public class DriveStraightToCommand extends Command implements PIDOutput {
 //    	System.out.println("Yaw: " + Robot.driveSubsystem.ahrs.getYaw() + "/t TurnSetpoint: " + turnController.getSetpoint());
     	System.out.println("Left: " + Robot.arcadeDrive.getDistance()[0] + "\tRight: " + Robot.arcadeDrive.getDistance()[1]);
 //    	System.out.println("AVG Dist: " + Math.abs(Robot.arcadeDrive.getDistance()[0]) + Math.abs(Robot.arcadeDrive.getDistance()[1])/2 + "\t DriveSetpoint: " + distance);
-//    	if(distance > 0) Robot.arcadeDrive.setMotors(rotateToAngleRate + speed, -rotateToAngleRate + speed);
-//    	else Robot.arcadeDrive.setMotors(-(-rotateToAngleRate + speed), -(rotateToAngleRate + speed));
+    	if(distance > 0) Robot.arcadeDrive.setMotors(-rotateToAngleRate + speed, -rotateToAngleRate + speed);
+    	else Robot.arcadeDrive.setMotors(-(rotateToAngleRate + speed), -(rotateToAngleRate + speed));
     	
-    	if(distance > 0) Robot.arcadeDrive.setMotors(speed, -speed);
-    	else Robot.arcadeDrive.setMotors(-speed, speed);
+//    	if(distance > 0) {
+//    		Robot.arcadeDrive.setMotors(-speed, -speed);
+//    		System.out.println(speed);
+//    	}
+//    	else Robot.arcadeDrive.setMotors(speed, speed);
     }
 
     // Make this return true when this Command no longer needs to run execute()

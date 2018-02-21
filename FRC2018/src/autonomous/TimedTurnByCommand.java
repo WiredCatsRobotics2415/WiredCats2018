@@ -17,9 +17,9 @@ public class TimedTurnByCommand extends TimedCommand implements PIDOutput {
 	boolean finisher, checked = false;
 	long finisherTime, startTime;
 	
-	double kP = 0.025 * 1.69;
+	double kP = 0.0487;
 	double kI = 0.0000;
-	double kD = 0.071 * 0.8;
+	double kD = 0.0640;
 	double kF = 0;
 	
 	double kTolerance = 1;
@@ -58,7 +58,8 @@ public class TimedTurnByCommand extends TimedCommand implements PIDOutput {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.arcadeDrive.setMotors(rotateToAngleRate, rotateToAngleRate);
+    	System.out.println(Robot.arcadeDrive.getYaw());
+    	Robot.arcadeDrive.setMotors(-rotateToAngleRate, -rotateToAngleRate);
     	if (turnController.onTarget()) Robot.arcadeDrive.setMotors(0, 0);
     }
 

@@ -73,14 +73,14 @@ public class ArcadeDrive extends Subsystem {
 		lBack.set(ControlMode.Follower, lFront.getDeviceID());
 		rBack.set(ControlMode.Follower, rFront.getDeviceID());
 
-		lFront.configPeakCurrentLimit(30, 10);
+		lFront.configPeakCurrentLimit(35, 10);
 		lFront.configPeakCurrentDuration(200, 10);
-		lFront.configContinuousCurrentLimit(25, 10);
+		lFront.configContinuousCurrentLimit(30, 10);
 		lFront.enableCurrentLimit(true);
 
-		rFront.configPeakCurrentLimit(30, 10);
+		rFront.configPeakCurrentLimit(35, 10);
 		rFront.configPeakCurrentDuration(200, 10);
-		rFront.configContinuousCurrentLimit(25, 10);
+		rFront.configContinuousCurrentLimit(30, 10);
 		rFront.enableCurrentLimit(true);
 
 		lFront.setNeutralMode(NeutralMode.Coast);

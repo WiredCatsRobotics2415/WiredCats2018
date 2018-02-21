@@ -11,7 +11,7 @@ public class TestAuto extends CommandGroup {
     	
 //    	System.out.println("GO");
     	addSequential(new TimedTurnByCommand(1, 15));
-    	addSequential(new DriveStraightToCommand(2, 0.2, 2));
+    	addSequential(new SimpleDriveForward(2, 0.2, 15));
 //    	System.out.println("SHOULDVE TURNED");
         // Add Commands here:
         // e.g. addSequential(new Command1());
