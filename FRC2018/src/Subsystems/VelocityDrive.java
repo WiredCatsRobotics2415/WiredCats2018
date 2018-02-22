@@ -35,7 +35,7 @@ public class VelocityDrive extends Subsystem {
 	private double STRAIGHT_INTERPOLATION_FACTOR = 0.60;
 	private double TURNING_INTERPOLATION_FACTOR = .3; // needs to be decided on
 														// by Nathan
-	private double MAX_RPM = 500.0;
+	private double MAX_VEL; //in ticks/100ms
 
 	private double DEADBAND = 0.1;
 	private double FORWARD_STRAIGHT_RESTRICTER = 1;
@@ -112,8 +112,8 @@ public class VelocityDrive extends Subsystem {
 
 	public void velDrive(double leftY, double rightX) {
 
-		leftY = Robot.gamepad.getRawAxis(1);
-		rightX = Robot.gamepad.getRawAxis(4);
+//		leftY = Robot.gamepad.getRawAxis(1);
+//		rightX = Robot.gamepad.getRawAxis(4);
 
 		if (Math.abs(leftY) < Math.abs(DEADBAND))
 			leftY = 0;
@@ -125,11 +125,11 @@ public class VelocityDrive extends Subsystem {
 		if (isHighGear()) {
 			setPIDF(lFront, kHP, kHI, kHD, kHF);
 			setPIDF(rFront, kHP, kHI, kHD, kHF);
-			MAX_RPM = 300;
+			MAX_VEL = 4550;
 		} else {
 			setPIDF(lFront, kLP, kLI, kLD, kLF);
 			setPIDF(rFront, kLP, kLI, kLD, kLF);
-			MAX_RPM = 500;
+			MAX_VEL = 2100;
 		}
 		
 		if (!pointTurn) {
@@ -165,11 +165,11 @@ public class VelocityDrive extends Subsystem {
 				right = -1.0;
 			}
 
-			setVelocity(left * 4096 * MAX_RPM / 600, right * 4096 * MAX_RPM / 600);
+			setVelocity(left * 4096 * MAX_VEL / 600, right * 4096 * MAX_VEL / 600);
 
 		} else {
 
-			setVelocity(.87 * MAX_RPM * rightX, -.87 * MAX_RPM * rightX);
+			setVelocity(.87 * MAX_VEL * rightX, -.87 * MAX_VEL * rightX);
 		}
 
 	}

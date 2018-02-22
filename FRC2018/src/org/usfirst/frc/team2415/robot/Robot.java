@@ -179,13 +179,13 @@ public class Robot extends IterativeRobot {
 		double leftY;
 		double rightX;
 
-		if (gamepad.getBumper(Hand.kLeft)) {
+		if (gamepad.getBumper(Hand.kRight)) {
 			arcadeDrive.setHighGear(true);
 		} else {
 			arcadeDrive.setHighGear(false);
 		}
 
-		leftY = Robot.gamepad.getRawAxis(1);
+		leftY = -Robot.gamepad.getRawAxis(1);
 		rightX = Robot.gamepad.getRawAxis(4);
 
 		if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND))
@@ -207,11 +207,14 @@ public class Robot extends IterativeRobot {
 		//
 		// arcadeDrive.setMotors(left, right);
 
-		if (gamepad.getBumper(Hand.kLeft)) {
+		if (gamepad.getBumper(Hand.kRight)) {
 			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
 		} else {
 			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
 		}
+		
+		System.out.println("OUTPUT: " + Robot.arcadeDrive.getMotorOutput() +
+				 "\tVEL: " + Robot.arcadeDrive.getVelocity()[0]);
 
 		// System.out.println(arcadeDrive.getBattery());
 
@@ -250,11 +253,11 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 
-		double leftY;
-		leftY = -Robot.gamepad.getRawAxis(1);
-		System.out.println(beast.getHeight());
-//		System.out.println(leftY);
-		beast.testMotor(leftY * 0.65);
+		double leftY, rightX;
+//		leftY = -Robot.gamepad.getRawAxis(1);
+//		System.out.println(beast.getHeight());
+////		System.out.println(leftY);
+//		beast.testMotor(leftY * 0.65);
 
 		// updateShuffle();
 		//
@@ -264,8 +267,11 @@ public class Robot extends IterativeRobot {
 		// double leftY;
 		// double rightX;
 		//
-		// leftY = Robot.gamepad.getRawAxis(1);
-		// rightX = Robot.gamepad.getRawAxis(4);
+		 leftY = Robot.gamepad.getRawAxis(1);
+		 rightX = Robot.gamepad.getRawAxis(4);
+		 
+//		 Robot.velocityDrive.velDrive(leftY, rightX);
+		 
 		//
 		// if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
 		// if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND)) rightX = 0;
@@ -284,9 +290,9 @@ public class Robot extends IterativeRobot {
 		// arcadeDrive.setMotors(left, right);
 
 		
-		// arcadeDrive.setMotors(1, 1);
-		// System.out.println("OUTPUT: " + Robot.arcadeDrive.getMotorOutput() +
-		// "\tVEL: " + Robot.arcadeDrive.getVelocity()[0]);
+		 arcadeDrive.setMotors(leftY, -leftY);
+		 System.out.println("OUTPUT: " + Robot.arcadeDrive.getMotorOutput() +
+		 "\tVEL: " + Robot.arcadeDrive.getVelocity()[0]);
 
 	}
 
