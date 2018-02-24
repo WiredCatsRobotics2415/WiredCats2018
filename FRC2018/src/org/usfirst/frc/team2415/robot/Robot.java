@@ -56,15 +56,15 @@ public class Robot extends IterativeRobot {
 
 		cheesyDriveHelper = new CheesyDriveHelper();
 
-		arcadeDrive = new ArcadeDrive();
-//		velocityDrive = new VelocityDrive();
+//		arcadeDrive = new ArcadeDrive();
+		velocityDrive = new VelocityDrive();
 		intake = new Intake();
 		beast = new Beast();
 
-		arcadeDrive.zeroEncoders();
-		arcadeDrive.zeroYaw();
-
-		updateShuffle();
+//		arcadeDrive.zeroEncoders();
+//		arcadeDrive.zeroYaw();
+//
+//		updateShuffle();
 
 		// pdp = new PowerDistributionPanel(0);
 
@@ -88,8 +88,8 @@ public class Robot extends IterativeRobot {
 		// autoSelected = SmartDashboard.getString("Auto Selector");
 		// defaultAuto);
 		// System.out.println("Auto selected: " + autoSelected);
-		arcadeDrive.zeroEncoders();
-		arcadeDrive.zeroYaw();
+//		arcadeDrive.zeroEncoders();
+//		arcadeDrive.zeroYaw();
 
 		autoStopTime = System.currentTimeMillis();
 
@@ -126,7 +126,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 
-		updateShuffle();
+//		updateShuffle();
 
 		if (Math.abs(System.currentTimeMillis() - autoStopTime) <= 1000) {
 			intake.sideRoller(-1);
@@ -153,8 +153,8 @@ public class Robot extends IterativeRobot {
 
 	public void teleopInit() {
 		// System.out.println("START");
-		arcadeDrive.zeroEncoders();
-		arcadeDrive.zeroYaw();
+//		arcadeDrive.zeroEncoders();
+//		arcadeDrive.zeroYaw();
 		beast.zeroShooterEncoder();
 	}
 
@@ -165,13 +165,10 @@ public class Robot extends IterativeRobot {
 //		beast.checkLimits();
 //		System.out.println(beast.getHeight());
 
-		updateShuffle();
+//		updateShuffle();
 
 		// System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] +
 		// ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
-		//
-		// System.out.println(
-		// "VELOCITY: " + arcadeDrive.getVelocity());
 
 		// System.out.println("IR SENSOR: " + intake.hasPrism());
 //		 System.out.println("YAW: " + arcadeDrive.getYaw());
@@ -179,42 +176,34 @@ public class Robot extends IterativeRobot {
 		double leftY;
 		double rightX;
 
-		if (gamepad.getBumper(Hand.kRight)) {
-			arcadeDrive.setHighGear(true);
-		} else {
-			arcadeDrive.setHighGear(false);
-		}
+//		if (gamepad.getBumper(Hand.kRight)) {
+//			arcadeDrive.setHighGear(true);
+//		} else {
+//			arcadeDrive.setHighGear(false);
+//		}
 
 		leftY = -Robot.gamepad.getRawAxis(1);
 		rightX = Robot.gamepad.getRawAxis(4);
 
-		if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND))
+		if (Math.abs(leftY) < Math.abs(velocityDrive.DEADBAND))
 			leftY = 0;
-		if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND))
+		if (Math.abs(rightX) < Math.abs(velocityDrive.DEADBAND))
 			rightX = 0;
 
 		boolean isQuickTurn = leftY < 0.1;
 
-		// leftY = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(leftY, 3) +
-		// (1-arcadeDrive.INTERPOLATION_FACTOR)*leftY;
-		// rightX = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(rightX, 3) +
-		// (1-arcadeDrive.INTERPOLATION_FACTOR)*rightX;
-		////
-		// double left = arcadeDrive.STRAIGHT_RESTRICTER*leftY +
-		// arcadeDrive.TURN_SPEED_BOOST*rightX;
-		// double right = arcadeDrive.STRAIGHT_RESTRICTER*leftY -
-		// arcadeDrive.TURN_SPEED_BOOST*rightX;
-		//
-		// arcadeDrive.setMotors(left, right);
 
-		if (gamepad.getBumper(Hand.kRight)) {
-			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
-		} else {
-			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
-		}
+//		if (gamepad.getBumper(Hand.kRight)) {
+//			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
+//		} else {
+//			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
+//		}
 		
-		System.out.println("OUTPUT: " + Robot.arcadeDrive.getMotorOutput() +
-				 "\tVEL: " + Robot.arcadeDrive.getVelocity()[0]);
+		Robot.velocityDrive.velDrive(leftY, rightX);
+		System.out.println(Robot.velocityDrive.getCurrent());
+		
+//		System.out.println("OUTPUT: " + Robot.arcadeDrive.getMotorOutput() +
+//				 "\tVEL: " + Robot.arcadeDrive.getVelocity()[0]);
 
 		// System.out.println(arcadeDrive.getBattery());
 
@@ -242,8 +231,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testInit() {
-		arcadeDrive.zeroEncoders();
-		arcadeDrive.zeroYaw();
+//		arcadeDrive.zeroEncoders();
+//		arcadeDrive.zeroYaw();
 		beast.zeroShooterEncoder();
 	}
 
@@ -297,15 +286,15 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void disabledInit() {
-		arcadeDrive.zeroEncoders();
-		arcadeDrive.zeroYaw();
+//		arcadeDrive.zeroEncoders();
+//		arcadeDrive.zeroYaw();
 	}
 
 	public void disabledPeriodic() {
 //		System.out.println(-Robot.gamepad.getRawAxis(1));
 		Scheduler.getInstance().run();
 
-		updateShuffle();
+//		updateShuffle();
 
 //		System.out.println("YAW: " + arcadeDrive.getYaw());
 

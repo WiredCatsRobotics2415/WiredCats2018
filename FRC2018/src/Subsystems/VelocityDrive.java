@@ -1,20 +1,17 @@
 package Subsystems;
 
-import org.usfirst.frc.team2415.robot.Robot;
 import org.usfirst.frc.team2415.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
-import Cheesy.DriveSignal;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -35,11 +32,11 @@ public class VelocityDrive extends Subsystem {
 	private double STRAIGHT_INTERPOLATION_FACTOR = 0.60;
 	private double TURNING_INTERPOLATION_FACTOR = .3; // needs to be decided on
 														// by Nathan
-	private double MAX_VEL; //in ticks/100ms
+	private double MAX_VEL; // in ticks/100ms
 
-	private double DEADBAND = 0.1;
+	public double DEADBAND = 0.1;
 	private double FORWARD_STRAIGHT_RESTRICTER = 1;
-	private double FORWARD_TURN_SPEED_BOOST = 0.4;
+	private double FORWARD_TURN_SPEED_BOOST = 0.6; //0.4
 	private double BACKWARD_STRAIGHT_RESTRICTER = 1;
 	private double BACKWARD_TURN_SPEED_BOOST = 0.4;
 	private double overPower = .750; // .55
@@ -48,16 +45,16 @@ public class VelocityDrive extends Subsystem {
 	public double left, right;
 	// if we win, be happy robot :)
 
-	private double kHP = 0;
+	private double kHP = 0.098;
 	private double kHI = 0;
 	private double kHD = 0;
-	private double kHF = 0;
-	
-	private double kLP = 0;
+	private double kHF = 0.4871;
+
+	private double kLP = 0.073;
 	private double kLI = 0;
 	private double kLD = 0;
-	private double kLF = 0;
-	
+	private double kLF = 0.2273;
+
 	private int kTimeout = 10;
 
 	public VelocityDrive() {
@@ -73,7 +70,7 @@ public class VelocityDrive extends Subsystem {
 			 * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/
 			 * for details.
 			 */
-			ahrs = new AHRS(SPI.Port.kMXP);
+			ahrs = new AHRS(I2C.Port.kMXP);
 		} catch (RuntimeException ex) {
 			DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
 		}
@@ -87,6 +84,8 @@ public class VelocityDrive extends Subsystem {
 
 		lBack.set(ControlMode.Follower, lFront.getDeviceID());
 		rBack.set(ControlMode.Follower, rFront.getDeviceID());
+
+		rFront.setInverted(true);
 
 		lFront.configPeakCurrentLimit(35, 10);
 		lFront.configPeakCurrentDuration(200, 10);
@@ -112,8 +111,8 @@ public class VelocityDrive extends Subsystem {
 
 	public void velDrive(double leftY, double rightX) {
 
-//		leftY = Robot.gamepad.getRawAxis(1);
-//		rightX = Robot.gamepad.getRawAxis(4);
+		// leftY = Robot.gamepad.getRawAxis(1);
+		// rightX = Robot.gamepad.getRawAxis(4);
 
 		if (Math.abs(leftY) < Math.abs(DEADBAND))
 			leftY = 0;
@@ -124,14 +123,14 @@ public class VelocityDrive extends Subsystem {
 
 		if (isHighGear()) {
 			setPIDF(lFront, kHP, kHI, kHD, kHF);
-			setPIDF(rFront, kHP, kHI, kHD, kHF);
-			MAX_VEL = 4550;
+			setPIDF(rFront, kHP * 1.12, kHI, kHD, kHF);
+			MAX_VEL = -4500;
 		} else {
 			setPIDF(lFront, kLP, kLI, kLD, kLF);
-			setPIDF(rFront, kLP, kLI, kLD, kLF);
-			MAX_VEL = 2100;
+			setPIDF(rFront, kLP * 1.12, kLI, kLD, kLF);
+			MAX_VEL = -2100;
 		}
-		
+
 		if (!pointTurn) {
 			setBrakeMode(true);
 
@@ -144,34 +143,49 @@ public class VelocityDrive extends Subsystem {
 			rightX = TURNING_INTERPOLATION_FACTOR * Math.pow(rightX, 3) + (1 - TURNING_INTERPOLATION_FACTOR) * rightX;
 
 			if (leftY >= 0) {
-				left = FORWARD_STRAIGHT_RESTRICTER * leftY - FORWARD_TURN_SPEED_BOOST * rightX;
-				right = FORWARD_STRAIGHT_RESTRICTER * leftY + FORWARD_TURN_SPEED_BOOST * rightX;
+				left = FORWARD_STRAIGHT_RESTRICTER * leftY + FORWARD_TURN_SPEED_BOOST * rightX;
+				right = FORWARD_STRAIGHT_RESTRICTER * leftY - FORWARD_TURN_SPEED_BOOST * rightX;
 			} else {
-				left = BACKWARD_STRAIGHT_RESTRICTER * leftY - BACKWARD_TURN_SPEED_BOOST * rightX;
-				right = BACKWARD_STRAIGHT_RESTRICTER * leftY + BACKWARD_TURN_SPEED_BOOST * rightX;
+				left = BACKWARD_STRAIGHT_RESTRICTER * leftY + BACKWARD_TURN_SPEED_BOOST * rightX;
+				right = BACKWARD_STRAIGHT_RESTRICTER * leftY - BACKWARD_TURN_SPEED_BOOST * rightX;
 			}
 
-			if (left > 1.0) {
-				right -= overPower * (left - 1.0);
-				left = 1.0;
-			} else if (right > 1.0) {
-				left -= overPower * (right - 1.0);
-				right = 1.0;
-			} else if (left < -1.0) {
-				right += overPower * (-1.0 - left);
-				left = -1.0;
-			} else if (right < -1.0) {
-				left += overPower * (-1.0 - right);
-				right = -1.0;
-			}
+			// if (left > 1.0) {
+			// right -= overPower * (left - 1.0);
+			// left = 1.0;
+			// } else if (right > 1.0) {
+			// left -= overPower * (right - 1.0);
+			// right = 1.0;
+			// } else if (left < -1.0) {
+			// right += overPower * (-1.0 - left);
+			// left = -1.0;
+			// } else if (right < -1.0) {
+			// left += overPower * (-1.0 - right);
+			// right = -1.0;
+			// }
 
-			setVelocity(left * 4096 * MAX_VEL / 600, right * 4096 * MAX_VEL / 600);
+			setVelocity(left * MAX_VEL, right * MAX_VEL);
+			System.out.println("L: " + (left * MAX_VEL) + "\tR: " + (right * MAX_VEL));
 
 		} else {
-
-			setVelocity(.87 * MAX_VEL * rightX, -.87 * MAX_VEL * rightX);
+			setVelocity(MAX_VEL * rightX, -MAX_VEL * rightX);
 		}
 
+	}
+	
+	public void setVel(double left, double right) {
+		if (isHighGear()) {
+			setPIDF(lFront, kHP, kHI, kHD, kHF);
+			setPIDF(rFront, kHP * 1.12, kHI, kHD, kHF);
+		} else {
+			setPIDF(lFront, kLP, kLI, kLD, kLF);
+			setPIDF(rFront, kLP * 1.12, kLI, kLD, kLF);
+		}
+		setVelocity(left, right);
+	}
+
+	public double getCurrent() {
+		return lFront.getClosedLoopError(0);
 	}
 
 	public Value getShifter() {
@@ -184,7 +198,7 @@ public class VelocityDrive extends Subsystem {
 		talon.config_kD(0, d, kTimeout);
 		talon.config_kF(0, f, kTimeout);
 	}
-	
+
 	public void setHighGear(boolean gear) {
 		if (gear) {
 			shifter.set(DoubleSolenoid.Value.kForward);
@@ -232,8 +246,7 @@ public class VelocityDrive extends Subsystem {
 	}
 
 	public double fPS2RPM(double fps) {
-//		return (fps * 60) / (WHEEL_CIRCUMFERENCE);
-		return fps / 10 * 12 / WHEEL_CIRCUMFERENCE * 4096;
+		return fps / 10 * WHEEL_CIRCUMFERENCE/12 * 4096;
 	}
 
 	public void zeroEncoders() {
