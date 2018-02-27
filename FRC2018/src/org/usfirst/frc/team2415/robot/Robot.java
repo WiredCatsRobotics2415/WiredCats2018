@@ -5,8 +5,7 @@ import Subsystems.ArcadeDrive;
 import Subsystems.Beast;
 import Subsystems.Intake;
 import Subsystems.VelocityDrive;
-import autonomous.PathfindCommand;
-import autonomous.RightSwitch;
+import autonomous.LeftSwitch;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -106,7 +105,7 @@ public class Robot extends IterativeRobot {
 
 		// System.out.println("HELP");
 
-		 Command turn = new RightSwitch();
+		 Command turn = new LeftSwitch();
 		 turn.start();
 
 		double[][] waypoints = new double[][] { 
@@ -115,7 +114,7 @@ public class Robot extends IterativeRobot {
 			{ 5, 3 }
 		};
 
-		Command pathfind = new PathfindCommand(waypoints);
+//		Command pathfind = new PathfindCommand(waypoints);
 //		pathfind.start();
 
 	}

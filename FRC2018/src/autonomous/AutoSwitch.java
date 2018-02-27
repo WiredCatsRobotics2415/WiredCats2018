@@ -12,7 +12,7 @@ public class AutoSwitch extends Command {
     public AutoSwitch() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-//    	requires(Robot.beast);
+    	requires(Robot.beast);
     }
 
     // Called just before this Command runs the first time
@@ -21,6 +21,14 @@ public class AutoSwitch extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	if (!Robot.beast.reachTop()) {
+			 Robot.beast.testMotor(0.7); //switch
+			 
+//		 } else if (Robot.beast.hitBottom()) {
+//			 Robot.beast.eStop();
+		 } else if (Robot.beast.reachTop()) {
+			 Robot.beast.eStop();
+		 }
     }
 
     // Make this return true when this Command no longer needs to run execute()
