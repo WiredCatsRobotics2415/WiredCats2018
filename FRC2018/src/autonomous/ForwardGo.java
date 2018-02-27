@@ -2,21 +2,20 @@ package autonomous;
 
 import org.usfirst.frc.team2415.robot.Robot;
 
-import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class SimpleDriveForward extends TimedCommand {
-	
+public class ForwardGo extends Command {
+
 	double speed = 0;
 	double distance;
-
-    public SimpleDriveForward(double timeout, double speed, double distance) {
-        super(timeout);
+	
+    public ForwardGo(double speed, double distance) {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-        requires(Robot.arcadeDrive);
+    	requires(Robot.arcadeDrive);
         this.speed = speed;
         this.distance = distance;
     }
@@ -38,9 +37,13 @@ public class SimpleDriveForward extends TimedCommand {
     	}
     }
 
-    // Called once after timeout
+    // Make this return true when this Command no longer needs to run execute()
+    protected boolean isFinished() {
+        return Robot.arcadeDrive.getDistance()[0] > distance;
+    }
+
+    // Called once after isFinished returns true
     protected void end() {
-    	System.out.println("END");
     	Robot.arcadeDrive.setMotors(0, 0);
     }
 

@@ -51,7 +51,7 @@ public class Intake extends Subsystem {
 		}
 		
 		if (hasPrism() && Math.abs(System.currentTimeMillis() - startTime) >= waitTime) {
-			stopGrab();
+			sideRoller(0.5);
 		} else {
 			sideRoller(1);
 		}

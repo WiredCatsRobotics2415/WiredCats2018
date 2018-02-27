@@ -11,7 +11,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -70,7 +70,10 @@ public class VelocityDrive extends Subsystem {
 			 * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/
 			 * for details.
 			 */
-			ahrs = new AHRS(I2C.Port.kMXP);
+			ahrs = new AHRS(SPI.Port.kMXP);
+//			ahrs.reset();
+//			ahrs.zeroYaw();
+			//I2C on comp
 		} catch (RuntimeException ex) {
 			DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
 		}
@@ -123,11 +126,11 @@ public class VelocityDrive extends Subsystem {
 
 		if (isHighGear()) {
 			setPIDF(lFront, kHP, kHI, kHD, kHF);
-			setPIDF(rFront, kHP * 1.12, kHI, kHD, kHF);
+			setPIDF(rFront, kHP * 1.03, kHI, kHD, kHF);
 			MAX_VEL = -4500;
 		} else {
 			setPIDF(lFront, kLP, kLI, kLD, kLF);
-			setPIDF(rFront, kLP * 1.12, kLI, kLD, kLF);
+			setPIDF(rFront, kLP * 1.03, kLI, kLD, kLF);
 			MAX_VEL = -2100;
 		}
 
@@ -176,10 +179,10 @@ public class VelocityDrive extends Subsystem {
 	public void setVel(double left, double right) {
 		if (isHighGear()) {
 			setPIDF(lFront, kHP, kHI, kHD, kHF);
-			setPIDF(rFront, kHP * 1.12, kHI, kHD, kHF);
+			setPIDF(rFront, kHP * 1.03, kHI, kHD, kHF);
 		} else {
 			setPIDF(lFront, kLP, kLI, kLD, kLF);
-			setPIDF(rFront, kLP * 1.12, kLI, kLD, kLF);
+			setPIDF(rFront, kLP * 1.03, kLI, kLD, kLF);
 		}
 		setVelocity(left, right);
 	}

@@ -5,14 +5,16 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class TestAuto extends CommandGroup {
+public class RightSwitch extends CommandGroup {
 
-    public TestAuto() {
+    public RightSwitch() {
     	
-//    	System.out.println("GO");
-    	addSequential(new TimedTurnByCommand(1, 90));
-    	addSequential(new SimpleDriveForward(12, 0.3, 80));
-//    	System.out.println("SHOULDVE TURNED");
+    	addSequential(new ForwardGo(0.3, 60));
+    	addSequential(new TimedTurnByCommand(0.5, 30));
+    	addSequential(new ForwardGo(0.3, 60));
+    	addSequential(new TimedTurnByCommand(0.5, -30));
+    	addSequential(new ForwardGo(0.3, 60));
+//    	addSequential(new AutoSwitch());
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

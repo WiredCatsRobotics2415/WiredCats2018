@@ -5,7 +5,8 @@ import Subsystems.ArcadeDrive;
 import Subsystems.Beast;
 import Subsystems.Intake;
 import Subsystems.VelocityDrive;
-import autonomous.TestAuto;
+import autonomous.PathfindCommand;
+import autonomous.RightSwitch;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -56,15 +57,15 @@ public class Robot extends IterativeRobot {
 
 		cheesyDriveHelper = new CheesyDriveHelper();
 
-//		arcadeDrive = new ArcadeDrive();
-		velocityDrive = new VelocityDrive();
+		arcadeDrive = new ArcadeDrive();
+//		velocityDrive = new VelocityDrive();
 		intake = new Intake();
 		beast = new Beast();
 
-//		arcadeDrive.zeroEncoders();
-//		arcadeDrive.zeroYaw();
+		arcadeDrive.zeroEncoders();
+		arcadeDrive.zeroYaw();
 //
-//		updateShuffle();
+		updateShuffle();
 
 		// pdp = new PowerDistributionPanel(0);
 
@@ -88,8 +89,8 @@ public class Robot extends IterativeRobot {
 		// autoSelected = SmartDashboard.getString("Auto Selector");
 		// defaultAuto);
 		// System.out.println("Auto selected: " + autoSelected);
-//		arcadeDrive.zeroEncoders();
-//		arcadeDrive.zeroYaw();
+		arcadeDrive.zeroEncoders();
+		arcadeDrive.zeroYaw();
 
 		autoStopTime = System.currentTimeMillis();
 
@@ -98,14 +99,14 @@ public class Robot extends IterativeRobot {
 		// mySide = gameData.charAt(0);
 
 		if (mySide == 'R') {
-
+			
 		} else {
 
 		}
 
 		// System.out.println("HELP");
 
-		 Command turn = new TestAuto();
+		 Command turn = new RightSwitch();
 		 turn.start();
 
 		double[][] waypoints = new double[][] { 
@@ -114,7 +115,7 @@ public class Robot extends IterativeRobot {
 			{ 5, 3 }
 		};
 
-//		Command pathfind = new PathfindCommand(waypoints);
+		Command pathfind = new PathfindCommand(waypoints);
 //		pathfind.start();
 
 	}
@@ -153,9 +154,9 @@ public class Robot extends IterativeRobot {
 
 	public void teleopInit() {
 		// System.out.println("START");
-//		arcadeDrive.zeroEncoders();
-//		arcadeDrive.zeroYaw();
-		beast.zeroShooterEncoder();
+		arcadeDrive.zeroEncoders();
+		arcadeDrive.zeroYaw();
+//		beast.zeroShooterEncoder();
 	}
 
 	@Override
@@ -165,47 +166,41 @@ public class Robot extends IterativeRobot {
 //		beast.checkLimits();
 //		System.out.println(beast.getHeight());
 
-//		updateShuffle();
+		updateShuffle();
 
 		// System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] +
 		// ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
 
-		// System.out.println("IR SENSOR: " + intake.hasPrism());
+//		 System.out.println("IR SENSOR: " + intake.hasPrism());
 //		 System.out.println("YAW: " + arcadeDrive.getYaw());
 
 		double leftY;
 		double rightX;
 
-//		if (gamepad.getBumper(Hand.kRight)) {
-//			arcadeDrive.setHighGear(true);
-//		} else {
-//			arcadeDrive.setHighGear(false);
-//		}
+		if (!gamepad.getBumper(Hand.kRight)) {
+			arcadeDrive.setHighGear(true);
+		} else {
+			arcadeDrive.setHighGear(false);
+		}
 
 		leftY = -Robot.gamepad.getRawAxis(1);
 		rightX = Robot.gamepad.getRawAxis(4);
 
-		if (Math.abs(leftY) < Math.abs(velocityDrive.DEADBAND))
+		if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND))
 			leftY = 0;
-		if (Math.abs(rightX) < Math.abs(velocityDrive.DEADBAND))
+		if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND))
 			rightX = 0;
 
 		boolean isQuickTurn = leftY < 0.1;
 
-
-//		if (gamepad.getBumper(Hand.kRight)) {
-//			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
-//		} else {
-//			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
-//		}
+		if (gamepad.getBumper(Hand.kRight)) {
+			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
+		} else {
+			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
+		}
 		
-		Robot.velocityDrive.velDrive(leftY, rightX);
-		System.out.println(Robot.velocityDrive.getCurrent());
-		
-//		System.out.println("OUTPUT: " + Robot.arcadeDrive.getMotorOutput() +
-//				 "\tVEL: " + Robot.arcadeDrive.getVelocity()[0]);
-
-		// System.out.println(arcadeDrive.getBattery());
+//		Robot.velocityDrive.velDrive(leftY, rightX);
+//		System.out.println(Robot.velocityDrive.getCurrent());
 
 		if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
 			intake.grabPrism();
@@ -222,8 +217,13 @@ public class Robot extends IterativeRobot {
 		 } else if (gamepad.getYButton()) {
 			 System.out.println("RESET");
 			 beast.resetBools();
+			 beast.eStop();
 		 } else if (gamepad.getXButton()) {
-			 beast.stopShooter();
+			 beast.resetShooter();
+		 } else if (beast.hitBottom()) {
+			 beast.eStop();
+		 } else if (beast.reachTop()) {
+			 beast.backDown();
 		 }
 		 
 //		 System.out.println("TELEOP");
@@ -233,7 +233,7 @@ public class Robot extends IterativeRobot {
 	public void testInit() {
 //		arcadeDrive.zeroEncoders();
 //		arcadeDrive.zeroYaw();
-		beast.zeroShooterEncoder();
+//		beast.zeroShooterEncoder();
 	}
 
 	/**
@@ -241,11 +241,12 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-
+//		System.out.println("YAW: " + arcadeDrive.getYaw());
+		updateShuffle();
 		double leftY, rightX;
 //		leftY = -Robot.gamepad.getRawAxis(1);
 //		System.out.println(beast.getHeight());
-////		System.out.println(leftY);
+		
 //		beast.testMotor(leftY * 0.65);
 
 		// updateShuffle();
@@ -253,48 +254,53 @@ public class Robot extends IterativeRobot {
 		// System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] +
 		// ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
 		//
-		// double leftY;
-		// double rightX;
-		//
+//		 double leftY;
+//		 double rightX;
+		
 		 leftY = Robot.gamepad.getRawAxis(1);
+//		 System.out.println(leftY);
+//		 arcadeDrive.setOne(leftY);
 		 rightX = Robot.gamepad.getRawAxis(4);
+		 
+		 Robot.arcadeDrive.setVelocity(leftY * 9000, leftY * 9000);
 		 
 //		 Robot.velocityDrive.velDrive(leftY, rightX);
 		 
 		//
-		// if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
-		// if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND)) rightX = 0;
-		//
-		//
-		// leftY = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(leftY, 3) +
-		// (1-arcadeDrive.INTERPOLATION_FACTOR)*leftY;
-		// rightX = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(rightX, 3) +
-		// (1-arcadeDrive.INTERPOLATION_FACTOR)*rightX;
-		////
-		// double left = arcadeDrive.STRAIGHT_RESTRICTER*leftY +
-		// arcadeDrive.TURN_SPEED_BOOST*rightX;
-		// double right = arcadeDrive.STRAIGHT_RESTRICTER*leftY -
-		// arcadeDrive.TURN_SPEED_BOOST*rightX;
-		//
-		// arcadeDrive.setMotors(left, right);
+//		 if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
+//		 if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND)) rightX = 0;
+//		
+//		
+//		 leftY = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(leftY, 3) +
+//		 (1-arcadeDrive.INTERPOLATION_FACTOR)*leftY;
+//		 rightX = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(rightX, 3) +
+//		 (1-arcadeDrive.INTERPOLATION_FACTOR)*rightX;
+//		//
+//		 double left = arcadeDrive.STRAIGHT_RESTRICTER*leftY +
+//		 arcadeDrive.TURN_SPEED_BOOST*rightX;
+//		 double right = arcadeDrive.STRAIGHT_RESTRICTER*leftY -
+//		 arcadeDrive.TURN_SPEED_BOOST*rightX;
+//		
+//		 arcadeDrive.setMotors(left, right);
 
 		
-		 arcadeDrive.setMotors(leftY, -leftY);
-		 System.out.println("OUTPUT: " + Robot.arcadeDrive.getMotorOutput() +
-		 "\tVEL: " + Robot.arcadeDrive.getVelocity()[0]);
+//		 arcadeDrive.setMotors(leftY, -leftY);
+//		 System.out.println("OUTPUT: " + Robot.arcadeDrive.getMotorOutput() +
+//		 "\tVEL: " + Robot.arcadeDrive.getVelocity()[0]);
 
 	}
 
 	public void disabledInit() {
-//		arcadeDrive.zeroEncoders();
-//		arcadeDrive.zeroYaw();
+		arcadeDrive.zeroEncoders();
+		arcadeDrive.zeroYaw();
 	}
 
 	public void disabledPeriodic() {
 //		System.out.println(-Robot.gamepad.getRawAxis(1));
 		Scheduler.getInstance().run();
+//		System.out.println("R: " + velocityDrive.getDistance()[1] + "\tL: " + velocityDrive.getDistance()[0]);
 
-//		updateShuffle();
+		updateShuffle();
 
 //		System.out.println("YAW: " + arcadeDrive.getYaw());
 
@@ -303,13 +309,12 @@ public class Robot extends IterativeRobot {
 	public void updateShuffle() {
 		SmartDashboard.putBoolean("HIGH GEAR: ", arcadeDrive.isHighGear());
 		SmartDashboard.putBoolean("COMP ", compressor.enabled());
-		
-		SmartDashboard.putNumber("HEADING: ", arcadeDrive.getAngle());
+		SmartDashboard.putBoolean("SHOOTING: ", beast.isGoing());
+//		SmartDashboard.putNumber("HEADING: ", arcadeDrive.getAngle());
 //		SmartDashboard.putNumber("VELOCITY: ", Math.abs(arcadeDrive.getVelocity()));
 		SmartDashboard.putNumber("THROTTLE", -Robot.gamepad.getRawAxis(1));
-		SmartDashboard.putNumber("YAW", Robot.gamepad.getRawAxis(4));
-		
-		SmartDashboard.putBoolean("SHOOTER REACHED BOTTOM: ", beast.reachedBot);
+		SmartDashboard.putNumber("YAW", Robot.arcadeDrive.getYaw());
+		SmartDashboard.putBoolean("SHOOTER REACHED BOTTOM: ", beast.hitBottom());
 
 	}
 }

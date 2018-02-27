@@ -56,7 +56,7 @@ public class ArcadeDrive extends Subsystem {
 			 * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/
 			 * for details.
 			 */
-			ahrs = new AHRS(I2C.Port.kMXP);
+			ahrs = new AHRS(I2C.Port.kMXP); //I2C works on competition SPI on practice
 		} catch (RuntimeException ex) {
 			DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
 		}
@@ -66,25 +66,40 @@ public class ArcadeDrive extends Subsystem {
 		lBack = new WPI_TalonSRX(RobotMap.LEFT_TALON_BACK);
 		rBack = new WPI_TalonSRX(RobotMap.RIGHT_TALON_BACK);
 
-		// shifter, shifter1, shifter 2 -- dont work
-
 		shifter = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GEAR_SHIFTER_BACK, RobotMap.GEAR_SHIFTER_FRONT);
 
-		lBack.set(ControlMode.Follower, lFront.getDeviceID());
-		rBack.set(ControlMode.Follower, rFront.getDeviceID());
+//		lBack.set(ControlMode.Follower, lFront.getDeviceID());
+//		rBack.set(ControlMode.Follower, rFront.getDeviceID());
 
-		lFront.configPeakCurrentLimit(35, 10);
+		lFront.configPeakCurrentLimit(30, 10); //35
 		lFront.configPeakCurrentDuration(200, 10);
-		lFront.configContinuousCurrentLimit(30, 10);
+		lFront.configContinuousCurrentLimit(25, 10); //30
 		lFront.enableCurrentLimit(true);
+		
+		lBack.configPeakCurrentLimit(30, 10); //35
+		lBack.configPeakCurrentDuration(200, 10);
+		lBack.configContinuousCurrentLimit(25, 10); //30
+		lBack.enableCurrentLimit(true);
+		
+//		lFront.configVoltageCompSaturation(11.0, 10);
+//		lFront.enableVoltageCompensation(true);
+//		rFront.configVoltageCompSaturation(11.0, 10);
+//		rFront.enableVoltageCompensation(true);
 
-		rFront.configPeakCurrentLimit(35, 10);
+		rFront.configPeakCurrentLimit(30, 10);
 		rFront.configPeakCurrentDuration(200, 10);
-		rFront.configContinuousCurrentLimit(30, 10);
+		rFront.configContinuousCurrentLimit(25, 10);
 		rFront.enableCurrentLimit(true);
+		
+		rBack.configPeakCurrentLimit(30, 10);
+		rBack.configPeakCurrentDuration(200, 10);
+		rBack.configContinuousCurrentLimit(25, 10);
+		rBack.enableCurrentLimit(true);
 
-		lFront.setNeutralMode(NeutralMode.Coast);
-		rFront.setNeutralMode(NeutralMode.Coast);
+		lFront.setNeutralMode(NeutralMode.Brake);
+		rFront.setNeutralMode(NeutralMode.Brake);
+		lBack.setNeutralMode(NeutralMode.Brake);
+		rBack.setNeutralMode(NeutralMode.Brake);
 
 		lBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		rBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
@@ -92,6 +107,10 @@ public class ArcadeDrive extends Subsystem {
 //		lBack.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_100Ms, 10);
 //		lBack.configVelocityMeasurementWindow(128, 10);
 
+	}
+	
+	public void setOne(double num) {
+		lBack.set(num);
 	}
 
 	public void slaveRight(boolean slave) {
@@ -142,12 +161,16 @@ public class ArcadeDrive extends Subsystem {
 
 	public void setMotors(double left, double right) {
 		lFront.set(left);
+		lBack.set(left);
 		rFront.set(right);
+		rBack.set(right);
 	}
 
 	public void setVelocity(double leftVel, double rightVel) {
 		lFront.set(ControlMode.Velocity, leftVel);
+		lBack.set(ControlMode.Velocity, leftVel);
 		rFront.set(ControlMode.Velocity, rightVel);
+		rBack.set(ControlMode.Velocity, rightVel);
 	}
 
 	public double[] getDistance() {
@@ -192,6 +215,10 @@ public class ArcadeDrive extends Subsystem {
 
 	public double getMotorOutput() {
 		return lFront.getMotorOutputPercent();
+	}
+	
+	public double fPS2RPM(double fps) {
+		return fps / 10 * WHEEL_CIRCUMFERENCE / 12 * 4096;
 	}
 
 	@Override

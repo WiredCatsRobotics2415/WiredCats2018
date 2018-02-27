@@ -26,7 +26,7 @@ public class Beast extends Subsystem {
 	public boolean shooting = true, dropping = false, reachedBot = false;
 	public volatile boolean thread = false, hitTop = false;
 	public boolean checkerGoing = true;
-	
+
 	public boolean prevStateTop = false, prevStateBot = false;
 
 	long ascentStopTime, stopTime;
@@ -83,7 +83,7 @@ public class Beast extends Subsystem {
 					} else if (shootAt == SWITCH) {
 						System.out.println("SHOOTING AT SWITCH!");
 						thread = true;
-//						 switchShot();
+						// switchShot();
 					}
 				}
 				System.out.println("STOPPING!");
@@ -96,12 +96,11 @@ public class Beast extends Subsystem {
 		descend = new Thread(new Runnable() {
 			public void run() {
 				while (checkerGoing) {
-					if (descend.interrupted()) {
+					if (Thread.interrupted()) {
 						System.out.println("STOPPED GOING DOWN");
 						stopShooter();
 						// zeroShooterEncoder();
 						thread = false;
-						return;
 					}
 					while (!descend.isInterrupted()) {
 						backDown();
@@ -114,9 +113,11 @@ public class Beast extends Subsystem {
 	}
 
 	public void testMotor(double speed) {
-			System.out.println(!topLimit.get());
-			lNear.set(speed);
-			rFar.set(speed);
+		System.out.println("TOP: " + !topLimit.get() + "\tBOT: " + !bottomLimit.get());
+		lNear.set(speed);
+		lFar.set(speed);
+		rNear.set(speed);
+		rFar.set(speed);
 	}
 
 	public void resetBools() {
@@ -132,33 +133,33 @@ public class Beast extends Subsystem {
 		}
 
 		if (!topLimit.get() && !dropping) {
-//			System.out.println("REACHED TOP");
+			 System.out.println("REACHED TOP");
 			stopShooter();
-//			System.out.println("ENCODER AT: " + getHeight());
-//			System.out.println("STOP TIME: " + ascentStopTime);
+			// System.out.println("ENCODER AT: " + getHeight());
+			// System.out.println("STOP TIME: " + ascentStopTime);
 			dropping = true;
 			shooting = false;
 		} else if (!bottomLimit.get() == dropping && dropping && !shooting) {
-//			System.out.println("REACHED BOTTOM");
-			stopShooter();
+			 System.out.println("REACHED BOTTOM");
+			eStop();
 			dropping = false;
 			reachedBot = true;
 			// zeroShooterEncoder();
 		} else if (dropping && System.currentTimeMillis() > ascentStopTime + 1000) {
-//			System.out.println("GOING DOWN");
+			 System.out.println("GOING DOWN");
 			stopTime = System.currentTimeMillis();
 			// System.out.println(dropping + "\t" + !bottomLimit.get());
 			// System.out.println(!bottomLimit.get() == dropping);
 			backDown();
 		} else {
 			if (state == 0 && shooting && !dropping) {
-//				System.out.println("SHOOTING AT SCALE!");
+				 System.out.println("SHOOTING AT SCALE!");
 				shooting = true;
 				reachedBot = false;
 				ascentStopTime = System.currentTimeMillis();
 				scaleShot();
 			} else if (state == 1 && shooting && !dropping) {
-//				System.out.println("SHOOTING AT SWITCH!");
+				 System.out.println("SHOOTING AT SWITCH!");
 				shooting = true;
 				reachedBot = false;
 				ascentStopTime = System.currentTimeMillis();
@@ -172,14 +173,14 @@ public class Beast extends Subsystem {
 	}
 
 	public void checkLimits() {
-//		System.out.println("TOP: " + !topLimit.get());
-//		System.out.println("\t BOT: " + !bottomLimit.get());
+		// System.out.println("TOP: " + !topLimit.get());
+		// System.out.println("\t BOT: " + !bottomLimit.get());
 		if (!topLimit.get() != prevStateTop && !topLimit.get()) {
 			System.out.println("TOP: " + !topLimit.get());
-//			System.out.println("STOP ME");
+			// System.out.println("STOP ME");
 		} else if (!bottomLimit.get() != prevStateBot && !bottomLimit.get()) {
 			System.out.println("BOT: " + !bottomLimit.get());
-//			System.out.println(".");
+			// System.out.println(".");
 		}
 		prevStateTop = !topLimit.get();
 		prevStateBot = !bottomLimit.get();
@@ -207,32 +208,68 @@ public class Beast extends Subsystem {
 	}
 
 	public void stopShooter() {
-		 lFar.set(0);
-		lNear.set(0);
-		rFar.set(0);
-		 rNear.set(0);
+		lFar.set(-0.05);
+		lNear.set(-0.05);
+		rFar.set(-0.05);
+		rNear.set(-0.05);
 	}
 
 	public void backDown() {
 		// zeroShooterEncoder();
-//		 lFar.set(-0.25);
-		lNear.set(-0.4);
-		rFar.set(-0.4);
-//		 rNear.set(-0.25);
+		 lFar.set(-0.13);
+		lNear.set(-0.13);
+		rFar.set(-0.13);
+		 rNear.set(-0.13);
 	}
 
 	public void scaleShot() {
-		 lFar.set(0.5);
-		lNear.set(0.5);
-		rFar.set(0.5);
-		 rNear.set(0.5);
+		lFar.set(1);
+		lNear.set(1);
+		rFar.set(1);
+		rNear.set(1);
+		
 	}
 
 	public void switchShot() {
-		 lFar.set(1);
-		lNear.set(1);
-		rFar.set(1);
-		 rNear.set(1);
+		lFar.set(0.7);
+		lNear.set(0.7);
+		rFar.set(0.7);
+		rNear.set(0.7);
+	}
+
+	public void resetShooter() {
+		if (!bottomLimit.get()) {
+			System.out.println(!bottomLimit.get());
+			System.out.println("STOP");
+			lFar.set(0);
+			lNear.set(0);
+			rFar.set(0);
+			rNear.set(0);
+			resetBools();
+		} else {
+			System.out.println(!bottomLimit.get());
+			System.out.println("GO");
+			backDown();
+		}
+	}
+	
+	public void eStop() {
+		lFar.set(0);
+		lNear.set(0);
+		rFar.set(0);
+		rNear.set(0);
+	}
+	
+	public boolean hitBottom() {
+		return !bottomLimit.get();
+	}
+	
+	public boolean reachTop() {
+		return !topLimit.get();
+	}
+	
+	public boolean isGoing() {
+		return lFar.getMotorOutputPercent() > 0.01;
 	}
 
 	// Put methods for controlling this subsystem
