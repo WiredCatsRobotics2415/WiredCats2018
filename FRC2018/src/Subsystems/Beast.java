@@ -113,7 +113,7 @@ public class Beast extends Subsystem {
 	}
 
 	public void testMotor(double speed) {
-		System.out.println("TOP: " + !topLimit.get() + "\tBOT: " + !bottomLimit.get());
+//		System.out.println("TOP: " + !topLimit.get() + "\tBOT: " + !bottomLimit.get());
 		lNear.set(speed);
 		lFar.set(speed);
 		rNear.set(speed);
@@ -239,16 +239,16 @@ public class Beast extends Subsystem {
 
 	public void resetShooter() {
 		if (!bottomLimit.get()) {
-			System.out.println(!bottomLimit.get());
-			System.out.println("STOP");
+//			System.out.println(!bottomLimit.get());
+//			System.out.println("STOP");
 			lFar.set(0);
 			lNear.set(0);
 			rFar.set(0);
 			rNear.set(0);
 			resetBools();
 		} else {
-			System.out.println(!bottomLimit.get());
-			System.out.println("GO");
+//			System.out.println(!bottomLimit.get());
+//			System.out.println("GO");
 			backDown();
 		}
 	}

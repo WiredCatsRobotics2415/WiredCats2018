@@ -5,14 +5,13 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class TestAuto extends CommandGroup {
+public class StraightDumpPrism extends CommandGroup {
 
-    public TestAuto() {
-    	
-//    	System.out.println("GO");
-    	addSequential(new TimedTurnByCommand(1, 90));
-    	addSequential(new SimpleDriveForward(12, 0.3, 80));
-//    	System.out.println("SHOULDVE TURNED");
+    public StraightDumpPrism() {
+//    	addSequential(new ForwardGo(0.4, 110));
+    	addSequential(new DriveStraightToCommand(120, 0.4, 7));
+    	addParallel(new ResetShooter());
+    	addSequential(new AutoSwitch());
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

@@ -5,17 +5,11 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class RightSwitch extends CommandGroup {
+public class CrossAutoLine extends CommandGroup {
 
-    public RightSwitch() {
-    	
-    	addSequential(new ForwardGo(0.4, 30));
+    public CrossAutoLine() {
+    	addSequential(new DriveStraightToCommand(130, 0.3, 13));
     	addParallel(new ResetShooter());
-    	addSequential(new TimedTurnByCommand(0.5, 45));
-    	addSequential(new ForwardGo(0.4, 67.5));
-    	addSequential(new TimedTurnByCommand(0.5, -45));
-    	addSequential(new DriveStraightToCommand(30, 0.4, 3));
-    	addSequential(new AutoSwitch());
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

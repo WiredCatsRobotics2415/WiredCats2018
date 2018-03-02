@@ -7,33 +7,28 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class AutoSwitch extends Command {
+public class ResetShooter extends Command {
 
-    public AutoSwitch() {
+    public ResetShooter() {
         // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
+        // eg. requires(chassis)
     	requires(Robot.beast);
+    	
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	Robot.beast.eStop();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if (!Robot.beast.reachTop()) {
-			 Robot.beast.testMotor(0.7); //switch
-			 
-//		 } else if (Robot.beast.hitBottom()) {
-//			 Robot.beast.eStop();
-		 } else if (Robot.beast.reachTop()) {
-			 Robot.beast.eStop();
-		 }
+    	Robot.beast.backDown();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return Robot.beast.reachTop();
+        return Robot.beast.hitBottom();
     }
 
     // Called once after isFinished returns true
