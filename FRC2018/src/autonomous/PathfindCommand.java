@@ -15,7 +15,7 @@ public class PathfindCommand extends Command {
 
 	double[][] waypoints;
 	double totalTime = 5; // max seconds we want to drive the path
-	double timeStep = 0.02; // period of control loop on Rio, seconds
+	double timeStep = 0.01; // period of control loop on Rio, seconds
 	double robotTrackWidth = 2.165; // distance between left and right wheels,
 									// feet
 	FalconPathPlanner path;

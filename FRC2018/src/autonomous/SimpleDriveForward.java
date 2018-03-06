@@ -29,7 +29,7 @@ public class SimpleDriveForward extends TimedCommand {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	System.out.println("GOING");
+//    	System.out.println("GOING");
     	if (Robot.arcadeDrive.getDistance()[0] > distance) {
     		Robot.arcadeDrive.setMotors(0, 0);
     	} else {
@@ -40,7 +40,7 @@ public class SimpleDriveForward extends TimedCommand {
 
     // Called once after timeout
     protected void end() {
-    	System.out.println("END");
+//    	System.out.println("END");
     	Robot.arcadeDrive.setMotors(0, 0);
     }
 
