@@ -133,33 +133,33 @@ public class Beast extends Subsystem {
 		}
 
 		if (!topLimit.get() && !dropping) {
-			 System.out.println("REACHED TOP");
+//			 System.out.println("REACHED TOP");
 			stopShooter();
 			// System.out.println("ENCODER AT: " + getHeight());
 			// System.out.println("STOP TIME: " + ascentStopTime);
 			dropping = true;
 			shooting = false;
 		} else if (!bottomLimit.get() == dropping && dropping && !shooting) {
-			 System.out.println("REACHED BOTTOM");
+//			 System.out.println("REACHED BOTTOM");
 			eStop();
 			dropping = false;
 			reachedBot = true;
 			// zeroShooterEncoder();
 		} else if (dropping && System.currentTimeMillis() > ascentStopTime + 1000) {
-			 System.out.println("GOING DOWN");
+//			 System.out.println("GOING DOWN");
 			stopTime = System.currentTimeMillis();
 			// System.out.println(dropping + "\t" + !bottomLimit.get());
 			// System.out.println(!bottomLimit.get() == dropping);
 			backDown();
 		} else {
 			if (state == 0 && shooting && !dropping) {
-				 System.out.println("SHOOTING AT SCALE!");
+//				 System.out.println("SHOOTING AT SCALE!");
 				shooting = true;
 				reachedBot = false;
 				ascentStopTime = System.currentTimeMillis();
 				scaleShot();
 			} else if (state == 1 && shooting && !dropping) {
-				 System.out.println("SHOOTING AT SWITCH!");
+//				 System.out.println("SHOOTING AT SWITCH!");
 				shooting = true;
 				reachedBot = false;
 				ascentStopTime = System.currentTimeMillis();
@@ -176,10 +176,10 @@ public class Beast extends Subsystem {
 		// System.out.println("TOP: " + !topLimit.get());
 		// System.out.println("\t BOT: " + !bottomLimit.get());
 		if (!topLimit.get() != prevStateTop && !topLimit.get()) {
-			System.out.println("TOP: " + !topLimit.get());
+//			System.out.println("TOP: " + !topLimit.get());
 			// System.out.println("STOP ME");
 		} else if (!bottomLimit.get() != prevStateBot && !bottomLimit.get()) {
-			System.out.println("BOT: " + !bottomLimit.get());
+//			System.out.println("BOT: " + !bottomLimit.get());
 			// System.out.println(".");
 		}
 		prevStateTop = !topLimit.get();
@@ -187,7 +187,7 @@ public class Beast extends Subsystem {
 	}
 
 	public void beginDescent() {
-		System.out.println("WAITING");
+//		System.out.println("WAITING");
 		if (System.currentTimeMillis() >= ascentStopTime + 1000) {
 			descend.start();
 		}

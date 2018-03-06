@@ -9,11 +9,12 @@ import autonomous.CrossAutoLine;
 import autonomous.LeftSwitch;
 import autonomous.RightSwitch;
 import autonomous.StraightDumpPrism;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -27,7 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends TimedRobot {
+public class Robot extends IterativeRobot {
 	String autoSelected;
 	SendableChooser<String> chooser = new SendableChooser<>();
 
@@ -59,7 +60,9 @@ public class Robot extends TimedRobot {
 		// chooser.addDefault("Default Auto", defaultAuto);
 		// chooser.addObject("My Auto", customAuto);
 		// SmartDashboard.putData("Auto choices", chooser);
-		CameraServer.getInstance().startAutomaticCapture();
+//		UsbCamera camera = new UsbCamera("cam0", 0);
+//		camera.setFPS(15);
+//		CameraServer.getInstance().startAutomaticCapture(camera);
 
 		gamepad = new XboxController(0);
 		compressor = new Compressor(20);
@@ -78,7 +81,7 @@ public class Robot extends TimedRobot {
 
 		// pdp = new PowerDistributionPanel(0);
 		
-		setPeriod(0.01);
+//		setPeriod(0.02);
 
 	}
 
@@ -103,10 +106,14 @@ public class Robot extends TimedRobot {
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
 
+		
+		
 		String gameData;
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		mySide = gameData.charAt(0);
 
+		
+		
 		if (center) {
 			if (mySide == 'R') {
 				Command rightSwitch = new RightSwitch();
@@ -141,9 +148,16 @@ public class Robot extends TimedRobot {
 				crossLine.start();
 			}
 		} else {
+//			System.out.println("RUNNING");
 			Command crossLine = new CrossAutoLine();
 			crossLine.start();
 		}
+		
+		
+		
+
+//		Command crossLine = new LeftSwitch();
+//		crossLine.start();
 
 		// double[][] waypoints = new double[][] {
 		// { 1, 1 },
@@ -242,6 +256,8 @@ public class Robot extends TimedRobot {
 			intake.grabPrism();
 		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
 			intake.emptyPrism();
+		} else if (gamepad.getBumper(Hand.kLeft)) {
+			intake.turnPrism();
 		} else {
 			intake.stopGrab();
 		}
@@ -249,9 +265,10 @@ public class Robot extends TimedRobot {
 		if (gamepad.getBButton()) {
 			beast.testShoot((byte) 1); // switch
 		} else if (gamepad.getAButton()) {
-			beast.testShoot((byte) 0); // scale
+//			beast.testShoot((byte) 0); // scale
+			beast.testShoot((byte) 1); 
 		} else if (gamepad.getYButton()) {
-			System.out.println("RESET");
+//			System.out.println("RESET");
 			beast.resetBools();
 			beast.eStop();
 		} else if (gamepad.getXButton()) {
@@ -267,9 +284,15 @@ public class Robot extends TimedRobot {
 	}
 
 	public void testInit() {
-		// arcadeDrive.zeroEncoders();
-		// arcadeDrive.zeroYaw();
+		 arcadeDrive.zeroEncoders();
+		 arcadeDrive.zeroYaw();
 		// beast.zeroShooterEncoder();
+		
+		Command leftSwitch = new LeftSwitch();
+		leftSwitch.start();
+		
+//		Command rightSwitch = new RightSwitch();
+//		rightSwitch.start();
 	}
 
 	/**
@@ -279,7 +302,10 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {
 		// System.out.println("YAW: " + arcadeDrive.getYaw());
 		updateShuffle();
-		double leftY, rightX;
+
+		
+		
+//		double leftY, rightX;
 		// leftY = -Robot.gamepad.getRawAxis(1);
 		// System.out.println(beast.getHeight());
 
@@ -287,18 +313,18 @@ public class Robot extends TimedRobot {
 
 		// updateShuffle();
 		//
-		// System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] +
-		// ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
+//		 System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] +
+//		 ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
 		//
 		// double leftY;
 		// double rightX;
 
-		leftY = Robot.gamepad.getRawAxis(1);
+//		leftY = Robot.gamepad.getRawAxis(1);
 		// System.out.println(leftY);
 		// arcadeDrive.setOne(leftY);
-		rightX = Robot.gamepad.getRawAxis(4);
-
-		Robot.arcadeDrive.setVelocity(leftY * 9000, leftY * 9000);
+//		rightX = Robot.gamepad.getRawAxis(4);
+//
+//		Robot.arcadeDrive.setVelocity(leftY * 9000, leftY * 9000);
 
 		// Robot.velocityDrive.velDrive(leftY, rightX);
 
@@ -322,6 +348,7 @@ public class Robot extends TimedRobot {
 		// arcadeDrive.setMotors(leftY, -leftY);
 		// System.out.println("OUTPUT: " + Robot.arcadeDrive.getMotorOutput() +
 		// "\tVEL: " + Robot.arcadeDrive.getVelocity()[0]);
+//		System.out.println(intake.hasPrism());
 
 	}
 
@@ -338,7 +365,8 @@ public class Robot extends TimedRobot {
 
 		updateShuffle();
 
-		// System.out.println("YAW: " + arcadeDrive.getYaw());
+//		 System.out.println("YAW: " + arcadeDrive.getYaw());
+//		 System.out.println("IR SENSOR: " + intake.hasPrism());
 
 	}
 
@@ -352,6 +380,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("THROTTLE", -Robot.gamepad.getRawAxis(1));
 		SmartDashboard.putNumber("YAW", Robot.arcadeDrive.getYaw());
 		SmartDashboard.putBoolean("SHOOTER REACHED BOTTOM: ", beast.hitBottom());
+		SmartDashboard.putBoolean("SHOOTER REACHED TOP: ", beast.reachTop());
+		SmartDashboard.putBoolean("HAS PRISM: ", intake.hasPrism());
 
 	}
 }

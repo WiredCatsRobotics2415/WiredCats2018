@@ -145,7 +145,7 @@ public class ArcadeDrive extends Subsystem {
 	}
 
 	public double[] getVelocity() {
-		return new double[] { lBack.getSelectedSensorVelocity(0), rFront.getSelectedSensorVelocity(0) };
+		return new double[] { lBack.getSelectedSensorVelocity(0), -rFront.getSelectedSensorVelocity(0) };
 	}
 
 	public double getVoltage() {

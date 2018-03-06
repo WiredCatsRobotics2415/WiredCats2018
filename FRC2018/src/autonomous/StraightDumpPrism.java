@@ -9,8 +9,8 @@ public class StraightDumpPrism extends CommandGroup {
 
     public StraightDumpPrism() {
 //    	addSequential(new ForwardGo(0.4, 110));
-    	addSequential(new DriveStraightToCommand(120, 0.4, 7));
     	addParallel(new ResetShooter());
+    	addSequential(new DriveStraightToCommand(130, 0.4, 5));
     	addSequential(new AutoSwitch());
         // Add Commands here:
         // e.g. addSequential(new Command1());

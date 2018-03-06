@@ -49,6 +49,7 @@ public class DriveStraightToCommand extends Command implements PIDOutput {
     // Called just before this Command runs the first time
     protected void initialize() {	
     	startTime = System.currentTimeMillis()/1000;
+//    	System.out.println("start TIME: " + startTime);
 //    	Robot.arcadeDrive.set(ControlMode.PercentOutput);
     	Robot.arcadeDrive.zeroEncoders();
 //    	Robot.arcadeDrive.zeroYaw();
@@ -79,16 +80,17 @@ public class DriveStraightToCommand extends Command implements PIDOutput {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 //    	System.out.println("Yaw: " + Robot.driveSubsystem.ahrs.getYaw() + "/t TurnSetpoint: " + turnController.getSetpoint());
-    	System.out.println("Left: " + Robot.arcadeDrive.getDistance()[0] + "\tRight: " + Robot.arcadeDrive.getDistance()[1]);
+//    	System.out.println("Left: " + Robot.arcadeDrive.getDistance()[0] + "\tRight: " + Robot.arcadeDrive.getDistance()[1]);
 //    	System.out.println("AVG Dist: " + Math.abs(Robot.arcadeDrive.getDistance()[0]) + Math.abs(Robot.arcadeDrive.getDistance()[1])/2 + "\t DriveSetpoint: " + distance);
-    	if(distance > 0) Robot.arcadeDrive.setMotors(-rotateToAngleRate + speed, -rotateToAngleRate + speed);
-    	else Robot.arcadeDrive.setMotors(-(rotateToAngleRate + speed), -(rotateToAngleRate + speed));
+//    	if(distance > 0) Robot.arcadeDrive.setMotors(-rotateToAngleRate + speed, -rotateToAngleRate + speed);
+//    	else Robot.arcadeDrive.setMotors(-(rotateToAngleRate + speed), -(rotateToAngleRate + speed));
+//    	System.out.println(System.currentTimeMillis()/1000 - startTime);
     	
-//    	if(distance > 0) {
-//    		Robot.arcadeDrive.setMotors(-speed, -speed);
+    	if(distance > 0) {
+    		Robot.arcadeDrive.setMotors(-speed, speed);
 //    		System.out.println(speed);
-//    	}
-//    	else Robot.arcadeDrive.setMotors(speed, speed);
+    	}
+    	else Robot.arcadeDrive.setMotors(speed, -speed);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -103,7 +105,8 @@ public class DriveStraightToCommand extends Command implements PIDOutput {
 //    	Robot.driveSubsystem.setRightRampRate(0);
     	Robot.arcadeDrive.setMotors(0, 0);
     	Robot.arcadeDrive.zeroEncoders();
-    	turnController.reset();
+//    	turnController.reset();
+    	System.out.println("ENDING");
     }
 
     // Called when another command which requires one or more of the same
@@ -113,7 +116,7 @@ public class DriveStraightToCommand extends Command implements PIDOutput {
 //    	Robot.driveSubsystem.setRightRampRate(0);
     	Robot.arcadeDrive.setMotors(0, 0);
     	Robot.arcadeDrive.zeroEncoders();
-    	turnController.reset();
+//    	turnController.reset();
     }
 
 	@Override

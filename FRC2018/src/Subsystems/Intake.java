@@ -53,10 +53,32 @@ public class Intake extends Subsystem {
 		if (hasPrism() && Math.abs(System.currentTimeMillis() - startTime) >= waitTime) {
 			sideRoller(0.5);
 		} else {
-			sideRoller(1);
+//			sideRoller(1);
+//			sideRoller(0.5);
+			leftIntake.set(0.5*INTAKE_SPEED);
+			rightIntake.set(-1.1*INTAKE_SPEED);
 		}
 			
 	}
+	
+	public void turnPrism() {
+		
+		
+//		if(!hasPrism()) {
+//			startTime = System.currentTimeMillis();
+//		}
+		
+//		if (hasPrism() && Math.abs(System.currentTimeMillis() - startTime) >= waitTime) {
+//			sideRoller(0.5);
+//		} else {
+//			sideRoller(1);
+//			sideRoller(0.5);
+			leftIntake.set(-0.35*INTAKE_SPEED);
+			rightIntake.set(-0.9*INTAKE_SPEED);
+//		}
+			
+	}
+	
 	public void emptyPrism() {
 		
 		if(hasPrism()) {
