@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
 	public static VelocityDrive velocityDrive;
 	public static Intake intake;
 	public static Beast beast;
-	public static Ramps ramp; //Added by Yash
+//	public static Ramps ramps; //Added by Yash
 	
 	public char mySide;
 	public long autoStopTime;
@@ -76,7 +76,7 @@ public class Robot extends IterativeRobot {
 		// velocityDrive = new VelocityDrive();
 		intake = new Intake();
 		beast = new Beast();
-		ramp = new Ramps(); //Added by Yash
+//		ramps = new Ramps(); //Added by Yash
 		
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
