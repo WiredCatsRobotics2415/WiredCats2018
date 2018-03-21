@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  */
 public class Ramps extends Subsystem {
-
+/*
 	public static DoubleSolenoid sideOne, sideTwo, sideThree, sideFour, sideFive, sideSix;
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
@@ -39,7 +39,7 @@ public class Ramps extends Subsystem {
 			sideSix.set(Value.kReverse);
 		}
 	}
-
+*/
 	public void initDefaultCommand() {
 		// Set the default command for a subsystem here.
 		// setDefaultCommand(new MySpecialCommand());

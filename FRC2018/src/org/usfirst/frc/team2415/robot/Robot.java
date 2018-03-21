@@ -4,6 +4,7 @@ import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
 import Subsystems.Beast;
 import Subsystems.Intake;
+import Subsystems.Ramps;
 import Subsystems.VelocityDrive;
 import autonomous.CrossAutoLine;
 import autonomous.LeftSwitch;
@@ -41,10 +42,12 @@ public class Robot extends IterativeRobot {
 	public static VelocityDrive velocityDrive;
 	public static Intake intake;
 	public static Beast beast;
-
+	public static Ramps ramp; //Added by Yash
+	
 	public char mySide;
 	public long autoStopTime;
 	public boolean shooting;
+	public boolean rampDeployed;
 
 	public boolean center = true;
 	public boolean left = false;
@@ -73,7 +76,8 @@ public class Robot extends IterativeRobot {
 		// velocityDrive = new VelocityDrive();
 		intake = new Intake();
 		beast = new Beast();
-
+		ramp = new Ramps(); //Added by Yash
+		
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
 		//
@@ -263,10 +267,12 @@ public class Robot extends IterativeRobot {
 		}
 
 		if (gamepad.getBButton()) {
-			beast.testShoot((byte) 1); // switch
+//			beast.testShoot((byte) 1); // switch
+			beast.switchShot();
 		} else if (gamepad.getAButton()) {
 //			beast.testShoot((byte) 0); // scale
-			beast.testShoot((byte) 1); 
+//			beast.testShoot((byte) 1); 
+			beast.switchShot();
 		} else if (gamepad.getYButton()) {
 //			System.out.println("RESET");
 			beast.resetBools();
@@ -278,6 +284,11 @@ public class Robot extends IterativeRobot {
 		} else if (beast.reachTop()) {
 			beast.backDown();
 		}
+		
+		//Added by Yash
+//		if (gamepad.getBumper(Hand.kRight)) {
+//			ramp.rampsOut(rampDeployed);
+//		}
 
 		// System.out.println("TELEOP");
 
@@ -305,11 +316,11 @@ public class Robot extends IterativeRobot {
 
 		
 		
-//		double leftY, rightX;
-		// leftY = -Robot.gamepad.getRawAxis(1);
+		double leftY;
+		 leftY = -Robot.gamepad.getRawAxis(1);
 		// System.out.println(beast.getHeight());
 
-		// beast.testMotor(leftY * 0.65);
+		 beast.testMotor(leftY * 0.65);
 
 		// updateShuffle();
 		//
