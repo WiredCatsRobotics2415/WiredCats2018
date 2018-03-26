@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Intake extends Subsystem {
 	
-	final double INTAKE_SPEED = 0.69;
+	final double INTAKE_SPEED = 0.83; //0.69
 	
 	public long startTime, waitTime = 500, ejectTime = 500;
 	
@@ -43,6 +43,11 @@ public class Intake extends Subsystem {
 		return IRDetector.get();
 	}
 	
+	public void simpleIntake() {
+		leftIntake.set(0.6*INTAKE_SPEED);
+		rightIntake.set(-0.6*INTAKE_SPEED);
+	}
+	
 	public void grabPrism() {
 		
 		
@@ -53,9 +58,10 @@ public class Intake extends Subsystem {
 		if (hasPrism() && Math.abs(System.currentTimeMillis() - startTime) >= waitTime) {
 			sideRoller(0.5);
 		} else {
-//			sideRoller(1);
-//			sideRoller(0.5);
-			leftIntake.set(0.5*INTAKE_SPEED);
+////			sideRoller(1);
+////			sideRoller(0.5);
+//			System.out.println("GRABBING");
+			leftIntake.set(0.7*INTAKE_SPEED);
 			rightIntake.set(-1.1*INTAKE_SPEED);
 		}
 			
@@ -73,8 +79,9 @@ public class Intake extends Subsystem {
 //		} else {
 //			sideRoller(1);
 //			sideRoller(0.5);
-			leftIntake.set(-0.35*INTAKE_SPEED);
+			leftIntake.set(-0.5*INTAKE_SPEED);
 			rightIntake.set(-0.9*INTAKE_SPEED);
+//			System.out.println("TURNING");
 //		}
 			
 	}

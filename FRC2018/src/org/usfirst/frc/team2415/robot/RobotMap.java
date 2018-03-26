@@ -24,8 +24,8 @@ public class RobotMap {
 	public static final int RIGHT_TALON_BACK = 3; 
 	public static final int RIGHT_TALON_FRONT = 2;
 	
-	public static final int GEAR_SHIFTER_FRONT = 0;
-	public static final int GEAR_SHIFTER_BACK = 7;
+	public static final int GEAR_SHIFTER_FRONT = 1; //2
+	public static final int GEAR_SHIFTER_BACK = 6; //5
 	
 	public static final int LEFT_SIDE_ROLLER = 9;
 	public static final int RIGHT_SIDE_ROLLER = 8;
@@ -34,6 +34,13 @@ public class RobotMap {
 	public static final int LEFT_NEAR_SHOOTER = 15;
 	public static final int RIGHT_FAR_SHOOTER = 12;
 	public static final int RIGHT_NEAR_SHOOTER = 13;
+	
+	public static final int RAMP_PUSH_FRONT = 0;
+	public static final int RAMP_PUSH_BACK = 7;
+	public static final int RAMP_RIGHT_FRONT = 0;
+	public static final int RAMP_RIGHT_BACK = 0;
+	public static final int RAMP_LEFT_FRONT = 4;
+	public static final int RAMP_LEFT_BACK = 3;
 	
 	public static final int IR_PORT = 0;
 	public static final int TOP_LIMIT = 1;

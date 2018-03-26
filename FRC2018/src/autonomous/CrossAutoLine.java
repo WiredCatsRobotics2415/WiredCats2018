@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class CrossAutoLine extends CommandGroup {
 
     public CrossAutoLine() {
-    	addParallel(new ResetShooter());
-    	addSequential(new DriveStraightToCommand(130, 0.3, 13));
+//    	addParallel(new ResetShooter());
+    	addSequential(new ForwardGo(0.6, 150));
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

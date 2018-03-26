@@ -1,5 +1,7 @@
 package Subsystems;
 
+import java.awt.Robot;
+
 import org.usfirst.frc.team2415.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -28,9 +30,10 @@ public class ArcadeDrive extends Subsystem {
 	private WPI_TalonSRX lFront, rFront, lBack, rBack;
 	private DoubleSolenoid shifter;
 	public AHRS ahrs;
+	public boolean toggling;
 
 	// private Solenoid pu, pupu;
-	private final double WHEEL_CIRCUMFERENCE = 5 * Math.PI; // inches
+	private final double WHEEL_CIRCUMFERENCE = 6 * Math.PI; // inches
 
 	public double DEADBAND = 0.05;
 	public double STRAIGHT_RESTRICTER = 1;
@@ -48,15 +51,13 @@ public class ArcadeDrive extends Subsystem {
 		try {
 			/* Communicate w/navX-MXP via the MXP SPI Bus. */
 			/*
-			 * Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or
-			 * SerialPort.Port.kUSB
+			 * Alternatively: I2C.Port.kMXP, SerialPort.Port.kMXP or SerialPort.Port.kUSB
 			 */
 			/*
-			 * See
-			 * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/
-			 * for details.
+			 * See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for
+			 * details.
 			 */
-			ahrs = new AHRS(I2C.Port.kMXP); //I2C works on competition SPI on practice
+			ahrs = new AHRS(I2C.Port.kMXP); // I2C works on competition SPI on practice
 		} catch (RuntimeException ex) {
 			DriverStation.reportError("Error instantiating navX-MXP:  " + ex.getMessage(), true);
 		}
@@ -68,29 +69,29 @@ public class ArcadeDrive extends Subsystem {
 
 		shifter = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GEAR_SHIFTER_BACK, RobotMap.GEAR_SHIFTER_FRONT);
 
-//		lBack.set(ControlMode.Follower, lFront.getDeviceID());
-//		rBack.set(ControlMode.Follower, rFront.getDeviceID());
+		// lBack.set(ControlMode.Follower, lFront.getDeviceID());
+		// rBack.set(ControlMode.Follower, rFront.getDeviceID());
 
-		lFront.configPeakCurrentLimit(30, 10); //35
+		lFront.configPeakCurrentLimit(30, 10); // 35
 		lFront.configPeakCurrentDuration(200, 10);
-		lFront.configContinuousCurrentLimit(25, 10); //30
+		lFront.configContinuousCurrentLimit(25, 10); // 30
 		lFront.enableCurrentLimit(true);
-		
-		lBack.configPeakCurrentLimit(30, 10); //35
+
+		lBack.configPeakCurrentLimit(30, 10); // 35
 		lBack.configPeakCurrentDuration(200, 10);
-		lBack.configContinuousCurrentLimit(25, 10); //30
+		lBack.configContinuousCurrentLimit(25, 10); // 30
 		lBack.enableCurrentLimit(true);
-		
-//		lFront.configVoltageCompSaturation(11.0, 10);
-//		lFront.enableVoltageCompensation(true);
-//		rFront.configVoltageCompSaturation(11.0, 10);
-//		rFront.enableVoltageCompensation(true);
+
+		// lFront.configVoltageCompSaturation(11.0, 10);
+		// lFront.enableVoltageCompensation(true);
+		// rFront.configVoltageCompSaturation(11.0, 10);
+		// rFront.enableVoltageCompensation(true);
 
 		rFront.configPeakCurrentLimit(30, 10);
 		rFront.configPeakCurrentDuration(200, 10);
 		rFront.configContinuousCurrentLimit(25, 10);
 		rFront.enableCurrentLimit(true);
-		
+
 		rBack.configPeakCurrentLimit(30, 10);
 		rBack.configPeakCurrentDuration(200, 10);
 		rBack.configContinuousCurrentLimit(25, 10);
@@ -104,11 +105,11 @@ public class ArcadeDrive extends Subsystem {
 		lBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		rBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 
-//		lBack.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_100Ms, 10);
-//		lBack.configVelocityMeasurementWindow(128, 10);
+		// lBack.configVelocityMeasurementPeriod(VelocityMeasPeriod.Period_100Ms, 10);
+		// lBack.configVelocityMeasurementWindow(128, 10);
 
 	}
-	
+
 	public void setOne(double num) {
 		lBack.set(num);
 	}
@@ -141,6 +142,21 @@ public class ArcadeDrive extends Subsystem {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+	public void toggleHighGear() {
+		if (toggling == false) {
+			if (shifter.get() == Value.kForward) {
+				shifter.set(Value.kReverse);
+				toggling = true;
+			} else if (shifter.get() == Value.kReverse) {
+				shifter.set(Value.kForward);
+				toggling = true;
+			} else {
+				shifter.set(Value.kForward);
+				toggling = true;
+			}
 		}
 	}
 
@@ -216,7 +232,7 @@ public class ArcadeDrive extends Subsystem {
 	public double getMotorOutput() {
 		return lFront.getMotorOutputPercent();
 	}
-	
+
 	public double fPS2RPM(double fps) {
 		return fps / 10 * WHEEL_CIRCUMFERENCE / 12 * 4096;
 	}

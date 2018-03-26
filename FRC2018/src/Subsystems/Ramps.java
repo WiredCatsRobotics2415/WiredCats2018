@@ -1,5 +1,7 @@
 package Subsystems;
 
+import org.usfirst.frc.team2415.robot.RobotMap;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -9,37 +11,44 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Ramps extends Subsystem {
 /*
-	public static DoubleSolenoid sideOne, sideTwo, sideThree, sideFour, sideFive, sideSix;
-	// Put methods for controlling this subsystem
-	// here. Call these from Commands.
+//	public static DoubleSolenoid rampPushRight, rampPushLeft, rightLiftFar, rightLiftNear, leftLiftFar, leftLiftNear;
+	public static DoubleSolenoid rampPush, leftLift;
+	public static DoubleSolenoid test;
 
 	public Ramps() {
-		sideOne = new DoubleSolenoid(0, 1);
-		sideTwo = new DoubleSolenoid(2, 3);
-		sideThree = new DoubleSolenoid(4, 5);
-		sideFour = new DoubleSolenoid(6, 7);
-		sideFive= new DoubleSolenoid(8, 9);
-		sideSix = new DoubleSolenoid(10, 11);
+		rampPush = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.RAMP_PUSH_FRONT, RobotMap.RAMP_PUSH_BACK);
+//		rightLift = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.RAMP_RIGHT_FRONT, RobotMap.RAMP_RIGHT_BACK);
+		leftLift= new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.RAMP_LEFT_FRONT, RobotMap.RAMP_LEFT_BACK);
+//		test = new DoubleSolenoid(RobotMap.PCM_ID, 0, 7);
+	}
+	
+	public void test(boolean go) {
+		if (go) {
+//			test.set(Value.kForward);
+		} else {
+//			test.set(Value.kReverse);
+		}
 	}
 
 	public void rampsOut(boolean on) {
 		if (on) {
-			sideOne.set(Value.kForward);
-			sideTwo.set(Value.kForward);
-			sideThree.set(Value.kForward);
-			sideFour.set(Value.kForward);
-			sideFive.set(Value.kForward);
-			sideSix.set(Value.kForward);
+			rampPush.set(Value.kForward);
 		} else {
-			sideOne.set(Value.kReverse);
-			sideTwo.set(Value.kReverse);
-			sideThree.set(Value.kReverse);
-			sideFour.set(Value.kReverse);
-			sideFive.set(Value.kReverse);
-			sideSix.set(Value.kReverse);
+			rampPush.set(Value.kReverse);
 		}
 	}
-*/
+	
+	public void platformsDown(boolean down) {
+		if (down) {
+//			rightLift.set(Value.kReverse);
+			leftLift.set(Value.kReverse);
+		} else {
+//			rightLift.set(Value.kForward);
+			leftLift.set(Value.kForward);
+		}
+	}
+	*/
+
 	public void initDefaultCommand() {
 		// Set the default command for a subsystem here.
 		// setDefaultCommand(new MySpecialCommand());

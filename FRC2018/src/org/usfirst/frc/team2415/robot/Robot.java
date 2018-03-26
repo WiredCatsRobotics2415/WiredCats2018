@@ -4,13 +4,11 @@ import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
 import Subsystems.Beast;
 import Subsystems.Intake;
-import Subsystems.Ramps;
 import Subsystems.VelocityDrive;
 import autonomous.CrossAutoLine;
 import autonomous.LeftSwitch;
 import autonomous.RightSwitch;
 import autonomous.StraightDumpPrism;
-import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -34,6 +32,7 @@ public class Robot extends IterativeRobot {
 	SendableChooser<String> chooser = new SendableChooser<>();
 
 	public static XboxController gamepad;
+//	public static XboxController rampsController;
 	public static Compressor compressor;
 
 	public static CheesyDriveHelper cheesyDriveHelper;
@@ -51,6 +50,8 @@ public class Robot extends IterativeRobot {
 
 	public boolean center = true;
 	public boolean left = false;
+	
+	public DriverStation DS;
 
 	// public static PowerDistributionPanel pdp;
 
@@ -65,10 +66,12 @@ public class Robot extends IterativeRobot {
 		// SmartDashboard.putData("Auto choices", chooser);
 //		UsbCamera camera = new UsbCamera("cam0", 0);
 //		camera.setFPS(15);
-//		CameraServer.getInstance().startAutomaticCapture(camera);
+		CameraServer.getInstance().startAutomaticCapture();
 
 		gamepad = new XboxController(0);
 		compressor = new Compressor(20);
+		
+//		rampsController = new XboxController(1);
 
 		cheesyDriveHelper = new CheesyDriveHelper();
 
@@ -80,6 +83,7 @@ public class Robot extends IterativeRobot {
 		
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
+		DS = DriverStation.getInstance();
 		//
 		updateShuffle();
 
@@ -109,11 +113,13 @@ public class Robot extends IterativeRobot {
 		// System.out.println("Auto selected: " + autoSelected);
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
+		arcadeDrive.setHighGear(true);
 
-		
+//		ramps.rampsOut(false);
+//		ramps.platformsDown(false);
 		
 		String gameData;
-		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		gameData = DS.getGameSpecificMessage();
 		mySide = gameData.charAt(0);
 
 		
@@ -152,10 +158,11 @@ public class Robot extends IterativeRobot {
 				crossLine.start();
 			}
 		} else {
-//			System.out.println("RUNNING");
 			Command crossLine = new CrossAutoLine();
 			crossLine.start();
 		}
+		
+		
 		
 		
 		
@@ -211,6 +218,9 @@ public class Robot extends IterativeRobot {
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
 		// beast.zeroShooterEncoder();
+		
+//		ramps.rampsOut(false);
+//		ramps.platformsDown(false);
 	}
 
 	@Override
@@ -221,6 +231,8 @@ public class Robot extends IterativeRobot {
 		// System.out.println(beast.getHeight());
 
 		updateShuffle();
+		
+//		compressor.start();
 
 		// System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] +
 		// ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
@@ -231,10 +243,13 @@ public class Robot extends IterativeRobot {
 		double leftY;
 		double rightX;
 
-		if (!gamepad.getBumper(Hand.kRight)) {
-			arcadeDrive.setHighGear(true);
+		if (gamepad.getBumper(Hand.kRight)) {
+			arcadeDrive.toggleHighGear();
+//			arcadeDrive.setHighGear(true);
+//		}
 		} else {
-			arcadeDrive.setHighGear(false);
+//			arcadeDrive.setHighGear(false);
+			arcadeDrive.toggling = false;
 		}
 
 		leftY = -Robot.gamepad.getRawAxis(1);
@@ -247,7 +262,7 @@ public class Robot extends IterativeRobot {
 
 		boolean isQuickTurn = leftY < 0.1;
 
-		if (gamepad.getBumper(Hand.kRight)) {
+		if (arcadeDrive.isHighGear()) {
 			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
 		} else {
 			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
@@ -258,9 +273,12 @@ public class Robot extends IterativeRobot {
 
 		if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
 			intake.grabPrism();
+//			System.out.println("LEFT TRIGGER");
 		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
 			intake.emptyPrism();
+//			System.out.println("RIGHT TRIGGER");
 		} else if (gamepad.getBumper(Hand.kLeft)) {
+//			System.out.println("L BUMP");
 			intake.turnPrism();
 		} else {
 			intake.stopGrab();
@@ -285,9 +303,13 @@ public class Robot extends IterativeRobot {
 			beast.backDown();
 		}
 		
-		//Added by Yash
-//		if (gamepad.getBumper(Hand.kRight)) {
-//			ramp.rampsOut(rampDeployed);
+//		if (rampsController.getTriggerAxis(Hand.kLeft) > 0.5) {
+//			ramps.platformsDown(true);
+//		} else if (rampsController.getTriggerAxis(Hand.kRight) > 0.5) {
+//			ramps.rampsOut(true);
+//		} else if (rampsController.getBumper(Hand.kLeft)){
+//			ramps.rampsOut(false);
+//			ramps.platformsDown(false);
 //		}
 
 		// System.out.println("TELEOP");
@@ -302,6 +324,8 @@ public class Robot extends IterativeRobot {
 		Command leftSwitch = new LeftSwitch();
 		leftSwitch.start();
 		
+//		compressor.start();
+		
 //		Command rightSwitch = new RightSwitch();
 //		rightSwitch.start();
 	}
@@ -311,10 +335,17 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		// System.out.println("YAW: " + arcadeDrive.getYaw());
+//		 System.out.println("YAW: " + arcadeDrive.getYaw());
 		updateShuffle();
-
 		
+//		if (gamepad.getBumper(Hand.kRight)) {
+////			arcadeDrive.toggleHighGear();
+//			ramps.test(true);
+////		}
+//		} else {
+//			ramps.test(false);
+//			arcadeDrive.toggling = false;
+//		}
 		
 		double leftY;
 		 leftY = -Robot.gamepad.getRawAxis(1);

@@ -55,12 +55,12 @@ public class DriveStraightToCommand extends Command implements PIDOutput {
 //    	Robot.arcadeDrive.zeroYaw();
 //    	startPos = (Math.abs(Robot.arcadeDrive.getDistance()[1]) + Math.abs(Robot.arcadeDrive.getDistance()[0]))/2;
     	Robot.arcadeDrive.setMotors(0, 0);
-    	turnController = new PIDController(kP, kI, kD, kF, Robot.arcadeDrive.ahrs, this);
-    	turnController.setInputRange(-180.0f,  180.0f);
-    	turnController.setOutputRange(-1.0, 1.0);
-    	turnController.setAbsoluteTolerance(kTolerance);
-    	turnController.setContinuous(true);
-    	turnController.setSetpoint(Robot.arcadeDrive.ahrs.getYaw());
+//    	turnController = new PIDController(kP, kI, kD, kF, Robot.arcadeDrive.ahrs, this);
+//    	turnController.setInputRange(-180.0f,  180.0f);
+//    	turnController.setOutputRange(-1.0, 1.0);
+//    	turnController.setAbsoluteTolerance(kTolerance);
+//    	turnController.setContinuous(true);
+//    	turnController.setSetpoint(Robot.arcadeDrive.ahrs.getYaw());
 //    	turnController.setSetpoint(0);
 //    	int count = 0;
 //    	for(int i = 0; i < 30; i++){	
@@ -70,8 +70,9 @@ public class DriveStraightToCommand extends Command implements PIDOutput {
 //    		}
 //    	}
     	Robot.arcadeDrive.zeroEncoders();
-    	turnController.enable();
+//    	turnController.enable();
     	Robot.arcadeDrive.setBrakeMode(true);
+    	Robot.arcadeDrive.zeroEncoders();
     	
 //    	Robot.driveSubsystem.setLeftRampRate(27.4285714286/2);
 //    	Robot.driveSubsystem.setRightRampRate(27.4285714286/2);
@@ -96,7 +97,7 @@ public class DriveStraightToCommand extends Command implements PIDOutput {
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
     	return System.currentTimeMillis()/1000 - startTime > time ||
-    			Math.abs(distance) <= (Math.abs(Robot.arcadeDrive.getDistance()[1]) + Math.abs(Robot.arcadeDrive.getDistance()[0]))/2;
+    			Math.abs(distance) + Math.abs(startPos) <= (Math.abs(Robot.arcadeDrive.getDistance()[0]));
     }
 
     // Called once after isFinished returns true

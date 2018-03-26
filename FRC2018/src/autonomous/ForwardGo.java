@@ -11,6 +11,7 @@ public class ForwardGo extends Command {
 
 	double speed = 0;
 	double distance;
+	double startingEnc;
 	
     public ForwardGo(double speed, double distance) {
         // Use requires() here to declare subsystem dependencies
@@ -24,12 +25,13 @@ public class ForwardGo extends Command {
     protected void initialize() {
     	Robot.arcadeDrive.zeroEncoders();
     	Robot.arcadeDrive.setMotors(-speed, -speed);
+    	startingEnc = Robot.arcadeDrive.getDistance()[0];
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	System.out.println("GOING");
-    	if (Math.abs(Robot.arcadeDrive.getDistance()[0]) > Math.abs(distance)) {
+    	if (Math.abs(Robot.arcadeDrive.getDistance()[0]) > Math.abs(distance + startingEnc)) {
     		Robot.arcadeDrive.setMotors(0, 0);
     	} else {
 //    		Robot.arcadeDrive.setMotors(-0.5, 0.5);
@@ -40,7 +42,7 @@ public class ForwardGo extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (Math.abs(Robot.arcadeDrive.getDistance()[0]) > Math.abs(distance));
+        return (Math.abs(Robot.arcadeDrive.getDistance()[0]) > Math.abs(distance + startingEnc));
     }
 
     // Called once after isFinished returns true
