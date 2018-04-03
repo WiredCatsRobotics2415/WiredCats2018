@@ -96,18 +96,18 @@ public class Beast extends Subsystem {
 	}
 
 	public void stopShooter() {
-		lFar.set(-0.05);
-		lNear.set(-0.05);
-		rFar.set(-0.05);
-		rNear.set(-0.05);
+		lFar.set(-0.03);
+		lNear.set(-0.03);
+		rFar.set(-0.03);
+		rNear.set(-0.03);
 	}
 
 	public void backDown() {
 		// zeroShooterEncoder();
-		 lFar.set(-0.29); //-0.13
-		lNear.set(-0.29);
-		rFar.set(-0.29);
-		 rNear.set(-0.29);
+		 lFar.set(-0.33); //-0.13
+		lNear.set(-0.33);
+		rFar.set(-0.33);
+		 rNear.set(-0.33);
 	}
 
 	public void scaleShot() {
@@ -119,14 +119,14 @@ public class Beast extends Subsystem {
 	}
 
 	public void switchShot() {
-		lFar.set(0.7);
-		lNear.set(0.7);
-		rFar.set(0.7);
-		rNear.set(0.7);
+		lFar.set(0.85); //0.7
+		lNear.set(0.85);
+		rFar.set(0.85);
+		rNear.set(0.85);
 	}
 	
 	public boolean encoderTop() {
-		return getHeight() > 10000;
+		return Math.abs(getHeight()) > 14500;
 	}
 
 	public void resetShooter() {

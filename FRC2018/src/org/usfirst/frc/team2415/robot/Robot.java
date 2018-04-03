@@ -280,12 +280,11 @@ public class Robot extends IterativeRobot {
 		}
 
 		if (gamepad.getBButton()) {
-			// beast.testShoot((byte) 1); // switch
-			beast.switchShot();
+//			beast.switchShot();
+			beast.scaleShot();
 		} else if (gamepad.getAButton()) {
-			// beast.testShoot((byte) 0); // scale
-			// beast.testShoot((byte) 1);
-			beast.switchShot();
+//			beast.switchShot();
+			beast.scaleShot();
 		} else if (gamepad.getYButton()) {
 			// System.out.println("RESET");
 			beast.resetBools();
@@ -293,7 +292,8 @@ public class Robot extends IterativeRobot {
 		} else if (gamepad.getXButton()) {
 			beast.resetShooter();
 		} else if (beast.hitBottom()) {
-			beast.eStop();
+//			beast.eStop();
+			beast.stopShooter();
 			beast.zeroShooterEncoder();
 		} else if (beast.reachTop() || beast.encoderTop()) {
 			beast.backDown();
@@ -357,6 +357,10 @@ public class Robot extends IterativeRobot {
 
 		beast.testMotor(leftY * 0.65);
 		System.out.println("HEIGHT: " + beast.getHeight());
+		
+		if(beast.hitBottom()) {
+			beast.zeroShooterEncoder();
+		}
 
 		// updateShuffle();
 		//
