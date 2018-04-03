@@ -51,65 +51,6 @@ public class Beast extends Subsystem {
 		topLimit = new DigitalInput(RobotMap.TOP_LIMIT);
 		bottomLimit = new DigitalInput(RobotMap.BOTTOM_LIMIT);
 
-		checker = new Thread(new Runnable() {
-			public void run() {
-				while (!Thread.interrupted()) {
-					if (!topLimit.get() /* || getHeight() - kHeight <= 50 */) {
-						System.out.println("REACHED TOP");
-						ascentStopTime = System.currentTimeMillis();
-						shooter.interrupt();
-						System.out.println("STOP TIME: " + ascentStopTime);
-						hitTop = true;
-					} else if (!bottomLimit.get() && hitTop) {
-						System.out.println("REACHED BOTTOM");
-						descend.interrupt();
-						checkerGoing = false;
-						hitTop = false;
-						return;
-					} else {
-						// System.out.println("CHECKING");
-					}
-				}
-			}
-		});
-
-		shooter = new Thread(new Runnable() {
-			public void run() {
-				while (!Thread.interrupted()) {
-					if (shootAt == SCALE) {
-						System.out.println("SHOOTING AT SCALE!");
-						thread = true;
-						// scaleShot();
-					} else if (shootAt == SWITCH) {
-						System.out.println("SHOOTING AT SWITCH!");
-						thread = true;
-						// switchShot();
-					}
-				}
-				System.out.println("STOPPING!");
-				stopShooter();
-				beginDescent();
-				return;
-			}
-		});
-
-		descend = new Thread(new Runnable() {
-			public void run() {
-				while (checkerGoing) {
-					if (Thread.interrupted()) {
-						System.out.println("STOPPED GOING DOWN");
-						stopShooter();
-						// zeroShooterEncoder();
-						thread = false;
-					}
-					while (!descend.isInterrupted()) {
-						backDown();
-						System.out.println("GOING DOWN NOW");
-					}
-				}
-			}
-		});
-
 	}
 
 	public void testMotor(double speed) {
@@ -126,52 +67,6 @@ public class Beast extends Subsystem {
 		reachedBot = false;
 	}
 
-	public void testShoot(byte state) {
-		checkLimits();
-		if (reachedBot) {
-			shooting = (stopTime + 2000 <= System.currentTimeMillis());
-		}
-
-		if (!topLimit.get() && !dropping) {
-//			 System.out.println("REACHED TOP");
-			stopShooter();
-			// System.out.println("ENCODER AT: " + getHeight());
-			// System.out.println("STOP TIME: " + ascentStopTime);
-			dropping = true;
-			shooting = false;
-		} else if (!bottomLimit.get() == dropping && dropping && !shooting) {
-//			 System.out.println("REACHED BOTTOM");
-			eStop();
-			dropping = false;
-			reachedBot = true;
-			// zeroShooterEncoder();
-		} else if (dropping && System.currentTimeMillis() > ascentStopTime + 1000) {
-//			 System.out.println("GOING DOWN");
-			stopTime = System.currentTimeMillis();
-			// System.out.println(dropping + "\t" + !bottomLimit.get());
-			// System.out.println(!bottomLimit.get() == dropping);
-			backDown();
-		} else {
-			if (state == 0 && shooting && !dropping) {
-//				 System.out.println("SHOOTING AT SCALE!");
-				shooting = true;
-				reachedBot = false;
-				ascentStopTime = System.currentTimeMillis();
-				scaleShot();
-			} else if (state == 1 && shooting && !dropping) {
-//				 System.out.println("SHOOTING AT SWITCH!");
-				shooting = true;
-				reachedBot = false;
-				ascentStopTime = System.currentTimeMillis();
-				switchShot();
-			}
-		}
-	}
-
-	public boolean isShooting() {
-		return thread;
-	}
-
 	public void checkLimits() {
 		// System.out.println("TOP: " + !topLimit.get());
 		// System.out.println("\t BOT: " + !bottomLimit.get());
@@ -184,13 +79,6 @@ public class Beast extends Subsystem {
 		}
 		prevStateTop = !topLimit.get();
 		prevStateBot = !bottomLimit.get();
-	}
-
-	public void beginDescent() {
-//		System.out.println("WAITING");
-		if (System.currentTimeMillis() >= ascentStopTime + 1000) {
-			descend.start();
-		}
 	}
 
 	public double getHeight() {
@@ -216,10 +104,10 @@ public class Beast extends Subsystem {
 
 	public void backDown() {
 		// zeroShooterEncoder();
-		 lFar.set(-0.23); //-0.13
-		lNear.set(-0.23);
-		rFar.set(-0.23);
-		 rNear.set(-0.23);
+		 lFar.set(-0.29); //-0.13
+		lNear.set(-0.29);
+		rFar.set(-0.29);
+		 rNear.set(-0.29);
 	}
 
 	public void scaleShot() {
@@ -235,6 +123,10 @@ public class Beast extends Subsystem {
 		lNear.set(0.7);
 		rFar.set(0.7);
 		rNear.set(0.7);
+	}
+	
+	public boolean encoderTop() {
+		return getHeight() > 10000;
 	}
 
 	public void resetShooter() {
