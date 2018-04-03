@@ -104,10 +104,10 @@ public class Beast extends Subsystem {
 
 	public void backDown() {
 		// zeroShooterEncoder();
-		 lFar.set(-0.33); //-0.13
-		lNear.set(-0.33);
-		rFar.set(-0.33);
-		 rNear.set(-0.33);
+		 lFar.set(-0.43); //-0.33
+		lNear.set(-0.43);
+		rFar.set(-0.43);
+		 rNear.set(-0.43);
 	}
 
 	public void scaleShot() {
