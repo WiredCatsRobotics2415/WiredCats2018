@@ -66,9 +66,8 @@ public class Robot extends IterativeRobot {
 		// SmartDashboard.putData("Auto choices", chooser);
 		// UsbCamera camera = new UsbCamera("cam0", 0);
 		// camera.setFPS(15);
-		
-		
-//		CameraServer.getInstance().startAutomaticCapture();
+
+		// CameraServer.getInstance().startAutomaticCapture();
 
 		gamepad = new XboxController(0);
 		compressor = new Compressor(20);
@@ -254,40 +253,55 @@ public class Robot extends IterativeRobot {
 			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
 		}
 
-		// Robot.velocityDrive.velDrive(leftY, rightX);
-		// System.out.println(Robot.velocityDrive.getCurrent());
-
 		if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
 			intake.grabPrism();
-			// System.out.println("LEFT TRIGGER");
 		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
 			intake.emptyPrism();
-			// System.out.println("RIGHT TRIGGER");
 		} else if (gamepad.getBumper(Hand.kLeft)) {
-			// System.out.println("L BUMP");
 			intake.turnPrism();
 		} else {
 			intake.stopGrab();
 		}
 
 		if (gamepad.getBButton()) {
-//			beast.switchShot();
+			// beast.switchShot();
 			beast.scaleShot();
 		} else if (gamepad.getAButton()) {
-//			beast.switchShot();
+			// beast.switchShot();
 			beast.scaleShot();
 		} else if (gamepad.getYButton()) {
-			// System.out.println("RESET");
 			beast.resetBools();
 			beast.eStop();
 		} else if (gamepad.getXButton()) {
 			beast.resetShooter();
 		} else if (beast.hitBottom()) {
-//			beast.eStop();
+			// beast.eStop();
 			beast.stopShooter();
 			beast.zeroShooterEncoder();
 		} else if (beast.reachTop() || beast.encoderTop()) {
 			beast.backDown();
+		}
+
+		if (gamepad.getAButton()) {
+			// beast.switchShot();
+			sidney.fire();
+		} else if (gamepad.getBButton()) {
+			// beast.switchShot();
+			sidney.nextFloor();
+		} else if (gamepad.getYButton()) {
+			sidney.backDown();
+		} else if (gamepad.getXButton()) {
+			sidney.backDown();
+		} else if (sidney.scalePos() && sidney.isSearching()) {
+			sidney.eStop();
+		} else if (sidney.switchPos() && sidney.isSearching()) {
+			sidney.eStop();
+		} else if (sidney.hitBottom()) {
+			sidney.eStop();
+			// sidney.stopShooter();
+			sidney.zeroShooterEncoder();
+		} else if (sidney.reachTop() || sidney.encoderTop()) {
+			sidney.backDown();
 		}
 
 		// if (rampsController.getTriggerAxis(Hand.kLeft) > 0.5) {
@@ -298,8 +312,6 @@ public class Robot extends IterativeRobot {
 		// ramps.rampsOut(false);
 		// ramps.platformsDown(false);
 		// }
-
-		// System.out.println("TELEOP");
 
 	}
 
@@ -333,11 +345,11 @@ public class Robot extends IterativeRobot {
 		// ramps.test(false);
 		// arcadeDrive.toggling = false;
 		// }
-		
-		if(beast.hitBottom()) {
+
+		if (beast.hitBottom()) {
 			beast.zeroShooterEncoder();
 		}
-		
+
 		System.out.println("REACH TOP: " + beast.reachTop());
 
 		double leftY;
@@ -346,8 +358,8 @@ public class Robot extends IterativeRobot {
 
 		beast.testMotor(leftY * 0.65);
 		System.out.println("HEIGHT: " + beast.getHeight());
-		
-		if(beast.hitBottom()) {
+
+		if (beast.hitBottom()) {
 			beast.zeroShooterEncoder();
 		}
 
@@ -404,8 +416,8 @@ public class Robot extends IterativeRobot {
 		// velocityDrive.getDistance()[0]);
 
 		updateShuffle();
-//		System.out.println("REACH TOP: " + beast.reachTop());
-//		System.out.println("REACH BOTTOM: " + beast.hitBottom());
+		// System.out.println("REACH TOP: " + beast.reachTop());
+		// System.out.println("REACH BOTTOM: " + beast.hitBottom());
 
 		// System.out.println("YAW: " + arcadeDrive.getYaw());
 		// System.out.println("IR SENSOR: " + intake.hasPrism());
