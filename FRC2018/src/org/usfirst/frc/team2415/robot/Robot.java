@@ -222,18 +222,9 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 
-		// beast.checkLimits();
-		// System.out.println(beast.getHeight());
-
 		updateShuffle();
 
 		// compressor.start();
-
-		// System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] +
-		// ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
-
-		// System.out.println("IR SENSOR: " + intake.hasPrism());
-		// System.out.println("YAW: " + arcadeDrive.getYaw());
 
 		double leftY;
 		double rightX;
@@ -298,8 +289,6 @@ public class Robot extends IterativeRobot {
 		} else if (beast.reachTop() || beast.encoderTop()) {
 			beast.backDown();
 		}
-
-		System.out.println("HEIGHT: " + beast.getHeight());
 
 		// if (rampsController.getTriggerAxis(Hand.kLeft) > 0.5) {
 		// ramps.platformsDown(true);

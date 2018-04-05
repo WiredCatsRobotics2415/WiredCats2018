@@ -11,6 +11,7 @@ public class SimpleDriveForward extends TimedCommand {
 	
 	double speed = 0;
 	double distance;
+	double startingEnc;
 
     public SimpleDriveForward(double timeout, double speed, double distance) {
         super(timeout);
@@ -25,16 +26,18 @@ public class SimpleDriveForward extends TimedCommand {
     protected void initialize() {
     	Robot.arcadeDrive.zeroEncoders();
     	Robot.arcadeDrive.setMotors(-speed, -speed);
+    	startingEnc = Robot.arcadeDrive.getDistance()[0];
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 //    	System.out.println("GOING");
-    	if (Robot.arcadeDrive.getDistance()[0] > distance) {
+    	if (Math.abs(Robot.arcadeDrive.getDistance()[0]) > Math.abs(distance + startingEnc)) {
     		Robot.arcadeDrive.setMotors(0, 0);
     	} else {
 //    		Robot.arcadeDrive.setMotors(-0.5, 0.5);
     		Robot.arcadeDrive.setMotors(-speed, speed);
+//    		System.out.println("ENCODER LEFT: " + Robot.arcadeDrive.getDistance()[0]);
     	}
     }
 

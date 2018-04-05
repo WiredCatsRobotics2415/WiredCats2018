@@ -15,12 +15,13 @@ public class RightSwitch extends CommandGroup {
     	addSequential(new ForwardGo(0.6, 65));
     	addSequential(new TimedTurnByCommand(0.5, -49.5));
     	addParallel(new SpinIntake());
-//    	addParallel(new TimedSpinIntake(5));
     	addSequential(new DriveStraightToCommand(27, 0.45, 2));
 //    	addSequential(new ForwardGo(0.45, 29));
 //    	addParallel(new TimedSpinIntake(5));
     	addSequential(new AutoSwitch());
     	addSequential(new StopIntake());
+    	
+    	
 //    	addSequential(new ForwardGo(-0.4, 10));
 //    	addSequential(new TimedTurnByCommand(0.5, 90));
     	

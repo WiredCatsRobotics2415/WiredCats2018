@@ -22,8 +22,6 @@ public class Intake extends Subsystem {
 	public static WPI_TalonSRX leftIntake, rightIntake;
 	public static DigitalInput IRDetector;
 
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
 	public Intake() {
 		leftIntake = new WPI_TalonSRX(RobotMap.LEFT_SIDE_ROLLER);
 		rightIntake = new WPI_TalonSRX(RobotMap.RIGHT_SIDE_ROLLER);

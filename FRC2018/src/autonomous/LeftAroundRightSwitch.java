@@ -5,26 +5,9 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class LeftSwitch extends CommandGroup {
+public class LeftAroundRightSwitch extends CommandGroup {
 
-    public LeftSwitch() {
-    	
-    	addParallel(new ResetShooter());
-    	addSequential(new ForwardGo(0.6, 30));
-    	addSequential(new TimedTurnByCommand(0.5, -49.5));
-    	addSequential(new ForwardGo(0.6, 68));
-    	addSequential(new TimedTurnByCommand(0.5, 49.5));
-    	addParallel(new SpinIntake());
-    	addSequential(new DriveStraightToCommand(27, 0.45, 2));
-//    	addSequential(new ForwardGo(0.45, 29));
-    	addSequential(new AutoSwitch());
-    	addSequential(new StopIntake());
-    	
-    	
-//    	addSequential(new ForwardGo(-0.4, 10));
-//    	addSequential(new TimedTurnByCommand(0.5, -90));
-    	
-    	
+    public LeftAroundRightSwitch() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

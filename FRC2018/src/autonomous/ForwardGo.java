@@ -30,7 +30,7 @@ public class ForwardGo extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	System.out.println("GOING");
+//    	System.out.println("GOING");
     	if (Math.abs(Robot.arcadeDrive.getDistance()[0]) > Math.abs(distance + startingEnc)) {
     		Robot.arcadeDrive.setMotors(0, 0);
     	} else {

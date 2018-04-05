@@ -22,7 +22,6 @@ public class Beast extends Subsystem {
 
 	private WPI_TalonSRX lFar, lNear, rFar, rNear;
 	private DigitalInput topLimit, bottomLimit;
-	public Thread checker, shooter, descend;
 	public boolean shooting = true, dropping = false, reachedBot = false;
 	public volatile boolean thread = false, hitTop = false;
 	public boolean checkerGoing = true;
@@ -87,12 +86,6 @@ public class Beast extends Subsystem {
 
 	public void zeroShooterEncoder() {
 		lNear.setSelectedSensorPosition(0, 0, 10);
-	}
-
-	public void shoot(byte state) {
-		shootAt = state;
-		checker.start();
-		shooter.start();
 	}
 
 	public void stopShooter() {
