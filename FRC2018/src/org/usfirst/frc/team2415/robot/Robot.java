@@ -282,6 +282,7 @@ public class Robot extends IterativeRobot {
 			beast.backDown();
 		}
 
+		/*
 		if (gamepad.getAButton()) {
 			// beast.switchShot();
 			sidney.fire();
@@ -303,6 +304,7 @@ public class Robot extends IterativeRobot {
 		} else if (sidney.reachTop() || sidney.encoderTop()) {
 			sidney.backDown();
 		}
+		*/
 
 		// if (rampsController.getTriggerAxis(Hand.kLeft) > 0.5) {
 		// ramps.platformsDown(true);
