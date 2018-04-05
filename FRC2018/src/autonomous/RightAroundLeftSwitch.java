@@ -8,6 +8,16 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class RightAroundLeftSwitch extends CommandGroup {
 
     public RightAroundLeftSwitch() {
+    	addParallel(new ResetShooter());
+    	addSequential(new DriveStraightToCommand(90, 0.6, 6));
+    	addSequential(new TimedTurnByCommand(1, 90));
+    	addSequential(new DriveStraightToCommand(60, 0.4, 3));
+    	addSequential(new TimedTurnByCommand(1, -90));
+    	addSequential(new DriveStraightToCommand(60, 0.4, 2));
+//    	addSequential(new TimedTurnByCommand(1, -90));
+//    	addSequential(new DriveStraightToCommand(20, 0.4, 2));
+    	addSequential(new AutoSwitch());
+    	
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

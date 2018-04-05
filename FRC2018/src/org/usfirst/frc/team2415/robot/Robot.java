@@ -3,10 +3,11 @@ package org.usfirst.frc.team2415.robot;
 import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
 import Subsystems.Beast;
-import Subsystems.Intake;
+import Subsystems.GroundIntake;
 import Subsystems.VelocityDrive;
 import autonomous.CrossAutoLine;
 import autonomous.LeftSwitch;
+import autonomous.RightAroundLeftSwitch;
 import autonomous.RightSwitch;
 import autonomous.StraightDumpPrism;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -39,8 +40,9 @@ public class Robot extends IterativeRobot {
 
 	public static ArcadeDrive arcadeDrive;
 	public static VelocityDrive velocityDrive;
-	public static Intake intake;
+//	public static Intake intake;
 	public static Beast beast;
+	 public static GroundIntake groundIntake;
 	// public static Ramps ramps; //Added by Yash
 
 	public char mySide;
@@ -56,8 +58,8 @@ public class Robot extends IterativeRobot {
 	// public static PowerDistributionPanel pdp;
 
 	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
+	 * This function is run when the robot is first started up and should be used
+	 * for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
@@ -67,19 +69,18 @@ public class Robot extends IterativeRobot {
 		// UsbCamera camera = new UsbCamera("cam0", 0);
 		// camera.setFPS(15);
 
-		// CameraServer.getInstance().startAutomaticCapture();
+		 CameraServer.getInstance().startAutomaticCapture();
 
 		gamepad = new XboxController(0);
 		compressor = new Compressor(20);
-
-		// rampsController = new XboxController(1);
 
 		cheesyDriveHelper = new CheesyDriveHelper();
 
 		arcadeDrive = new ArcadeDrive();
 		// velocityDrive = new VelocityDrive();
-		intake = new Intake();
+//		intake = new Intake();
 		beast = new Beast();
+		 groundIntake = new GroundIntake();
 		// ramps = new Ramps(); //Added by Yash
 
 		arcadeDrive.zeroEncoders();
@@ -96,14 +97,14 @@ public class Robot extends IterativeRobot {
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString line to get the auto name from the text box below the Gyro
+	 * between different autonomous modes using the dashboard. The sendable chooser
+	 * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+	 * remove all of the chooser code and uncomment the getString line to get the
+	 * auto name from the text box below the Gyro
 	 *
 	 * You can add additional auto modes by adding additional comparisons to the
-	 * switch structure below with additional strings. If using the
-	 * SendableChooser make sure to add them to the chooser code above as well.
+	 * switch structure below with additional strings. If using the SendableChooser
+	 * make sure to add them to the chooser code above as well.
 	 */
 	@Override
 	public void autonomousInit() {
@@ -150,8 +151,9 @@ public class Robot extends IterativeRobot {
 				Command dumpSwitch = new StraightDumpPrism();
 				dumpSwitch.start();
 			} else if (mySide == 'L') {
-				Command crossLine = new CrossAutoLine();
-				crossLine.start();
+				Command crossLeft = new RightAroundLeftSwitch();
+//				Command crossLeft = new CrossAutoLine();
+				crossLeft.start();
 			} else {
 				Command crossLine = new CrossAutoLine();
 				crossLine.start();
@@ -252,6 +254,8 @@ public class Robot extends IterativeRobot {
 		} else {
 			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
 		}
+		
+		/*
 
 		if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
 			intake.grabPrism();
@@ -261,6 +265,18 @@ public class Robot extends IterativeRobot {
 			intake.turnPrism();
 		} else {
 			intake.stopGrab();
+		}
+		
+		*/
+		
+		if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
+			groundIntake.grabPrism();
+		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
+			groundIntake.emptyPrism();
+		} else if (gamepad.getBumper(Hand.kLeft)) {
+			groundIntake.groundSwitch(0.4);
+		} else {
+			groundIntake.stopGrab();
 		}
 
 		if (gamepad.getBButton()) {
@@ -283,28 +299,15 @@ public class Robot extends IterativeRobot {
 		}
 
 		/*
-		if (gamepad.getAButton()) {
-			// beast.switchShot();
-			sidney.fire();
-		} else if (gamepad.getBButton()) {
-			// beast.switchShot();
-			sidney.nextFloor();
-		} else if (gamepad.getYButton()) {
-			sidney.backDown();
-		} else if (gamepad.getXButton()) {
-			sidney.backDown();
-		} else if (sidney.scalePos() && sidney.isSearching()) {
-			sidney.eStop();
-		} else if (sidney.switchPos() && sidney.isSearching()) {
-			sidney.eStop();
-		} else if (sidney.hitBottom()) {
-			sidney.eStop();
-			// sidney.stopShooter();
-			sidney.zeroShooterEncoder();
-		} else if (sidney.reachTop() || sidney.encoderTop()) {
-			sidney.backDown();
-		}
-		*/
+		 * if (gamepad.getAButton()) { // beast.switchShot(); sidney.fire(); } else if
+		 * (gamepad.getBButton()) { // beast.switchShot(); sidney.nextFloor(); } else if
+		 * (gamepad.getYButton()) { sidney.backDown(); } else if (gamepad.getXButton())
+		 * { sidney.backDown(); } else if (sidney.scalePos() && sidney.isSearching()) {
+		 * sidney.eStop(); } else if (sidney.switchPos() && sidney.isSearching()) {
+		 * sidney.eStop(); } else if (sidney.hitBottom()) { sidney.eStop(); //
+		 * sidney.stopShooter(); sidney.zeroShooterEncoder(); } else if
+		 * (sidney.reachTop() || sidney.encoderTop()) { sidney.backDown(); }
+		 */
 
 		// if (rampsController.getTriggerAxis(Hand.kLeft) > 0.5) {
 		// ramps.platformsDown(true);
@@ -322,8 +325,8 @@ public class Robot extends IterativeRobot {
 		arcadeDrive.zeroYaw();
 		// beast.zeroShooterEncoder();
 
-		Command leftSwitch = new LeftSwitch();
-		leftSwitch.start();
+//		Command leftSwitch = new LeftSwitch();
+//		leftSwitch.start();
 
 		// compressor.start();
 
@@ -339,70 +342,27 @@ public class Robot extends IterativeRobot {
 		// System.out.println("YAW: " + arcadeDrive.getYaw());
 		updateShuffle();
 
-		// if (gamepad.getBumper(Hand.kRight)) {
-		//// arcadeDrive.toggleHighGear();
-		// ramps.test(true);
-		//// }
-		// } else {
-		// ramps.test(false);
-		// arcadeDrive.toggling = false;
-		// }
+//		if (beast.hitBottom()) {
+//			beast.zeroShooterEncoder();
+//		}
 
-		if (beast.hitBottom()) {
-			beast.zeroShooterEncoder();
-		}
-
-		System.out.println("REACH TOP: " + beast.reachTop());
+//		System.out.println("REACH TOP: " + beast.reachTop());
 
 		double leftY;
 		leftY = -Robot.gamepad.getRawAxis(1);
 		// System.out.println(beast.getHeight());
 
-		beast.testMotor(leftY * 0.65);
-		System.out.println("HEIGHT: " + beast.getHeight());
-
-		if (beast.hitBottom()) {
-			beast.zeroShooterEncoder();
-		}
-
-		// updateShuffle();
-		//
-		// System.out.println("ENCODER LEFT: " + arcadeDrive.getDistance()[0] +
-		// ", ENCODER RIGHT: " + arcadeDrive.getDistance()[1]);
-		//
-		// double leftY;
-		// double rightX;
-
-		// leftY = Robot.gamepad.getRawAxis(1);
-		// System.out.println(leftY);
-		// arcadeDrive.setOne(leftY);
-		// rightX = Robot.gamepad.getRawAxis(4);
-		//
-		// Robot.arcadeDrive.setVelocity(leftY * 9000, leftY * 9000);
-
-		// Robot.velocityDrive.velDrive(leftY, rightX);
-
-		//
-		// if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND)) leftY = 0;
-		// if (Math.abs(rightX) < Math.abs(arcadeDrive.DEADBAND)) rightX = 0;
-		//
-		//
-		// leftY = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(leftY, 3) +
-		// (1-arcadeDrive.INTERPOLATION_FACTOR)*leftY;
-		// rightX = arcadeDrive.INTERPOLATION_FACTOR*Math.pow(rightX, 3) +
-		// (1-arcadeDrive.INTERPOLATION_FACTOR)*rightX;
-		// //
-		// double left = arcadeDrive.STRAIGHT_RESTRICTER*leftY +
-		// arcadeDrive.TURN_SPEED_BOOST*rightX;
-		// double right = arcadeDrive.STRAIGHT_RESTRICTER*leftY -
-		// arcadeDrive.TURN_SPEED_BOOST*rightX;
-		//
-		// arcadeDrive.setMotors(left, right);
-
-		// arcadeDrive.setMotors(leftY, -leftY);
-		// System.out.println("OUTPUT: " + Robot.arcadeDrive.getMotorOutput() +
-		// "\tVEL: " + Robot.arcadeDrive.getVelocity()[0]);
-		// System.out.println(intake.hasPrism());
+//		beast.testMotor(leftY * 0.65);
+//		System.out.println("HEIGHT: " + beast.getHeight());
+//
+//		if (beast.hitBottom()) {
+//			beast.zeroShooterEncoder();
+//		}
+		
+//		groundIntake.testUptake(leftY);
+//		groundIntake.getMotorOutput();
+//		groundIntake.testShot(1);
+		
 
 	}
 
@@ -437,7 +397,9 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("YAW", Robot.arcadeDrive.getYaw());
 		SmartDashboard.putBoolean("SHOOTER REACHED BOTTOM: ", beast.hitBottom());
 		SmartDashboard.putBoolean("SHOOTER REACHED TOP: ", beast.reachTop());
-		SmartDashboard.putBoolean("HAS PRISM: ", intake.hasPrism());
+		SmartDashboard.putBoolean("HAS PRISM: ", groundIntake.hasPrism());
+		SmartDashboard.putBoolean("UPTAKE HIT TOP: ", groundIntake.hitTop());
+		SmartDashboard.putBoolean("UPTAKE HIT BOTTOM: ", groundIntake.hitBottom());
 
 	}
 }

@@ -2,42 +2,39 @@ package autonomous;
 
 import org.usfirst.frc.team2415.robot.Robot;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 
 /**
  *
  */
-public class SpinIntake extends Command {
+public class SimpleDriveBackward extends TimedCommand {
+	
+	double speed;
 
-    public SpinIntake() {
+    public SimpleDriveBackward(double timeout, double speed) {
+        super(timeout);
+        this.speed = speed;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.intake);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.intake.simpleIntake();
+    	Robot.arcadeDrive.setMotors(-speed, speed);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.intake.simpleIntake();
+    	Robot.arcadeDrive.setMotors(-speed, speed);
     }
 
-    // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
-        return false;
-    }
-
-    // Called once after isFinished returns true
+    // Called once after timeout
     protected void end() {
-    	Robot.intake.stopGrab();
+    	Robot.arcadeDrive.setMotors(0, 0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.intake.stopGrab();
     }
 }

@@ -33,8 +33,8 @@ public class RobotMap {
 	public static final int LEFT_SIDE_ROLLER = 9;
 	public static final int RIGHT_SIDE_ROLLER = 8;
 	
-	public static final int LEFT_UPTAKE = 4;
-	public static final int RIGHT_UPTAKE = 5;
+	public static final int LEFT_UPTAKE = 10;
+	public static final int RIGHT_UPTAKE = 4;
 	
 	public static final int LEFT_FAR_SHOOTER = 14;
 	public static final int LEFT_NEAR_SHOOTER = 15;
@@ -44,6 +44,7 @@ public class RobotMap {
 	public static final int IR_PORT = 0;
 	public static final int TOP_LIMIT = 1;
 	public static final int BOTTOM_LIMIT = 2;
+	
 	public static final int LIFT_LIMIT = 3;
 	public static final int DROP_LIMIT = 4;
 	

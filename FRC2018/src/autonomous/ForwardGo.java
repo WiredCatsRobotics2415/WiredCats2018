@@ -23,38 +23,38 @@ public class ForwardGo extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.arcadeDrive.zeroEncoders();
-    	Robot.arcadeDrive.setMotors(-speed, -speed);
+//    	Robot.arcadeDrive.zeroEncoders();
+    	Robot.arcadeDrive.setMotors(-speed, speed);
     	startingEnc = Robot.arcadeDrive.getDistance()[0];
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 //    	System.out.println("GOING");
-    	if (Math.abs(Robot.arcadeDrive.getDistance()[0]) > Math.abs(distance + startingEnc)) {
+    	if (Math.abs(Robot.arcadeDrive.getDistance()[0]) > (startingEnc + Math.abs(distance))) {
     		Robot.arcadeDrive.setMotors(0, 0);
     	} else {
 //    		Robot.arcadeDrive.setMotors(-0.5, 0.5);
     		Robot.arcadeDrive.setMotors(-speed, speed);
-//    		System.out.println("ENCODER LEFT: " + Robot.arcadeDrive.getDistance()[0]);
+    		System.out.println("ENCODER LEFT: " + Robot.arcadeDrive.getDistance()[0] + "\tTARGET: " + (startingEnc + Math.abs(distance)));
     	}
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (Math.abs(Robot.arcadeDrive.getDistance()[0]) > Math.abs(distance + startingEnc));
+        return (Math.abs(Robot.arcadeDrive.getDistance()[0]) > (startingEnc + Math.abs(distance)));
     }
 
     // Called once after isFinished returns true
     protected void end() {
     	Robot.arcadeDrive.setMotors(0, 0);
-    	Robot.arcadeDrive.zeroEncoders();
+
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
     	Robot.arcadeDrive.setMotors(0, 0);
-    	Robot.arcadeDrive.zeroEncoders();
+//    	Robot.arcadeDrive.zeroEncoders();
     }
 }
