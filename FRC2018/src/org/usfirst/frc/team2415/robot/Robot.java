@@ -6,10 +6,11 @@ import Subsystems.Beast;
 import Subsystems.GroundIntake;
 import Subsystems.VelocityDrive;
 import autonomous.CrossAutoLine;
+import autonomous.LeftDumpPrism;
 import autonomous.LeftSwitch;
 import autonomous.RightAroundLeftSwitch;
+import autonomous.RightDumpPrism;
 import autonomous.RightSwitch;
-import autonomous.StraightDumpPrism;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -40,9 +41,9 @@ public class Robot extends IterativeRobot {
 
 	public static ArcadeDrive arcadeDrive;
 	public static VelocityDrive velocityDrive;
-//	public static Intake intake;
+	// public static Intake intake;
 	public static Beast beast;
-	 public static GroundIntake groundIntake;
+	public static GroundIntake groundIntake;
 	// public static Ramps ramps; //Added by Yash
 
 	public char mySide;
@@ -69,7 +70,7 @@ public class Robot extends IterativeRobot {
 		// UsbCamera camera = new UsbCamera("cam0", 0);
 		// camera.setFPS(15);
 
-		 CameraServer.getInstance().startAutomaticCapture();
+		CameraServer.getInstance().startAutomaticCapture();
 
 		gamepad = new XboxController(0);
 		compressor = new Compressor(20);
@@ -78,9 +79,9 @@ public class Robot extends IterativeRobot {
 
 		arcadeDrive = new ArcadeDrive();
 		// velocityDrive = new VelocityDrive();
-//		intake = new Intake();
+		// intake = new Intake();
 		beast = new Beast();
-		 groundIntake = new GroundIntake();
+		groundIntake = new GroundIntake();
 		// ramps = new Ramps(); //Added by Yash
 
 		arcadeDrive.zeroEncoders();
@@ -140,7 +141,7 @@ public class Robot extends IterativeRobot {
 				Command crossLine = new CrossAutoLine();
 				crossLine.start();
 			} else if (mySide == 'L') {
-				Command dumpSwitch = new StraightDumpPrism();
+				Command dumpSwitch = new LeftDumpPrism();
 				dumpSwitch.start();
 			} else {
 				Command crossLine = new CrossAutoLine();
@@ -148,11 +149,11 @@ public class Robot extends IterativeRobot {
 			}
 		} else if (!left) {
 			if (mySide == 'R') {
-				Command dumpSwitch = new StraightDumpPrism();
+				Command dumpSwitch = new RightDumpPrism();
 				dumpSwitch.start();
 			} else if (mySide == 'L') {
-				Command crossLeft = new RightAroundLeftSwitch();
-//				Command crossLeft = new CrossAutoLine();
+				// Command crossLeft = new RightAroundLeftSwitch();
+				Command crossLeft = new CrossAutoLine();
 				crossLeft.start();
 			} else {
 				Command crossLine = new CrossAutoLine();
@@ -184,6 +185,8 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 
+		groundIntake.testUptake(0.3);
+
 		// updateShuffle();
 
 		// if (Math.abs(System.currentTimeMillis() - autoStopTime) <= 1000) {
@@ -213,6 +216,7 @@ public class Robot extends IterativeRobot {
 		// System.out.println("START");
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
+		groundIntake.grabCube(false);
 		// beast.zeroShooterEncoder();
 
 		// ramps.rampsOut(false);
@@ -230,14 +234,16 @@ public class Robot extends IterativeRobot {
 		double leftY;
 		double rightX;
 
-		if (gamepad.getBumper(Hand.kRight)) {
-			arcadeDrive.toggleHighGear();
-			// arcadeDrive.setHighGear(true);
-			// }
-		} else {
-			// arcadeDrive.setHighGear(false);
-			arcadeDrive.toggling = false;
-		}
+		arcadeDrive.setHighGear(true);
+
+		// if (gamepad.getBumper(Hand.kRight)) {
+		// arcadeDrive.toggleHighGear();
+		// // arcadeDrive.setHighGear(true);
+		// // }
+		// } else {
+		// // arcadeDrive.setHighGear(false);
+		// arcadeDrive.toggling = false;
+		// }
 
 		leftY = -Robot.gamepad.getRawAxis(1);
 		rightX = Robot.gamepad.getRawAxis(4);
@@ -249,35 +255,48 @@ public class Robot extends IterativeRobot {
 
 		boolean isQuickTurn = leftY < 0.1;
 
-		if (arcadeDrive.isHighGear()) {
-			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
-		} else {
-			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
-		}
-		
-		/*
+		// if (arcadeDrive.isHighGear()) {
+		// arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn,
+		// true));
+		// } else {
+		arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
+		// }
 
-		if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
-			intake.grabPrism();
-		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
-			intake.emptyPrism();
-		} else if (gamepad.getBumper(Hand.kLeft)) {
-			intake.turnPrism();
-		} else {
-			intake.stopGrab();
-		}
-		
-		*/
-		
+		/*
+		 * 
+		 * if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) { intake.grabPrism(); } else if
+		 * (gamepad.getTriggerAxis(Hand.kRight) > 0.5) { intake.emptyPrism(); } else if
+		 * (gamepad.getBumper(Hand.kLeft)) { intake.turnPrism(); } else {
+		 * intake.stopGrab(); }
+		 * 
+		 */
+
 		if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
 			groundIntake.grabPrism();
 		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
 			groundIntake.emptyPrism();
 		} else if (gamepad.getBumper(Hand.kLeft)) {
-			groundIntake.groundSwitch(0.4);
+			// groundIntake.groundSwitch(0.4);
+//			if (groundIntake.hasPrism()) {
+//				groundIntake.grabCube(true);
+//				groundIntake.grabPrism();
+//			} else {
+//				groundIntake.grabCube(false);
+//			}
+			groundIntake.testUptake(0.75);
+		} else if (gamepad.getRawButton(7)) {
+			groundIntake.turnPrism();
 		} else {
 			groundIntake.stopGrab();
 		}
+
+		// if (groundIntake.hasPrism()) {
+		// groundIntake.grabCube(true);
+		// System.out.println("GOT");
+		// } else {
+		// groundIntake.grabCube(false);
+		// System.out.println("NOT GOT");
+		// }
 
 		if (gamepad.getBButton()) {
 			// beast.switchShot();
@@ -289,13 +308,13 @@ public class Robot extends IterativeRobot {
 			beast.resetBools();
 			beast.eStop();
 		} else if (gamepad.getXButton()) {
-			beast.resetShooter();
+			beast.backDown();
 		} else if (beast.hitBottom()) {
 			// beast.eStop();
 			beast.stopShooter();
 			beast.zeroShooterEncoder();
 		} else if (beast.reachTop() || beast.encoderTop()) {
-			beast.backDown();
+			beast.eStop();
 		}
 
 		/*
@@ -325,8 +344,8 @@ public class Robot extends IterativeRobot {
 		arcadeDrive.zeroYaw();
 		// beast.zeroShooterEncoder();
 
-//		Command leftSwitch = new LeftSwitch();
-//		leftSwitch.start();
+		// Command leftSwitch = new LeftSwitch();
+		// leftSwitch.start();
 
 		// compressor.start();
 
@@ -342,27 +361,36 @@ public class Robot extends IterativeRobot {
 		// System.out.println("YAW: " + arcadeDrive.getYaw());
 		updateShuffle();
 
-//		if (beast.hitBottom()) {
-//			beast.zeroShooterEncoder();
-//		}
+		if (groundIntake.hasPrism()) {
+			groundIntake.grabCube(true);
+			System.out.println("GOT");
+		} else {
+			groundIntake.grabCube(false);
+			System.out.println("NOT GOT");
+		}
+		// if (beast.hitBottom()) {
+		// beast.zeroShooterEncoder();
+		// }
 
-//		System.out.println("REACH TOP: " + beast.reachTop());
+		// System.out.println("REACH TOP: " + beast.reachTop());
 
 		double leftY;
 		leftY = -Robot.gamepad.getRawAxis(1);
 		// System.out.println(beast.getHeight());
 
 //		beast.testMotor(leftY * 0.65);
-//		System.out.println("HEIGHT: " + beast.getHeight());
-//
-//		if (beast.hitBottom()) {
-//			beast.zeroShooterEncoder();
-//		}
+//		beast.printOutput();
 		
-//		groundIntake.testUptake(leftY);
-//		groundIntake.getMotorOutput();
-//		groundIntake.testShot(1);
 		
+		// System.out.println("HEIGHT: " + beast.getHeight());
+		//
+		// if (beast.hitBottom()) {
+		// beast.zeroShooterEncoder();
+		// }
+
+		// groundIntake.testUptake(leftY);
+		// groundIntake.getMotorOutput();
+		// groundIntake.testShot(1);
 
 	}
 

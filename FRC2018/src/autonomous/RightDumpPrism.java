@@ -5,26 +5,15 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class RightSwitch extends CommandGroup {
+public class RightDumpPrism extends CommandGroup {
 
-    public RightSwitch() {
-    	
+    public RightDumpPrism() {
+//    	addSequential(new ForwardGo(0.4, 110));
     	addParallel(new ResetShooter());
-    	addSequential(new ForwardGo(0.6, 30));
-    	addSequential(new TimedTurnByCommand(0.5, 49.5));
-    	addSequential(new ForwardGo(0.6, 65));
-    	addSequential(new TimedTurnByCommand(0.5, -49.5));
-    	addSequential(new DriveStraightToCommand(27, 0.45, 2));
+    	addSequential(new ForwardGo(0.6, 150));
+    	addSequential(new TimedTurnByCommand(1, -90));
+    	addSequential(new DriveStraightToCommand(30, 0.4, 2));
     	addSequential(new AutoSwitch());
-    	
-//    	addParallel(new ResetShooter());
-//    	addSequential(new SimpleDriveBackward(0.5, 0.5));
-//    	addSequential(new TimedTurnByCommand(0.5, 90));
-//    	addSequential(new DriveStraightToCommand(45, 0.5, 3));
-//    	addSequential(new TimedTurnByCommand(0.5, -90));
-//    	addSequential(new DriveStraightToCommand(40, 0.5, 2));
-    	
-    	
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

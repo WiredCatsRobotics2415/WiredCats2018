@@ -89,18 +89,18 @@ public class Beast extends Subsystem {
 	}
 
 	public void stopShooter() {
-		lFar.set(-0.03);
-		lNear.set(-0.03);
-		rFar.set(-0.03);
-		rNear.set(-0.03);
+		lFar.set(-0.1);
+		lNear.set(-0.1);
+		rFar.set(-0.1);
+		rNear.set(-0.1);
 	}
 
 	public void backDown() {
 		// zeroShooterEncoder();
-		 lFar.set(-0.43); //-0.33
-		lNear.set(-0.43);
-		rFar.set(-0.43);
-		 rNear.set(-0.43);
+		 lFar.set(-0.40); //-0.33
+		lNear.set(-0.40);
+		rFar.set(-0.40);
+		 rNear.set(-0.40);
 	}
 
 	public void scaleShot() {
@@ -108,6 +108,15 @@ public class Beast extends Subsystem {
 		lNear.set(1);
 		rFar.set(1);
 		rNear.set(1);
+		
+	}
+	
+	public void printOutput() {
+		
+		System.out.println("FAR: " + lFar.getMotorOutputPercent());
+		System.out.println("RFAR: " + rFar.getMotorOutputPercent());
+		System.out.println("NEAR " + lNear.getMotorOutputPercent());
+		System.out.println("RNEAR: " + rNear.getMotorOutputPercent());
 		
 	}
 

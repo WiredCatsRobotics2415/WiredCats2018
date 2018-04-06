@@ -36,6 +36,9 @@ public class RobotMap {
 	public static final int LEFT_UPTAKE = 10;
 	public static final int RIGHT_UPTAKE = 4;
 	
+	public static final int GRABBER_BACK = 3;
+	public static final int GRABBER_FRONT = 4;
+	
 	public static final int LEFT_FAR_SHOOTER = 14;
 	public static final int LEFT_NEAR_SHOOTER = 15;
 	public static final int RIGHT_FAR_SHOOTER = 12;

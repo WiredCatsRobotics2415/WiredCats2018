@@ -7,6 +7,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -20,6 +22,7 @@ public class GroundIntake extends Subsystem {
 
 	public static WPI_TalonSRX leftIntake, rightIntake, leftUptake, rightUptake;
 	public static DigitalInput IRDetector, liftLimit, dropLimit;
+//	public static DoubleSolenoid grabber;
 
 	public GroundIntake() {
 		leftIntake = new WPI_TalonSRX(RobotMap.LEFT_SIDE_ROLLER);
@@ -28,6 +31,8 @@ public class GroundIntake extends Subsystem {
 		leftUptake = new WPI_TalonSRX(RobotMap.LEFT_UPTAKE);
 		rightUptake = new WPI_TalonSRX(RobotMap.RIGHT_UPTAKE);
 		rightUptake.setInverted(true);
+		
+//		grabber = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GRABBER_FRONT, RobotMap.GRABBER_BACK);
 
 		IRDetector = new DigitalInput(RobotMap.IR_PORT);
 		liftLimit = new DigitalInput(RobotMap.LIFT_LIMIT);
@@ -116,15 +121,20 @@ public class GroundIntake extends Subsystem {
 
 		if (!hasPrism()) {
 			startTime = System.currentTimeMillis();
-			ferrisWheel(false, 0.3);
+			ferrisWheel(false, 0.5);
 		}
+		
+//		if (hasPrism()) {
+//			
+//		}
 
 		if (hasPrism() && Math.abs(System.currentTimeMillis() - startTime) >= waitTime) {
 			sideRoller(0.7);
+//			grabCube(true);
 			// ferrisWheel(true, 0.5);
 		} else {
-			leftIntake.set(0.9 * INTAKE_SPEED);
-			rightIntake.set(-1.3 * INTAKE_SPEED);
+			leftIntake.set(0.75 * INTAKE_SPEED);
+			rightIntake.set(-1.0 * INTAKE_SPEED);
 		}
 
 	}
@@ -136,7 +146,9 @@ public class GroundIntake extends Subsystem {
 	}
 
 	public void emptyPrism() {
-
+		
+//		grabCube(false);
+		
 		if (hasPrism()) {
 			startTime = System.currentTimeMillis();
 		}
@@ -144,8 +156,8 @@ public class GroundIntake extends Subsystem {
 		if (!hasPrism() && Math.abs(System.currentTimeMillis() - startTime) >= ejectTime) {
 			stopGrab();
 		} else {
-			sideRoller(-1.3);
-			ferrisWheel(false, 0.3);
+			sideRoller(-1.5);
+//			ferrisWheel(false, 0.3);
 		}
 
 	}
@@ -154,8 +166,18 @@ public class GroundIntake extends Subsystem {
 		sideRoller(-1);
 	}
 
+	public void grabCube(boolean grabbing) {
+//		if (grabbing) {
+//			grabber.set(Value.kForward);
+//		} else {
+//			grabber.set(Value.kReverse);
+//		}
+	}
+	
 	public void stopGrab() {
 		sideRoller(0);
+		leftUptake.set(0);
+		rightUptake.set(0);
 //		ferrisWheel(false, 0.3);
 	}
 

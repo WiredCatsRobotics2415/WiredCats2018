@@ -5,14 +5,14 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class StraightDumpPrism extends CommandGroup {
+public class LeftDumpPrism extends CommandGroup {
 
-    public StraightDumpPrism() {
+    public LeftDumpPrism() {
 //    	addSequential(new ForwardGo(0.4, 110));
     	addParallel(new ResetShooter());
-    	addSequential(new DriveStraightToCommand(150, 0.5, 5));
-//    	addSequential(new TimedTurnByCommand(1, -90));
-//    	addSequential(new DriveStraightToCommand(15, 0.4, 2));
+    	addSequential(new ForwardGo(0.6, 150));
+    	addSequential(new TimedTurnByCommand(1, 90));
+    	addSequential(new DriveStraightToCommand(30, 0.4, 2));
     	addSequential(new AutoSwitch());
         // Add Commands here:
         // e.g. addSequential(new Command1());
