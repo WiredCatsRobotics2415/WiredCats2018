@@ -9,6 +9,10 @@ import autonomous.CrossAutoLine;
 import autonomous.LeftSwitch;
 import autonomous.RightSwitch;
 import autonomous.StraightDumpPrism;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -64,10 +68,10 @@ public class Robot extends IterativeRobot {
 		// chooser.addDefault("Default Auto", defaultAuto);
 		// chooser.addObject("My Auto", customAuto);
 		// SmartDashboard.putData("Auto choices", chooser);
-		// UsbCamera camera = new UsbCamera("cam0", 0);
-		// camera.setFPS(15);
+		UsbCamera camera = new UsbCamera("cam0", 0);
+		camera.setFPS(15);
 
-		// CameraServer.getInstance().startAutomaticCapture();
+		CameraServer.getInstance().startAutomaticCapture();
 
 		gamepad = new XboxController(0);
 		compressor = new Compressor(20);
@@ -85,6 +89,7 @@ public class Robot extends IterativeRobot {
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
 		DS = DriverStation.getInstance();
+		
 		//
 		updateShuffle();
 
