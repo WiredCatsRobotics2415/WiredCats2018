@@ -16,13 +16,13 @@ public class LeftSwitch extends CommandGroup {
     	addSequential(new TimedTurnByCommand(0.5, 49.5));
     	addSequential(new DriveStraightToCommand(27, 0.45, 2));
     	addSequential(new AutoSwitch());
-    	
-//    	addParallel(new ResetShooter());
-//    	addSequential(new SimpleDriveBackward(0.5, 0.5));
-//    	addSequential(new TimedTurnByCommand(0.5, 90));
-//    	addSequential(new DriveStraightToCommand(45, 0.5, 3));
+    	//BREAK
+//    	addSequential(new ResetShooter());
+//    	addSequential(new SimpleDriveBackward(1, 0.3));
 //    	addSequential(new TimedTurnByCommand(0.5, -90));
-//    	addSequential(new DriveStraightToCommand(40, 0.5, 2));
+//    	addSequential(new DriveStraightToCommand(45, 0.5, 3));
+//    	addSequential(new TimedTurnByCommand(0.5, 90));
+//    	addSequential(new DriveStraightToCommand(50, 0.5, 3));
     	
     	
 //    	addSequential(new ForwardGo(-0.4, 10));

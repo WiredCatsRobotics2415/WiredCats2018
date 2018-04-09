@@ -56,6 +56,7 @@ public class Robot extends IterativeRobot {
 
 	public DriverStation DS;
 
+
 	// public static PowerDistributionPanel pdp;
 
 	/**
@@ -93,6 +94,9 @@ public class Robot extends IterativeRobot {
 		// pdp = new PowerDistributionPanel(0);
 
 		// setPeriod(0.02);
+
+		arcadeDrive.zeroEncoders();
+		arcadeDrive.zeroYaw();
 
 	}
 
@@ -185,7 +189,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 
-		groundIntake.testUptake(0.3);
+		groundIntake.testUptake(0.4);
 
 		// updateShuffle();
 
@@ -216,7 +220,8 @@ public class Robot extends IterativeRobot {
 		// System.out.println("START");
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
-		groundIntake.grabCube(false);
+		arcadeDrive.setHighGear(true);
+		// groundIntake.grabCube(false);
 		// beast.zeroShooterEncoder();
 
 		// ramps.rampsOut(false);
@@ -234,7 +239,7 @@ public class Robot extends IterativeRobot {
 		double leftY;
 		double rightX;
 
-		arcadeDrive.setHighGear(true);
+//		arcadeDrive.setHighGear(true);
 
 		// if (gamepad.getBumper(Hand.kRight)) {
 		// arcadeDrive.toggleHighGear();
@@ -255,12 +260,11 @@ public class Robot extends IterativeRobot {
 
 		boolean isQuickTurn = leftY < 0.1;
 
-		// if (arcadeDrive.isHighGear()) {
-		// arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn,
-		// true));
-		// } else {
-		arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
-		// }
+//		 if (arcadeDrive.isHighGear()) {
+		arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
+//		} else {
+//			arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, false));
+//		}
 
 		/*
 		 * 
@@ -270,20 +274,23 @@ public class Robot extends IterativeRobot {
 		 * intake.stopGrab(); }
 		 * 
 		 */
-
+		
+		if(gamepad.getBumper(Hand.kRight)) arcadeDrive.setHighGear(true);
+//		if(gamepad.getRawButton(8)) arcadeDrive.setHighGear(false);
+		
 		if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
 			groundIntake.grabPrism();
 		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
 			groundIntake.emptyPrism();
 		} else if (gamepad.getBumper(Hand.kLeft)) {
 			// groundIntake.groundSwitch(0.4);
-//			if (groundIntake.hasPrism()) {
-//				groundIntake.grabCube(true);
-//				groundIntake.grabPrism();
-//			} else {
-//				groundIntake.grabCube(false);
-//			}
-			groundIntake.testUptake(0.75);
+			// if (groundIntake.hasPrism()) {
+			// groundIntake.grabCube(true);
+			// groundIntake.grabPrism();
+			// } else {
+			// groundIntake.grabCube(false);
+			// }
+			groundIntake.testUptake(0.69);
 		} else if (gamepad.getRawButton(7)) {
 			groundIntake.turnPrism();
 		} else {
@@ -299,22 +306,22 @@ public class Robot extends IterativeRobot {
 		// }
 
 		if (gamepad.getBButton()) {
-			// beast.switchShot();
-			beast.scaleShot();
+			beast.switchShot();
+			// beast.scaleShot();
 		} else if (gamepad.getAButton()) {
-			// beast.switchShot();
-			beast.scaleShot();
+			beast.switchShot();
+			// beast.scaleShot();
 		} else if (gamepad.getYButton()) {
 			beast.resetBools();
 			beast.eStop();
 		} else if (gamepad.getXButton()) {
 			beast.backDown();
 		} else if (beast.hitBottom()) {
-			// beast.eStop();
-			beast.stopShooter();
+			 beast.eStop();
+//			beast.stopShooter();
 			beast.zeroShooterEncoder();
 		} else if (beast.reachTop() || beast.encoderTop()) {
-			beast.eStop();
+			beast.backDown();
 		}
 
 		/*
@@ -361,27 +368,20 @@ public class Robot extends IterativeRobot {
 		// System.out.println("YAW: " + arcadeDrive.getYaw());
 		updateShuffle();
 
-		if (groundIntake.hasPrism()) {
-			groundIntake.grabCube(true);
-			System.out.println("GOT");
-		} else {
-			groundIntake.grabCube(false);
-			System.out.println("NOT GOT");
-		}
 		// if (beast.hitBottom()) {
 		// beast.zeroShooterEncoder();
 		// }
 
 		// System.out.println("REACH TOP: " + beast.reachTop());
 
+		System.out.println(arcadeDrive.getDistance()[0]);
 		double leftY;
 		leftY = -Robot.gamepad.getRawAxis(1);
 		// System.out.println(beast.getHeight());
 
-//		beast.testMotor(leftY * 0.65);
-//		beast.printOutput();
-		
-		
+		// beast.testMotor(leftY * 0.65);
+		// beast.printOutput();
+
 		// System.out.println("HEIGHT: " + beast.getHeight());
 		//
 		// if (beast.hitBottom()) {
@@ -404,6 +404,9 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		// System.out.println("R: " + velocityDrive.getDistance()[1] + "\tL: " +
 		// velocityDrive.getDistance()[0]);
+		// arcadeDrive.zeroEncoders();
+		// arcadeDrive.zeroYaw();
+		System.out.println(arcadeDrive.getDistance()[0]);
 
 		updateShuffle();
 		// System.out.println("REACH TOP: " + beast.reachTop());

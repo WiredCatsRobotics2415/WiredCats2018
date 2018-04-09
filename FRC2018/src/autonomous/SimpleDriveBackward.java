@@ -13,7 +13,7 @@ public class SimpleDriveBackward extends TimedCommand {
 
     public SimpleDriveBackward(double timeout, double speed) {
         super(timeout);
-        this.speed = speed;
+        this.speed = -speed;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }

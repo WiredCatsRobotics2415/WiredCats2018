@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -46,6 +47,13 @@ public class GroundIntake extends Subsystem {
 	}
 
 	public void testUptake(double speed) {
+		if (Robot.gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
+			grabPrism();
+		} else if (Robot.gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
+			emptyPrism();
+		} else {
+			sideRoller(0);
+		}
 		leftUptake.set(speed);
 		 rightUptake.set(speed);
 	}
@@ -121,7 +129,7 @@ public class GroundIntake extends Subsystem {
 
 		if (!hasPrism()) {
 			startTime = System.currentTimeMillis();
-			ferrisWheel(false, 0.5);
+			ferrisWheel(false, 0.65);
 		}
 		
 //		if (hasPrism()) {
