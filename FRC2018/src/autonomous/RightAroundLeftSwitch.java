@@ -17,6 +17,7 @@ public class RightAroundLeftSwitch extends CommandGroup {
 //    	addSequential(new TimedTurnByCommand(1, -90));
 //    	addSequential(new DriveStraightToCommand(20, 0.4, 2));
     	addSequential(new AutoSwitch());
+//    	addSequential(new ResetSwitch());
     	
         // Add Commands here:
         // e.g. addSequential(new Command1());
