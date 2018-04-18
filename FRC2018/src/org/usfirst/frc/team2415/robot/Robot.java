@@ -188,8 +188,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-
-		groundIntake.testUptake(0.4);
+		
+//		groundIntake.testUptake(0.4);
 
 		// updateShuffle();
 

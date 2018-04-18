@@ -10,19 +10,40 @@ public class LeftSwitch extends CommandGroup {
     public LeftSwitch() {
     	
     	addParallel(new ResetShooter());
+    	addParallel(new KeepIntakeUp());
     	addSequential(new ForwardGo(0.6, 30));
+    	addParallel(new KeepIntakeUp());
     	addSequential(new TimedTurnByCommand(0.5, -49.5));
+    	addParallel(new KeepIntakeUp());
     	addSequential(new ForwardGo(0.6, 63));
+    	addParallel(new KeepIntakeUp());
     	addSequential(new TimedTurnByCommand(0.5, 49.5));
-    	addSequential(new DriveStraightToCommand(27, 0.45, 2));
+    	addParallel(new KeepIntakeUp());
+    	addSequential(new DriveStraightToCommand(22, 0.45, 2)); //27
+    	addParallel(new KeepIntakeUp());
     	addSequential(new AutoSwitch());
     	//BREAK
-//    	addSequential(new ResetShooter());
-//    	addSequential(new SimpleDriveBackward(1, 0.3));
-//    	addSequential(new TimedTurnByCommand(0.5, -90));
+    	addParallel(new ResetShooter());
+    	addParallel(new KeepIntakeUp());
+    	addSequential(new SimpleDriveBackward(0.7, 0.5));
+    	addParallel(new KeepIntakeUp());
+    	addSequential(new TimedTurnByCommand(0.5, 49.5));
+    	addParallel(new KeepIntakeUp());
+    	addSequential(new SimpleDriveBackward(2, 0.6));
+    	addParallel(new KeepIntakeUp());
 //    	addSequential(new DriveStraightToCommand(45, 0.5, 3));
-//    	addSequential(new TimedTurnByCommand(0.5, 90));
-//    	addSequential(new DriveStraightToCommand(50, 0.5, 3));
+    	addSequential(new TimedTurnByCommand(0.5, -49.5));
+    	addParallel(new GrabCubeLift());
+    	addSequential(new DriveStraightToCommand(20, 0.3, 2));
+    	addParallel(new GrabCubeLift());
+    	addSequential(new TimedTurnByCommand(0.5, 49.5));
+    	addParallel(new GrabCubeLift());
+    	addSequential(new ForwardGo(0.6, 65));
+    	addParallel(new GrabCubeLift());
+    	addSequential(new TimedTurnByCommand(0.5, -49.5));
+    	addParallel(new GrabCubeLift());
+    	addSequential(new DriveStraightToCommand(22, 0.45, 2)); //27
+    	addSequential(new ShootCube());
     	
     	
 //    	addSequential(new ForwardGo(-0.4, 10));
