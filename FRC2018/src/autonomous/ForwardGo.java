@@ -36,7 +36,7 @@ public class ForwardGo extends Command {
     	} else {
 //    		Robot.arcadeDrive.setMotors(-0.5, 0.5);
     		Robot.arcadeDrive.setMotors(-speed, speed);
-    		System.out.println("ENCODER LEFT: " + Robot.arcadeDrive.getDistance()[0] + "\tTARGET: " + (startingEnc + Math.abs(distance)));
+//    		System.out.println("ENCODER LEFT: " + Robot.arcadeDrive.getDistance()[0] + "\tTARGET: " + (startingEnc + Math.abs(distance)));
     	}
     }
 

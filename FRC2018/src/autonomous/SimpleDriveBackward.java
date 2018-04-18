@@ -9,11 +9,12 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
  */
 public class SimpleDriveBackward extends TimedCommand {
 	
-	double speed;
+	double speed, distance, startingEnc;
 
-    public SimpleDriveBackward(double timeout, double speed) {
+    public SimpleDriveBackward(double timeout, double speed, double distance) {
         super(timeout);
         this.speed = -speed;
+        this.distance = distance;
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     }
@@ -21,11 +22,16 @@ public class SimpleDriveBackward extends TimedCommand {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.arcadeDrive.setMotors(-speed, speed);
+    	startingEnc = Robot.arcadeDrive.getDistance()[0];
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.arcadeDrive.setMotors(-speed, speed);
+    }
+    
+    protected boolean isFinished() {
+    	return isTimedOut() || (Math.abs(Robot.arcadeDrive.getDistance()[0] - startingEnc) > (Math.abs(distance)));
     }
 
     // Called once after timeout

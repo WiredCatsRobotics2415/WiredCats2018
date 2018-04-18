@@ -121,6 +121,7 @@ public class Robot extends IterativeRobot {
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
 		arcadeDrive.setHighGear(true);
+		groundIntake.testUptake(0.4);
 
 		// ramps.rampsOut(false);
 		// ramps.platformsDown(false);

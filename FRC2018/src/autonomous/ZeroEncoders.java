@@ -7,27 +7,22 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class GrabCubeLift extends Command {
+public class ZeroEncoders extends Command {
 
-    public GrabCubeLift() {
+    public ZeroEncoders() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
-    	requires(Robot.groundIntake);
+    	requires(Robot.arcadeDrive);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	
+    	Robot.arcadeDrive.zeroEncoders();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(Robot.groundIntake.hasPrism()) {
-    		Robot.groundIntake.testUptake(0.65);
-    	} else {
-    		Robot.groundIntake.grabPrism();
-    	}
-    	
+    	Robot.arcadeDrive.zeroEncoders();
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -37,14 +32,12 @@ public class GrabCubeLift extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.groundIntake.testUptake(0);
-    	Robot.groundIntake.stopGrab();
+    	Robot.arcadeDrive.zeroEncoders();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.groundIntake.testUptake(0);
-    	Robot.groundIntake.stopGrab();
+    	Robot.arcadeDrive.zeroEncoders();
     }
 }
