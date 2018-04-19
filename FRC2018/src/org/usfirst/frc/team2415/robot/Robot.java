@@ -52,16 +52,16 @@ public class Robot extends IterativeRobot {
 	public boolean shooting;
 	public boolean rampDeployed;
 
-	public boolean center = true;
-	public boolean left = false;
+	public boolean center = false;
+	public boolean left = true;
 
 	public DriverStation DS;
 
 	// public static PowerDistributionPanel pdp;
 
 	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
+	 * This function is run when the robot is first started up and should be used
+	 * for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
@@ -102,14 +102,14 @@ public class Robot extends IterativeRobot {
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString line to get the auto name from the text box below the Gyro
+	 * between different autonomous modes using the dashboard. The sendable chooser
+	 * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+	 * remove all of the chooser code and uncomment the getString line to get the
+	 * auto name from the text box below the Gyro
 	 *
 	 * You can add additional auto modes by adding additional comparisons to the
-	 * switch structure below with additional strings. If using the
-	 * SendableChooser make sure to add them to the chooser code above as well.
+	 * switch structure below with additional strings. If using the SendableChooser
+	 * make sure to add them to the chooser code above as well.
 	 */
 	@Override
 	public void autonomousInit() {
@@ -144,7 +144,7 @@ public class Robot extends IterativeRobot {
 		} else if (left) {
 			if (mySide == 'R') {
 				Command crossLine = new LeftAroundRightSwitch();
-//				Command crossLine = new CrossAutoLine();
+				// Command crossLine = new CrossAutoLine();
 				crossLine.start();
 			} else if (mySide == 'L') {
 				Command dumpSwitch = new LeftDumpPrism();
@@ -271,18 +271,20 @@ public class Robot extends IterativeRobot {
 
 		/*
 		 * 
-		 * if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) { intake.grabPrism(); }
-		 * else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
-		 * intake.emptyPrism(); } else if (gamepad.getBumper(Hand.kLeft)) {
-		 * intake.turnPrism(); } else { intake.stopGrab(); }
+		 * if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) { intake.grabPrism(); } else if
+		 * (gamepad.getTriggerAxis(Hand.kRight) > 0.5) { intake.emptyPrism(); } else if
+		 * (gamepad.getBumper(Hand.kLeft)) { intake.turnPrism(); } else {
+		 * intake.stopGrab(); }
 		 * 
 		 */
 
-		if (gamepad.getBumper(Hand.kRight))
-			arcadeDrive.setHighGear(true);
+		// if (gamepad.getBumper(Hand.kRight))
+		// arcadeDrive.setHighGear(true);
 		// if(gamepad.getRawButton(8)) arcadeDrive.setHighGear(false);
 
-		if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
+		if (gamepad.getTriggerAxis(Hand.kRight) > 0.5 && gamepad.getBumper(Hand.kLeft)) {
+
+		} else if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
 			groundIntake.grabPrism();
 		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
 			groundIntake.emptyPrism();
@@ -295,7 +297,7 @@ public class Robot extends IterativeRobot {
 			// groundIntake.grabCube(false);
 			// }
 			groundIntake.testUptake(0.69);
-		} else if (gamepad.getRawButton(7)) {
+		} else if (gamepad.getBumper(Hand.kRight)) {
 			groundIntake.turnPrism();
 		} else {
 			groundIntake.stopGrab();
@@ -329,16 +331,14 @@ public class Robot extends IterativeRobot {
 		}
 
 		/*
-		 * if (gamepad.getAButton()) { // beast.switchShot(); sidney.fire(); }
-		 * else if (gamepad.getBButton()) { // beast.switchShot();
-		 * sidney.nextFloor(); } else if (gamepad.getYButton()) {
-		 * sidney.backDown(); } else if (gamepad.getXButton()) {
-		 * sidney.backDown(); } else if (sidney.scalePos() &&
-		 * sidney.isSearching()) { sidney.eStop(); } else if (sidney.switchPos()
-		 * && sidney.isSearching()) { sidney.eStop(); } else if
-		 * (sidney.hitBottom()) { sidney.eStop(); // sidney.stopShooter();
-		 * sidney.zeroShooterEncoder(); } else if (sidney.reachTop() ||
-		 * sidney.encoderTop()) { sidney.backDown(); }
+		 * if (gamepad.getAButton()) { // beast.switchShot(); sidney.fire(); } else if
+		 * (gamepad.getBButton()) { // beast.switchShot(); sidney.nextFloor(); } else if
+		 * (gamepad.getYButton()) { sidney.backDown(); } else if (gamepad.getXButton())
+		 * { sidney.backDown(); } else if (sidney.scalePos() && sidney.isSearching()) {
+		 * sidney.eStop(); } else if (sidney.switchPos() && sidney.isSearching()) {
+		 * sidney.eStop(); } else if (sidney.hitBottom()) { sidney.eStop(); //
+		 * sidney.stopShooter(); sidney.zeroShooterEncoder(); } else if
+		 * (sidney.reachTop() || sidney.encoderTop()) { sidney.backDown(); }
 		 */
 
 		// if (rampsController.getTriggerAxis(Hand.kLeft) > 0.5) {
@@ -412,7 +412,7 @@ public class Robot extends IterativeRobot {
 		// velocityDrive.getDistance()[0]);
 		// arcadeDrive.zeroEncoders();
 		// arcadeDrive.zeroYaw();
-		System.out.println(arcadeDrive.getDistance()[0]);
+		// System.out.println(arcadeDrive.getDistance()[0]);
 
 		updateShuffle();
 		// System.out.println("REACH TOP: " + beast.reachTop());

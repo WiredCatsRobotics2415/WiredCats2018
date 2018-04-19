@@ -28,6 +28,7 @@ public class SimpleDriveBackward extends TimedCommand {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.arcadeDrive.setMotors(-speed, speed);
+    	System.out.println(Robot.arcadeDrive.getDistance()[0]);
     }
     
     protected boolean isFinished() {

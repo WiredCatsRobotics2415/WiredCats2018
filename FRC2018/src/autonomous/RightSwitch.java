@@ -10,17 +10,17 @@ public class RightSwitch extends CommandGroup {
     public RightSwitch() {
     	
     	addParallel(new ResetShooter());
-    	addParallel(new KeepIntakeUp());
+//    	addParallel(new KeepIntakeUp());
     	addSequential(new ForwardGo(0.6, 30));
-    	addParallel(new KeepIntakeUp());
+//    	addParallel(new KeepIntakeUp());
     	addSequential(new TimedTurnByCommand(0.5, 49.5));
-    	addParallel(new KeepIntakeUp());
+//    	addParallel(new KeepIntakeUp());
     	addSequential(new ForwardGo(0.6, 65));
-    	addParallel(new KeepIntakeUp());
+//    	addParallel(new KeepIntakeUp());
     	addSequential(new TimedTurnByCommand(0.5, -49.5));
-    	addParallel(new KeepIntakeUp());
+//    	addParallel(new KeepIntakeUp());
     	addSequential(new DriveStraightToCommand(22, 0.45, 2)); //27
-    	addParallel(new KeepIntakeUp());
+//    	addParallel(new KeepIntakeUp());
     	addSequential(new AutoSwitch());
     	//BREAK
     	addParallel(new ResetShooter());
