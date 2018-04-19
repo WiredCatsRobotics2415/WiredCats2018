@@ -283,7 +283,7 @@ public class Robot extends IterativeRobot {
 		// if(gamepad.getRawButton(8)) arcadeDrive.setHighGear(false);
 
 		if (gamepad.getTriggerAxis(Hand.kRight) > 0.5 && gamepad.getBumper(Hand.kLeft)) {
-
+			groundIntake.shootPrism();
 		} else if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
 			groundIntake.grabPrism();
 		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
