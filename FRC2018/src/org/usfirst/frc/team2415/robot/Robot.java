@@ -51,9 +51,11 @@ public class Robot extends IterativeRobot {
 	public long autoStopTime;
 	public boolean shooting;
 	public boolean rampDeployed;
+	
+	public boolean autoShoot = false, autoSuck = false;
 
-	public boolean center = false;
-	public boolean left = true;
+	public boolean center = true;
+	public boolean left = false;
 
 	public DriverStation DS;
 
@@ -190,7 +192,23 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		
+		if (!groundIntake.getAutoSuck() && groundIntake.getAutoShoot() && groundIntake.getLifting()) {
+//			System.out.println("SHOOT");
+			Robot.groundIntake.sideRoller(-1.5);
+		} else if (!groundIntake.getAutoShoot() && groundIntake.getAutoSuck() && !groundIntake.getLifting()) {
+			Robot.groundIntake.grabPrism();
+//			System.out.println("SUCK");
+		} else if (groundIntake.getLifting() && groundIntake.getAutoSuck()) {
+//			System.out.println("LIFT");
+			Robot.groundIntake.lift();
+		} else {
+			Robot.groundIntake.sideRoller(0);
+//			System.out.println("NOTHING");
+		}
 
+//		System.out.println("REE");
+		
 		// groundIntake.testUptake(0.4);
 
 		// updateShuffle();
@@ -262,7 +280,6 @@ public class Robot extends IterativeRobot {
 
 		boolean isQuickTurn = leftY < 0.1;
 
-		// if (arcadeDrive.isHighGear()) {
 		arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX, isQuickTurn, true));
 		// } else {
 		// arcadeDrive.drive(cheesyDriveHelper.cheesyDrive(leftY, rightX,
@@ -282,9 +299,12 @@ public class Robot extends IterativeRobot {
 		// arcadeDrive.setHighGear(true);
 		// if(gamepad.getRawButton(8)) arcadeDrive.setHighGear(false);
 
-		if (gamepad.getTriggerAxis(Hand.kRight) > 0.5 && gamepad.getBumper(Hand.kLeft)) {
+		// if (gamepad.getTriggerAxis(Hand.kRight) > 0.5 &&
+		// gamepad.getBumper(Hand.kLeft)) {
+		//
+		// } else
 
-		} else if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
+		if (gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
 			groundIntake.grabPrism();
 		} else if (gamepad.getTriggerAxis(Hand.kRight) > 0.5) {
 			groundIntake.emptyPrism();
@@ -299,6 +319,8 @@ public class Robot extends IterativeRobot {
 			groundIntake.testUptake(0.69);
 		} else if (gamepad.getBumper(Hand.kRight)) {
 			groundIntake.turnPrism();
+//		} else if (leftY < -0.2 || Math.abs(rightX) > 0.4) { 
+//			groundIntake.sideRoller(0.05);
 		} else {
 			groundIntake.stopGrab();
 		}
@@ -371,7 +393,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
-		// System.out.println("YAW: " + arcadeDrive.getYaw());
+		System.out.println("YAW: " + arcadeDrive.getYaw());
 		updateShuffle();
 
 		// if (beast.hitBottom()) {
@@ -385,7 +407,7 @@ public class Robot extends IterativeRobot {
 		leftY = -Robot.gamepad.getRawAxis(1);
 		// System.out.println(beast.getHeight());
 
-		// beast.testMotor(leftY * 0.65);
+		beast.testMotor(leftY * 0.65);
 		// beast.printOutput();
 
 		// System.out.println("HEIGHT: " + beast.getHeight());

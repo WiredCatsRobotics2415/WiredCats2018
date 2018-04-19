@@ -10,43 +10,36 @@ public class LeftSwitch extends CommandGroup {
     public LeftSwitch() {
     	
     	addParallel(new ResetShooter());
-//    	addParallel(new KeepIntakeUp());
     	addSequential(new ForwardGo(0.6, 30));
-//    	addParallel(new KeepIntakeUp());
     	addSequential(new TimedTurnByCommand(0.5, -49.5));
-//    	addParallel(new KeepIntakeUp());
     	addSequential(new ForwardGo(0.6, 63));
-//    	addParallel(new KeepIntakeUp());
     	addSequential(new TimedTurnByCommand(0.5, 49.5));
-//    	addParallel(new KeepIntakeUp());
     	addSequential(new DriveStraightToCommand(22, 0.45, 2)); //27
-//    	addParallel(new KeepIntakeUp());
     	addSequential(new AutoSwitch());
     	//BREAK
     	addParallel(new ResetShooter());
     	addParallel(new ZeroEncoders());
-//    	addParallel(new KeepIntakeUp());
     	addSequential(new SimpleDriveBackward(1, 0.45, 24));
-//    	addParallel(new KeepIntakeUp());
     	addSequential(new TimedTurnByCommand(0.5, -49.5));
-//    	addParallel(new KeepIntakeUp());
     	addSequential(new SimpleDriveBackward(5, 0.6, 63));
-//    	addParallel(new KeepIntakeUp());
-//    	addSequential(new DriveStraightToCommand(45, 0.5, 3));
     	addSequential(new TimedTurnByCommand(0.5, 49.5));
-    	addParallel(new GrabCube());
-    	addSequential(new DriveStraightToCommand(10, 0.3, 2));
-    	addParallel(new GrabCube());
+    	addSequential(new AutoIntakeSet(true, false));
+    	addSequential(new SimpleDriveBackward(1, 0.45, 3));
+//    	addParallel(new GrabCube(2));
+    	addSequential(new DriveStraightToCommand(12, 0.3, 2));
+//    	addParallel(new GrabCube(1));
+    	addParallel(new LiftCube(1));
+    	addSequential(new SimpleDriveBackward(1, 0.45, 13));
+//    	addParallel(new GrabCube(0.5));
     	addSequential(new TimedTurnByCommand(0.5, -49.5));
-    	addParallel(new GrabCube());
-    	addSequential(new ForwardGo(0.6, 65));
-    	addParallel(new GrabCube());
+//    	addParallel(new GrabCube(3));
+    	addParallel(new ZeroEncoders());
+    	addSequential(new DriveStraightToCommand(63, 0.3, 2));
+//    	addParallel(new GrabCube(0.5));
     	addSequential(new TimedTurnByCommand(0.5, 49.5));
-//    	addParallel(new GrabCube());
-    	addParallel(new LiftCube(0.5));
-    	addSequential(new DriveStraightToCommand(22, 0.45, 2)); //27
-    	addSequential(new ShootCube());
-    	
+    	addSequential(new DriveStraightToCommand(15, 0.45, 1)); //27
+    	addSequential(new AutoIntakeSet(false, true));
+//    	addSequential(new ShootCube());
     	
 //    	addSequential(new ForwardGo(-0.4, 10));
 //    	addSequential(new TimedTurnByCommand(0.5, -90));

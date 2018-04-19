@@ -23,6 +23,8 @@ public class GroundIntake extends Subsystem {
 
 	public static WPI_TalonSRX leftIntake, rightIntake, leftUptake, rightUptake;
 	public static DigitalInput IRDetector, liftLimit, dropLimit;
+	
+	public boolean autoSuck = false, autoShoot = false, lifting = false;
 //	public static DoubleSolenoid grabber;
 
 	public GroundIntake() {
@@ -45,7 +47,33 @@ public class GroundIntake extends Subsystem {
 		leftUptake.setNeutralMode(NeutralMode.Brake);
 		rightUptake.setNeutralMode(NeutralMode.Brake);
 	}
-
+	
+	public boolean getAutoShoot() {
+		return autoShoot;
+	}
+	
+	public boolean getAutoSuck() {
+		return autoSuck;
+	}
+	
+	public void setShootSuck(boolean shoot, boolean suck) {
+		autoShoot = shoot;
+		autoSuck = suck;
+	}
+	
+	public boolean getLifting() {
+		return lifting;
+	}
+	
+	public void setLifting(boolean lift) {
+		lifting = lift;
+	}
+	
+	public void lift() {
+		testUptake(0.77);
+		grabPrism();
+	}
+	
 	public void testUptake(double speed) {
 		if (Robot.gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
 			grabPrism();
@@ -155,21 +183,25 @@ public class GroundIntake extends Subsystem {
 
 	public void emptyPrism() {
 		
-//		grabCube(false);
 		
-		if (hasPrism()) {
-			startTime = System.currentTimeMillis();
-		}
-
-		if (!hasPrism() && Math.abs(System.currentTimeMillis() - startTime) >= ejectTime) {
-			stopGrab();
-		} else {
+//		if (hasPrism()) {
+//			startTime = System.currentTimeMillis();
+//		}
+//
+//		if (!hasPrism() && Math.abs(System.currentTimeMillis() - startTime) >= ejectTime) {
+//			stopGrab();
+//		} else {
 			sideRoller(-1.5);
 //			ferrisWheel(false, 0.3);
-		}
+//		}
 
 	}
 
+	public void autoCube() {
+		sideRoller(1.2);
+		testUptake(-0.7);
+	}
+	
 	public void openWheels() {
 		sideRoller(-1);
 	}
