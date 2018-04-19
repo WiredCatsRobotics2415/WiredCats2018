@@ -9,14 +9,14 @@ public class LeftAroundRightSwitch extends CommandGroup {
 
     public LeftAroundRightSwitch() {
     	addParallel(new ResetShooter());
-    	addSequential(new DriveStraightToCommand(175, 0.8, 8));
+    	addSequential(new DriveStraightToCommand(195, 0.8, 8));
     	addSequential(new TimedTurnByCommand(1, 90));
-    	addSequential(new DriveStraightToCommand(300, 0.8, 6));
-    	addSequential(new TimedTurnByCommand(1, 90));
-    	addSequential(new DriveStraightToCommand(40, 0.4, 2));
-    	addSequential(new TimedTurnByCommand(1, 90));
-    	addSequential(new DriveStraightToCommand(20, 0.4, 2));
-    	addSequential(new AutoSwitch());
+//    	addSequential(new DriveStraightToCommand(300, 0.8, 6));
+//    	addSequential(new TimedTurnByCommand(1, 90));
+//    	addSequential(new DriveStraightToCommand(40, 0.4, 2));
+//    	addSequential(new TimedTurnByCommand(1, 90));
+//    	addSequential(new DriveStraightToCommand(20, 0.4, 2));
+//    	addSequential(new AutoSwitch());
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

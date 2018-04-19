@@ -14,6 +14,7 @@ public class TimedTurnByCommand extends TimedCommand implements PIDOutput {
 	PIDController turnController;
 	double rotateToAngleRate;
 	double angle;
+	double currAngle;
 	boolean finisher, checked = false;
 	long finisherTime, startTime;
 	
@@ -38,12 +39,13 @@ public class TimedTurnByCommand extends TimedCommand implements PIDOutput {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.arcadeDrive.zeroYaw();
+//    	Robot.arcadeDrive.zeroYaw();
 //    	Robot.arcadeDrive.changeControlMode(TalonControlMode.PercentVbus);
     	
     	Robot.arcadeDrive.setMotors(0, 0);
     	Robot.arcadeDrive.setBrakeMode(true);
 //    	Robot.arcadeDrive.slaveRight(true);
+//    	Robot.arcadeDrive.zeroYaw();
     	
     	turnController = new PIDController(kP, kI, kD, kF, Robot.arcadeDrive.ahrs, this);
     	turnController.setInputRange(-180.0f,  180.0f);
@@ -51,7 +53,10 @@ public class TimedTurnByCommand extends TimedCommand implements PIDOutput {
     	turnController.setAbsoluteTolerance(kTolerance);
     	turnController.setContinuous(true);
     	turnController.enable();
-    	turnController.setSetpoint(angle);
+    	currAngle = Robot.arcadeDrive.getYaw();
+    	System.out.println("SET: " + (currAngle + angle));
+    	turnController.setSetpoint(currAngle + angle);
+    	
     	
 //    	System.out.println("SET: " + turnController.getSetpoint());
     }

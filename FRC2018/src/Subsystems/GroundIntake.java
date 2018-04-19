@@ -196,6 +196,11 @@ public class GroundIntake extends Subsystem {
 //		}
 
 	}
+	
+	public void shootPrism() {
+		sideRoller(-1.5);
+		testUptake(0.69);
+	}
 
 	public void autoCube() {
 		sideRoller(1.2);
