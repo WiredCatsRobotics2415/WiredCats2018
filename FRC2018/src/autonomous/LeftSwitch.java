@@ -25,20 +25,17 @@ public class LeftSwitch extends CommandGroup {
     	addSequential(new TimedTurnByCommand(0.5, 49.5));
     	addSequential(new AutoIntakeSet(true, false));
     	addSequential(new SimpleDriveBackward(1, 0.45, 3));
-//    	addParallel(new GrabCube(2));
     	addSequential(new DriveStraightToCommand(12, 0.3, 2));
-//    	addParallel(new GrabCube(1));
-    	addParallel(new LiftCube(1));
+    	addParallel(new LiftCube(0.5));
     	addSequential(new SimpleDriveBackward(1, 0.45, 13));
-//    	addParallel(new GrabCube(0.5));
     	addSequential(new TimedTurnByCommand(0.5, -49.5));
-//    	addParallel(new GrabCube(3));
     	addParallel(new ZeroEncoders());
     	addSequential(new DriveStraightToCommand(63, 0.3, 2));
-//    	addParallel(new GrabCube(0.5));
     	addSequential(new TimedTurnByCommand(0.5, 49.5));
     	addSequential(new DriveStraightToCommand(15, 0.45, 1)); //27
     	addSequential(new AutoIntakeSet(false, true));
+    	
+    	
 //    	addSequential(new ShootCube());
     	
 //    	addSequential(new ForwardGo(-0.4, 10));
