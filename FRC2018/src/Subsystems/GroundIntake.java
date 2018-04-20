@@ -23,9 +23,9 @@ public class GroundIntake extends Subsystem {
 
 	public static WPI_TalonSRX leftIntake, rightIntake, leftUptake, rightUptake;
 	public static DigitalInput IRDetector, liftLimit, dropLimit;
-	
+
 	public boolean autoSuck = false, autoShoot = false, lifting = false;
-//	public static DoubleSolenoid grabber;
+	// public static DoubleSolenoid grabber;
 
 	public GroundIntake() {
 		leftIntake = new WPI_TalonSRX(RobotMap.LEFT_SIDE_ROLLER);
@@ -34,8 +34,9 @@ public class GroundIntake extends Subsystem {
 		leftUptake = new WPI_TalonSRX(RobotMap.LEFT_UPTAKE);
 		rightUptake = new WPI_TalonSRX(RobotMap.RIGHT_UPTAKE);
 		rightUptake.setInverted(true);
-		
-//		grabber = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GRABBER_FRONT, RobotMap.GRABBER_BACK);
+
+		// grabber = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.GRABBER_FRONT,
+		// RobotMap.GRABBER_BACK);
 
 		IRDetector = new DigitalInput(RobotMap.IR_PORT);
 		liftLimit = new DigitalInput(RobotMap.LIFT_LIMIT);
@@ -47,33 +48,34 @@ public class GroundIntake extends Subsystem {
 		leftUptake.setNeutralMode(NeutralMode.Brake);
 		rightUptake.setNeutralMode(NeutralMode.Brake);
 	}
-	
+
 	public boolean getAutoShoot() {
 		return autoShoot;
 	}
-	
+
 	public boolean getAutoSuck() {
 		return autoSuck;
 	}
-	
+
 	public void setShootSuck(boolean shoot, boolean suck) {
 		autoShoot = shoot;
 		autoSuck = suck;
 	}
-	
+
 	public boolean getLifting() {
 		return lifting;
 	}
-	
+
 	public void setLifting(boolean lift) {
 		lifting = lift;
 	}
-	
+
 	public void lift() {
-		testUptake(0.77);
-		grabPrism();
+		leftUptake.set(0.63);
+		rightUptake.set(0.63);
+		sideRoller(0.88);
 	}
-	
+
 	public void testUptake(double speed) {
 		if (Robot.gamepad.getTriggerAxis(Hand.kLeft) > 0.5) {
 			grabPrism();
@@ -83,9 +85,9 @@ public class GroundIntake extends Subsystem {
 			sideRoller(0);
 		}
 		leftUptake.set(speed);
-		 rightUptake.set(speed);
+		rightUptake.set(speed);
 	}
-	
+
 	public void getMotorOutput() {
 		System.out.println("L: " + leftUptake.getMotorOutputPercent() + "\tR: " + rightUptake.getMotorOutputPercent());
 	}
@@ -114,7 +116,7 @@ public class GroundIntake extends Subsystem {
 		}
 
 	}
-	
+
 	public void testShot(double speed) {
 		if (Robot.gamepad.getAButton()) {
 			leftUptake.set(speed);
@@ -159,14 +161,14 @@ public class GroundIntake extends Subsystem {
 			startTime = System.currentTimeMillis();
 			ferrisWheel(false, 0.65);
 		}
-		
-//		if (hasPrism()) {
-//			
-//		}
+
+		// if (hasPrism()) {
+		//
+		// }
 
 		if (hasPrism() && Math.abs(System.currentTimeMillis() - startTime) >= waitTime) {
-			sideRoller(0.7);
-//			grabCube(true);
+			sideRoller(0.77);
+			// grabCube(true);
 			// ferrisWheel(true, 0.5);
 		} else {
 			leftIntake.set(0.75 * INTAKE_SPEED);
@@ -182,21 +184,21 @@ public class GroundIntake extends Subsystem {
 	}
 
 	public void emptyPrism() {
-		
-		
-//		if (hasPrism()) {
-//			startTime = System.currentTimeMillis();
-//		}
-//
-//		if (!hasPrism() && Math.abs(System.currentTimeMillis() - startTime) >= ejectTime) {
-//			stopGrab();
-//		} else {
-			sideRoller(-1.5);
-//			ferrisWheel(false, 0.3);
-//		}
+
+		// if (hasPrism()) {
+		// startTime = System.currentTimeMillis();
+		// }
+		//
+		// if (!hasPrism() && Math.abs(System.currentTimeMillis() - startTime) >=
+		// ejectTime) {
+		// stopGrab();
+		// } else {
+		sideRoller(-1.5);
+		// ferrisWheel(false, 0.3);
+		// }
 
 	}
-	
+
 	public void shootPrism() {
 		sideRoller(-1.5);
 		testUptake(0.69);
@@ -206,24 +208,24 @@ public class GroundIntake extends Subsystem {
 		sideRoller(1.2);
 		testUptake(-0.7);
 	}
-	
+
 	public void openWheels() {
 		sideRoller(-1);
 	}
 
 	public void grabCube(boolean grabbing) {
-//		if (grabbing) {
-//			grabber.set(Value.kForward);
-//		} else {
-//			grabber.set(Value.kReverse);
-//		}
+		// if (grabbing) {
+		// grabber.set(Value.kForward);
+		// } else {
+		// grabber.set(Value.kReverse);
+		// }
 	}
-	
+
 	public void stopGrab() {
 		sideRoller(0);
 		leftUptake.set(0);
 		rightUptake.set(0);
-//		ferrisWheel(false, 0.3);
+		// ferrisWheel(false, 0.3);
 	}
 
 	public void initDefaultCommand() {

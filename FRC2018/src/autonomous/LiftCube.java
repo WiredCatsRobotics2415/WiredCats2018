@@ -18,25 +18,27 @@ public class LiftCube extends TimedCommand {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.groundIntake.testUptake(0.69);
+//    	Robot.groundIntake.testUptake(0.69);
     	Robot.groundIntake.setLifting(true);
+    	Robot.groundIntake.lift();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.groundIntake.testUptake(0.69);
+//    	Robot.groundIntake.testUptake(0.69);
+    	Robot.groundIntake.lift();
     }
 
     // Called once after timeout
     protected void end() {
-    	Robot.groundIntake.testUptake(0);
+//    	Robot.groundIntake.testUptake(0);
     	Robot.groundIntake.setLifting(true);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.groundIntake.testUptake(0);
+//    	Robot.groundIntake.testUptake(0);
     	Robot.groundIntake.setLifting(true);
     }
 }

@@ -20,20 +20,21 @@ public class RightSwitch extends CommandGroup {
     	
     	addParallel(new ResetShooter());
     	addParallel(new ZeroEncoders());
+//    	addSequential(new ResetShooter());
     	addSequential(new SimpleDriveBackward(1, 0.45, 24));
     	addSequential(new TimedTurnByCommand(0.5, 49.5));
-    	addSequential(new SimpleDriveBackward(5, 0.6, 63));
-    	addSequential(new TimedTurnByCommand(0.5, -49.5));
+    	addSequential(new SimpleDriveBackward(5, 0.6, 57.5)); //63
+    	addSequential(new TimedTurnByCommand(0.5, -39.5)); //-49.5
     	addSequential(new AutoIntakeSet(true, false));
     	addSequential(new SimpleDriveBackward(1, 0.45, 3));
-    	addSequential(new DriveStraightToCommand(12, 0.3, 2));
+    	addSequential(new DriveStraightToCommand(13, 0.23, 2));
     	addParallel(new LiftCube(0.5));
-    	addSequential(new SimpleDriveBackward(1, 0.45, 13));
+    	addSequential(new SimpleDriveBackward(2, 0.3, 13));
     	addSequential(new TimedTurnByCommand(0.5, 49.5));
-    	addParallel(new ZeroEncoders());
-    	addSequential(new DriveStraightToCommand(63, 0.3, 2));
+//    	addParallel(new ZeroEncoders());
+    	addSequential(new DriveStraightToCommand(62, 0.5, 2.5));
     	addSequential(new TimedTurnByCommand(0.5, -49.5));
-    	addSequential(new DriveStraightToCommand(15, 0.45, 1)); //27
+    	addSequential(new DriveStraightToCommand(17, 0.45, 1)); //27
     	addSequential(new AutoIntakeSet(false, true));
     	
 //    	addSequential(new ShootCube());

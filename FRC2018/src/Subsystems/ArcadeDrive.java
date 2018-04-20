@@ -97,10 +97,10 @@ public class ArcadeDrive extends Subsystem {
 		rBack.configContinuousCurrentLimit(25, 10);
 		rBack.enableCurrentLimit(true);
 
-		lFront.setNeutralMode(NeutralMode.Brake);
-		rFront.setNeutralMode(NeutralMode.Brake);
-		lBack.setNeutralMode(NeutralMode.Brake);
-		rBack.setNeutralMode(NeutralMode.Brake);
+//		lFront.setNeutralMode(NeutralMode.Brake);
+//		rFront.setNeutralMode(NeutralMode.Brake);
+//		lBack.setNeutralMode(NeutralMode.Brake);
+//		rBack.setNeutralMode(NeutralMode.Brake);
 
 		lBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		rBack.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
@@ -223,14 +223,21 @@ public class ArcadeDrive extends Subsystem {
 		if (brake) {
 			lFront.setNeutralMode(NeutralMode.Brake);
 			rFront.setNeutralMode(NeutralMode.Brake);
+			lBack.setNeutralMode(NeutralMode.Brake);
+			rBack.setNeutralMode(NeutralMode.Brake);
 		} else {
 			lFront.setNeutralMode(NeutralMode.Coast);
 			rFront.setNeutralMode(NeutralMode.Coast);
+			lBack.setNeutralMode(NeutralMode.Coast);
+			rBack.setNeutralMode(NeutralMode.Coast);
 		}
 	}
 
-	public double getMotorOutput() {
-		return lFront.getMotorOutputPercent();
+	public void getMotorOutput() {
+		System.out.println("LF: " + lFront.getMotorOutputPercent());
+		System.out.println("RF: " + rFront.getMotorOutputPercent());
+		System.out.println("LB: " + lBack.getMotorOutputPercent());
+		System.out.println("RB: " + rBack.getMotorOutputPercent());
 	}
 
 	public double fPS2RPM(double fps) {

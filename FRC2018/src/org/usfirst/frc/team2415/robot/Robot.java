@@ -51,7 +51,7 @@ public class Robot extends IterativeRobot {
 	public long autoStopTime;
 	public boolean shooting;
 	public boolean rampDeployed;
-	
+
 	public boolean autoShoot = false, autoSuck = false;
 
 	public boolean center = true;
@@ -124,6 +124,7 @@ public class Robot extends IterativeRobot {
 		arcadeDrive.zeroYaw();
 		arcadeDrive.setHighGear(true);
 		groundIntake.testUptake(0.4);
+		arcadeDrive.setBrakeMode(true);
 
 		// ramps.rampsOut(false);
 		// ramps.platformsDown(false);
@@ -192,23 +193,23 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
-		
+
 		if (!groundIntake.getAutoSuck() && groundIntake.getAutoShoot() && groundIntake.getLifting()) {
-//			System.out.println("SHOOT");
+			// System.out.println("SHOOT");
 			Robot.groundIntake.sideRoller(-1.5);
 		} else if (!groundIntake.getAutoShoot() && groundIntake.getAutoSuck() && !groundIntake.getLifting()) {
 			Robot.groundIntake.grabPrism();
-//			System.out.println("SUCK");
+			// System.out.println("SUCK");
 		} else if (groundIntake.getLifting() && groundIntake.getAutoSuck()) {
-//			System.out.println("LIFT");
+			// System.out.println("LIFT");
 			Robot.groundIntake.lift();
 		} else {
 			Robot.groundIntake.sideRoller(0);
-//			System.out.println("NOTHING");
+			// System.out.println("NOTHING");
 		}
 
-//		System.out.println("REE");
-		
+		// System.out.println("REE");
+
 		// groundIntake.testUptake(0.4);
 
 		// updateShuffle();
@@ -241,6 +242,8 @@ public class Robot extends IterativeRobot {
 		arcadeDrive.zeroEncoders();
 		arcadeDrive.zeroYaw();
 		arcadeDrive.setHighGear(true);
+		groundIntake.setLifting(false);
+		groundIntake.setShootSuck(false, false);
 		// groundIntake.grabCube(false);
 		// beast.zeroShooterEncoder();
 
@@ -251,6 +254,9 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		
+		arcadeDrive.setBrakeMode(false);
+//		beast.setBrakeMode(false);
 
 		updateShuffle();
 
@@ -319,8 +325,8 @@ public class Robot extends IterativeRobot {
 			groundIntake.testUptake(0.69);
 		} else if (gamepad.getBumper(Hand.kRight)) {
 			groundIntake.turnPrism();
-//		} else if (leftY < -0.2 || Math.abs(rightX) > 0.4) { 
-//			groundIntake.sideRoller(0.05);
+			// } else if (leftY < -0.2 || Math.abs(rightX) > 0.4) {
+			// groundIntake.sideRoller(0.05);
 		} else {
 			groundIntake.stopGrab();
 		}
@@ -334,15 +340,18 @@ public class Robot extends IterativeRobot {
 		// }
 
 		if (gamepad.getBButton()) {
-			beast.switchShot();
-			// beast.scaleShot();
+//			beast.setBrakeMode(false);
+//			beast.switchShot();
+			 beast.scaleShot();
 		} else if (gamepad.getAButton()) {
-			beast.switchShot();
-			// beast.scaleShot();
+//			beast.setBrakeMode(false);
+//			 beast.switchShot();
+			beast.scaleShot();
 		} else if (gamepad.getYButton()) {
 			beast.resetBools();
 			beast.eStop();
 		} else if (gamepad.getXButton()) {
+//			beast.setBrakeMode(true);
 			beast.backDown();
 		} else if (beast.hitBottom()) {
 			beast.eStop();
@@ -350,6 +359,7 @@ public class Robot extends IterativeRobot {
 			beast.zeroShooterEncoder();
 		} else if (beast.reachTop() || beast.encoderTop()) {
 			beast.backDown();
+//			beast.setBrakeMode(true);
 		}
 
 		/*
@@ -402,7 +412,7 @@ public class Robot extends IterativeRobot {
 
 		// System.out.println("REACH TOP: " + beast.reachTop());
 
-		System.out.println(arcadeDrive.getDistance()[0]);
+		// System.out.println(arcadeDrive.getDistance()[0]);
 		double leftY;
 		leftY = -Robot.gamepad.getRawAxis(1);
 		// System.out.println(beast.getHeight());
@@ -459,6 +469,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("HAS PRISM: ", groundIntake.hasPrism());
 		SmartDashboard.putBoolean("UPTAKE HIT TOP: ", groundIntake.hitTop());
 		SmartDashboard.putBoolean("UPTAKE HIT BOTTOM: ", groundIntake.hitBottom());
+		
 
 	}
 }

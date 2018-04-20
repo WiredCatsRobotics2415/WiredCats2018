@@ -44,12 +44,31 @@ public class Beast extends Subsystem {
 		lNear.setNeutralMode(NeutralMode.Brake);
 		rFar.setNeutralMode(NeutralMode.Brake);
 		rNear.setNeutralMode(NeutralMode.Brake);
+		
+//		lFar.setNeutralMode(NeutralMode.Coast);
+//		lNear.setNeutralMode(NeutralMode.Coast);
+//		rFar.setNeutralMode(NeutralMode.Coast);
+//		rNear.setNeutralMode(NeutralMode.Coast);
 
 		lNear.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 
 		topLimit = new DigitalInput(RobotMap.TOP_LIMIT);
 		bottomLimit = new DigitalInput(RobotMap.BOTTOM_LIMIT);
 
+	}
+	
+	public void setBrakeMode(boolean brake) {
+		if (brake) {
+			lFar.setNeutralMode(NeutralMode.Brake);
+			lNear.setNeutralMode(NeutralMode.Brake);
+			rFar.setNeutralMode(NeutralMode.Brake);
+			rNear.setNeutralMode(NeutralMode.Brake);
+		} else {
+			lFar.setNeutralMode(NeutralMode.Coast);
+			lNear.setNeutralMode(NeutralMode.Coast);
+			rFar.setNeutralMode(NeutralMode.Coast);
+			rNear.setNeutralMode(NeutralMode.Coast);
+		}
 	}
 
 	public void testMotor(double speed) {
@@ -97,17 +116,17 @@ public class Beast extends Subsystem {
 
 	public void backDown() {
 		// zeroShooterEncoder();
-		 lFar.set(-0.24); //-0.33
-		lNear.set(-0.24); //-0.28
-		rFar.set(-0.24);
-		 rNear.set(-0.24);
+		 lFar.set(-0.27); //
+		lNear.set(-0.27); //-0.27
+		rFar.set(-0.27);
+		 rNear.set(-0.27);
 	}
 
 	public void scaleShot() {
-		lFar.set(1);
-		lNear.set(1);
-		rFar.set(1);
-		rNear.set(1);
+		lFar.set(0.75);
+		lNear.set(0.75);
+		rFar.set(0.75);
+		rNear.set(0.75);
 		
 	}
 	
