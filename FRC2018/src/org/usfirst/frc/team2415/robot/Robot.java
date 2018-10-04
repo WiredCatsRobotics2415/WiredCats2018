@@ -2,16 +2,16 @@ package org.usfirst.frc.team2415.robot;
 
 import Cheesy.CheesyDriveHelper;
 import Subsystems.ArcadeDrive;
-import Subsystems.Beast;
+//import Subsystems.Beast;
 import Subsystems.GroundIntake;
 import Subsystems.VelocityDrive;
 import autonomous.CrossAutoLine;
-import autonomous.LeftAroundRightSwitch;
-import autonomous.LeftDumpPrism;
-import autonomous.LeftSwitch;
-import autonomous.RightAroundLeftSwitch;
-import autonomous.RightDumpPrism;
-import autonomous.RightSwitch;
+//import autonomous.LeftAroundRightSwitch;
+//import autonomous.LeftDumpPrism;
+//import autonomous.LeftSwitch;
+//import autonomous.RightAroundLeftSwitch;
+//import autonomous.RightDumpPrism;
+//import autonomous.RightSwitch;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -219,8 +219,8 @@ public class Robot extends IterativeRobot {
 		// arcadeDrive.toggling = false;
 		// }
 
-		leftY = -Robot.gamepad.getRawAxis(1);
-		rightX = Robot.gamepad.getRawAxis(4);
+		leftY = -Robot.gamepad.getRawAxis(1); //changed from 1
+		rightX = Robot.gamepad.getRawAxis(4); //changed from 4
 
 		if (Math.abs(leftY) < Math.abs(arcadeDrive.DEADBAND))
 			leftY = 0;
@@ -281,7 +281,7 @@ public class Robot extends IterativeRobot {
 		// groundIntake.grabCube(false);
 		// System.out.println("NOT GOT");
 		// }
-
+/*
 		if (gamepad.getBButton()) {
 			beast.switchShot();
 			// beast.scaleShot();
@@ -300,7 +300,7 @@ public class Robot extends IterativeRobot {
 		} else if (beast.reachTop() || beast.encoderTop()) {
 			beast.backDown();
 		}
-
+*/
 		/*
 		 * if (gamepad.getAButton()) { // beast.switchShot(); sidney.fire(); } else if
 		 * (gamepad.getBButton()) { // beast.switchShot(); sidney.nextFloor(); } else if
@@ -356,7 +356,7 @@ public class Robot extends IterativeRobot {
 		leftY = -Robot.gamepad.getRawAxis(1);
 		// System.out.println(beast.getHeight());
 
-		beast.testMotor(leftY * 0.65);
+		//beast.testMotor(leftY * 0.65);
 		// beast.printOutput();
 
 		// System.out.println("HEIGHT: " + beast.getHeight());
@@ -397,14 +397,14 @@ public class Robot extends IterativeRobot {
 	public void updateShuffle() {
 		SmartDashboard.putBoolean("HIGH GEAR: ", arcadeDrive.isHighGear());
 		SmartDashboard.putBoolean("COMP ", compressor.enabled());
-		SmartDashboard.putBoolean("SHOOTING: ", beast.isGoing());
+		//SmartDashboard.putBoolean("SHOOTING: ", beast.isGoing());
 		// SmartDashboard.putNumber("HEADING: ", arcadeDrive.getAngle());
 		// SmartDashboard.putNumber("VELOCITY: ",
 		// Math.abs(arcadeDrive.getVelocity()));
 		SmartDashboard.putNumber("THROTTLE", -Robot.gamepad.getRawAxis(1));
 		SmartDashboard.putNumber("YAW", Robot.arcadeDrive.getYaw());
-		SmartDashboard.putBoolean("SHOOTER REACHED BOTTOM: ", beast.hitBottom());
-		SmartDashboard.putBoolean("SHOOTER REACHED TOP: ", beast.reachTop());
+		//SmartDashboard.putBoolean("SHOOTER REACHED BOTTOM: ", beast.hitBottom());
+		//SmartDashboard.putBoolean("SHOOTER REACHED TOP: ", beast.reachTop());
 		SmartDashboard.putBoolean("HAS PRISM: ", groundIntake.hasPrism());
 		SmartDashboard.putBoolean("UPTAKE HIT TOP: ", groundIntake.hitTop());
 		SmartDashboard.putBoolean("UPTAKE HIT BOTTOM: ", groundIntake.hitBottom());

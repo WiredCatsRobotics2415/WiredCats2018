@@ -124,7 +124,7 @@ public class ArcadeDrive extends Subsystem {
 	public void drive(DriveSignal signal) {
 		setMotors(-signal.getLeft(), signal.getRight());
 	}
-
+ 
 	public Value getShifter() {
 		return shifter.get();
 	}
