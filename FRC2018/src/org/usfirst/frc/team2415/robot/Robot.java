@@ -43,7 +43,6 @@ public class Robot extends IterativeRobot {
 	public static ArcadeDrive arcadeDrive;
 	public static VelocityDrive velocityDrive;
 	// public static Intake intake;
-	public static Beast beast;
 	public static GroundIntake groundIntake;
 	// public static Ramps ramps; //Added by Yash
 
@@ -83,7 +82,6 @@ public class Robot extends IterativeRobot {
 		arcadeDrive = new ArcadeDrive();
 		// velocityDrive = new VelocityDrive();
 		// intake = new Intake();
-		beast = new Beast();
 		groundIntake = new GroundIntake();
 		// ramps = new Ramps(); //Added by Yash
 
@@ -132,57 +130,8 @@ public class Robot extends IterativeRobot {
 		gameData = DS.getGameSpecificMessage();
 		mySide = gameData.charAt(0);
 
-		if (center) {
-			if (mySide == 'R') {
-				Command rightSwitch = new RightSwitch();
-				rightSwitch.start();
-			} else if (mySide == 'L') {
-				Command leftSwitch = new LeftSwitch();
-				leftSwitch.start();
-			} else {
-				Command crossLine = new CrossAutoLine();
-				crossLine.start();
-			}
-		} else if (left) {
-			if (mySide == 'R') {
-				Command crossLine = new LeftAroundRightSwitch();
-				// Command crossLine = new CrossAutoLine();
-				crossLine.start();
-			} else if (mySide == 'L') {
-				Command dumpSwitch = new LeftDumpPrism();
-				dumpSwitch.start();
-			} else {
-				Command crossLine = new CrossAutoLine();
-				crossLine.start();
-			}
-		} else if (!left) {
-			if (mySide == 'R') {
-				Command dumpSwitch = new RightDumpPrism();
-				dumpSwitch.start();
-			} else if (mySide == 'L') {
-				Command crossLeft = new RightAroundLeftSwitch();
-				// Command crossLeft = new CrossAutoLine();
-				crossLeft.start();
-			} else {
-				Command crossLine = new CrossAutoLine();
-				crossLine.start();
-			}
-		} else {
-			Command crossLine = new CrossAutoLine();
-			crossLine.start();
-		}
-
-		// Command crossLine = new LeftSwitch();
-		// crossLine.start();
-
-		// double[][] waypoints = new double[][] {
-		// { 1, 1 },
-		// { 2, 1 },
-		// { 5, 3 }
-		// };
-
-		// Command pathfind = new PathfindCommand(waypoints);
-		// pathfind.start();
+		Command crossLine = new CrossAutoLine();
+		crossLine.start();
 
 	}
 
